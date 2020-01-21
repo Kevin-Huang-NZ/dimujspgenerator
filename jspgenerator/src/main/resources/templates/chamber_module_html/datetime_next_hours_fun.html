@@ -1,0 +1,22 @@
+<!--#<JREMOVE>
+   FUN:Confused
+	 功能：用于获取偏移小时的时间。
+	 输入：例如24，那么就表示偏移24小时。
+	 输出: 新到时间，精确到秒。 
+</JREMOVE>#-->  
+
+<!--#<MACRO>
+	Jsp.pops("__offsetHours");
+</MACRO>#-->
+
+<east:service beanName="eastUtilService" methodName="getNowDateTime"  id="idNowYMDHMS">
+</east:service>	 
+
+<east:service beanName="eastUtilService" methodName="getHourOffset"  id="__idOffsetHour">
+	<east:para name="_datetime" value="${idNowYMDHMS}" type="String" />
+	<east:para name="__offsetHours"  value="${__offsetHours}" type="Integer" />
+</east:service>  
+ 
+<!--#<MACRO>
+	Jsp.pushs("${__idOffsetHour}");
+</MACRO>#-->

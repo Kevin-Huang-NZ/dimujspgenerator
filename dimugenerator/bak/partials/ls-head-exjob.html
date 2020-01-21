@@ -1,0 +1,80 @@
+	<link href="../exjob_erp_css/css/font-awesome.css?ver=1.0" rel="stylesheet" type="text/css" />
+	<link href="../exjob_erp_css/bootstrap.min.css?ver=1.0" rel="stylesheet">
+	<link href="../exjob_erp_css/templatemo_style.css?ver=1.0" rel="stylesheet">
+	<link href="../exjob_erp_css/slidernav.css?ver=1.0" rel="stylesheet">
+	<link href="../exjob_erp_css/ob_style.css?ver=1.0" rel="stylesheet">
+	
+	<link href="../exjob_css/bs_div.css?ver=1.0" rel="stylesheet">  
+	<link href="../exjob_css/bs_a.css?ver=1.0" rel="stylesheet">
+	<link href="../exjob_css/menu_style.css?ver=1.0" rel="stylesheet">
+	<link href="../exjob_css/chat.css?ver=1.0" rel="stylesheet">
+	
+	<link href="../bserp_js/alertify/alertify.core.css" rel="stylesheet" type="text/css"/>
+	<link href="../bserp_js/alertify/alertify.bootstrap.css" rel="stylesheet" type="text/css"/>
+	
+	<script src="../js/jquery-1.8.3.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../exjob_js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../exjob_js/moment.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../bserp_js/alertify/alertify.js" type="text/javascript" charset="utf-8"></script>
+	
+	<script src="../bserp_js/ajax_janus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../bserp_js/common_janus.alert.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../bserp_js/column_janus_mobile.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../widgets/lhgdialog/lhgdialog.js?skin=iblue" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/janus_dialog.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../My97DatePicker/WdatePicker.js" type="text/javascript" charset="utf-8"></script>
+	
+	<!--#<JREMOVE>#-->
+	<script type="text/javascript">
+		$(function() {
+			$(".bss_menuson").each(function(_index,_ele){
+				if ($(_ele).find('a').length == 0) {
+					$(_ele).parent().remove();
+				}
+			})
+			
+			$('.bss_title').click(function() {
+				var $ul = $(this).next('ul');
+				$('dd').find('.bss_menuson').slideUp();
+				if($ul.is(':visible')) {
+					$(this).next('.bss_menuson').slideUp();
+				} else {
+					$(this).next('.bss_menuson').slideDown();
+				}
+				
+				if ($ul.length == 0) {
+					$(".bss_leftmenu a").removeClass("active");
+					$(this).addClass("active");
+				}
+			});
+			
+			$(".bss_menuson a").click(function() {
+				$(".bss_leftmenu a").removeClass("active");
+				$(this).addClass("active").parent().siblings('a').addClass("active");
+			});
+		})
+	</script>
+	<!--#</JREMOVE>#-->
+	<script>
+		function onCheckboxId(_this){
+			var checked = $(_this).attr("checked");
+			var checkedNo = $(_this).val();
+			if(checked == "checked"){
+				$("input[name='checkboxData']").each(function(index,ele) {
+					if ($(_this).prop("checked")) {
+						var otherCheckedNo = $(this).val();
+						if (checkedNo !== otherCheckedNo) {
+							$(this).prop("checked", false);
+						}
+					}
+				});
+			}
+		}
+	</script>
+<!--#
+<MACRO>
+	Jsp.includejsp("/exjob_jsp/exjob_const_html/global_const_define.jsp");
+	Jsp.includejsp("/exjob_jsp/exjob_funs_html/erp_login_staff_info.jsp");
+	Jsp.result("_loginStaff","_roleFuncMap");
+</MACRO>
+#-->

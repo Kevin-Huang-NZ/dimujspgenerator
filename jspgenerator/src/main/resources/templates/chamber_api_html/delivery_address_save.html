@@ -1,0 +1,23 @@
+<!--#<JREMOVE>
+	保存顾客地址。
+</JREMOVE>#-->
+<east:service beanName="eastUtilService" methodName="setValue" id="hasError">
+	<east:para name="_value" value="0" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue" id="msg">
+	<east:para name="_value" value="" type="Object" />
+</east:service>
+
+
+<MACRO>
+	Jsp.call("/chamber_jsp/chamber_funs_html/fun_delivery_address_save.jsp","${requestEx.id}","${requestEx.ccustomerNo}","${requestEx.cname}","${requestEx.cphone}","${requestEx.cprovince}","${requestEx.ccity}","${requestEx.carea}","${requestEx.caddress}","${requestEx.chouseType}");
+	Jsp.result("hasError","msg","_deliveryAddress");
+</MACRO>
+
+	
+<s:if test="${hasError eq '0'}">
+	{"state":"success"}
+</s:if>
+<s:else>
+	{"state":"failure", "msg":"${msg}"}
+</s:else>

@@ -1,0 +1,87 @@
+<!--#<JREMOVE>
+  导入excel，更新区域信息。
+  参数：
+  fileId：上传的excel文件对应的fileId
+</JREMOVE>#-->
+
+<east:service beanName="eastUtilService" methodName="setValue"  id="hasError">
+  <east:para name="_value" value="0" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue"  id="msg">
+  <east:para name="_value" value="" type="Object" />
+</east:service>
+
+<!--#<JREMOVE>2、读取excel内容,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z
+<east:service beanName="eastUtilService" methodName="setValue"  id="_strLetter">
+  <east:para name="_value" value="A,B,C,D,E" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="getListOfString"  id="_lsLetter">
+  <east:para name="_value" value="${_strLetter}" type="String" />
+</east:service></JREMOVE>#-->
+<east:service beanName="eastUtilService" methodName="getFile" id="_file"> 
+  <east:para name="_fileId"  value="${requestEx.fileId}" type="Integer"/>  
+</east:service>
+<MACRO>
+  Jsp.call("/bspms_jsp/bspms_funs_html/ajax_excel_reader_fun.jsp","${_file.path}","E");
+  Jsp.result("_rsExcelContent");
+</MACRO>
+
+<!--#<JREMOVE>3、解析excel内容</JREMOVE>#-->
+<s:if test="${_rsExcelContent eq null || fn:length(_rsExcelContent) lt 2}">
+  <east:service beanName="eastUtilService" methodName="setValue"  id="hasError">
+    <east:para name="_value" value="1" type="Object" />
+  </east:service>
+  <east:service beanName="eastUtilService" methodName="setValue"  id="msg">
+    <east:para name="_value" value="导入的Excel格式不正确。" type="Object" />
+  </east:service>
+</s:if>
+
+<!--#<JREMOVE>3.1、从第2行开始，逐行解析区域</JREMOVE>#-->
+<s:if test="${hasError eq '0'}">
+  <east:service beanName="eastUtilService" methodName="setValue"  id="_currentProvince">
+    <east:para name="_value" value="" type="Object" />
+  </east:service>
+  <c:forEach items="${_rsExcelContent}" var="_one" varStatus="_status">
+    <s:if test="${hasError eq '0'}">
+      <east:service beanName="eastUtilService" methodName="mapGet"  id="_cprovince">
+        <east:para name="_map" value="${_one}" type="Object" />
+        <east:para name="_key" value="A" type="String" /> 
+      </east:service>
+      <s:if test="${_cprovince ne null && _cprovince ne ''}">
+        <east:service beanName="eastUtilService" methodName="setValue"  id="_currentProvince">
+          <east:para name="_value" value="${_cprovince}" type="Object" />
+        </east:service>
+      </s:if>
+      <east:service beanName="eastUtilService" methodName="mapGet"  id="_ccity">
+        <east:para name="_map" value="${_one}" type="Object" />
+        <east:para name="_key" value="B" type="String" /> 
+      </east:service>
+      <east:service beanName="eastUtilService" methodName="mapGet"  id="_careaName">
+        <east:para name="_map" value="${_one}" type="Object" />
+        <east:para name="_key" value="C" type="String" /> 
+      </east:service>
+      <east:service beanName="eastUtilService" methodName="mapGet"  id="_ctype">
+        <east:para name="_map" value="${_one}" type="Object" />
+        <east:para name="_key" value="D" type="String" /> 
+      </east:service>
+      <east:service beanName="eastUtilService" methodName="mapGet"  id="_clevel">
+        <east:para name="_map" value="${_one}" type="Object" />
+        <east:para name="_key" value="E" type="String" /> 
+      </east:service>
+      
+      <MACRO>
+        Jsp.call("/chamber_jsp/chamber_funs_html/fun_area_save.jsp","${_currentProvince}","${_ccity}","${_careaName}","${_ctype}","${_clevel}");
+        
+        Jsp.result("hasError","msg","_area");
+      </MACRO>
+    </s:if>
+  </c:forEach>
+</s:if>
+
+
+<s:if test="${hasError eq '0'}">
+  {"state":"success","data":"${_rsExcelContent}"}
+</s:if>
+<s:else>
+  {"state":"failure","msg":"${msg}","data":"${_rsExcelContent}"}
+</s:else>

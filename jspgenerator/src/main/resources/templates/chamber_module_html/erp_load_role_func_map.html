@@ -1,0 +1,116 @@
+<!--#<JREMOVE>
+FUN:Confused
+从数据看加载角色与功能映射关系。
+</JREMOVE>#-->
+
+<east:service beanName="eastUtilService" methodName="setValue"  id="expiredMinutes">
+  <east:para name="_role" value="30" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue"  id="roleFuncMapKeyInMem">
+  <east:para name="_role" value="chamber_ROLE_FUNC_MAP_KEY" type="Object" />
+</east:service>
+
+
+<!--#<JREMOVE>0、先从缓存中查询</JREMOVE>#-->
+<east:service beanName="pmsService" methodName="fromMem"  id="__roleFunctionMap">  
+  <east:para name="sessionName"  value="${roleFuncMapKeyInMem}" type="String" />  
+</east:service>
+
+<s:if test="${__roleFunctionMap eq null || __roleFunctionMap eq ''}">
+  
+  <!--#<JREMOVE>1、缓存中没有，从数据库中查询</JREMOVE>#-->
+
+  <!--#<JREMOVE>1.1、查询所有功能</JREMOVE>#-->
+  <east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="getAllByNativeField"  id="rsAllFunc">
+    <east:para name="newsClass"  value="colSysFuns" type="String" />
+    <east:para name="page" value="1" type="Integer" />
+    <east:para name="pageSize" value="9999" type="Integer" />
+    <east:para name="searchTVL" value="" type="String" />
+    <east:para name="orderName" value="cdate" type="String" />
+    <east:para name="descOrAsc" value="true" type="Boolean" />
+  </east:service>
+  <east:service beanName="eastUtilService" methodName="listCreate"  id="__allFunctions">
+  </east:service>
+  <c:forEach items="${rsAllFunc.list}" var="_one" varStatus="_status">
+    <east:service beanName="eastUtilService" methodName="listAdd" id="idResult">
+      <east:para name="_list" value="${__allFunctions}" type="List" />
+      <east:para name="_object" value="'${_one.ext.cfunNo}'" type="Object" />
+    </east:service>
+  </c:forEach>
+
+  <!--#<JREMOVE>1.2、查询角色和功能的映射关系</JREMOVE>#-->
+  <east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="createBeanExByClassName" id="colSysRoleVsFun">       
+    <east:para name="className" value="colSysRoleVsFun" type="String" />
+  </east:service>
+  <east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="getAllByNativeField"  id="rsRoleVsFun">
+    <east:para name="newsClass"  value="colSysRoleVsFun" type="String" />
+    <east:para name="page" value="1" type="Integer" />
+    <east:para name="pageSize" value="999999" type="Integer" />
+    <east:para name="searchTVL" value="" type="String" />
+    <east:para name="orderName" value="${colSysRoleVsFun.extKeepName.croleNo}" type="String" />
+    <east:para name="descOrAsc" value="false" type="Boolean" />
+  </east:service>
+  
+  <!--#<JREMOVE>1.3、整理角色和功能的映射关系,最终以roleNo为key保存每个role对应的func列表</JREMOVE>#-->
+  <east:service beanName="eastUtilService" methodName="mapCreate"  id="__roleFunctionMap">
+  </east:service>
+  <s:if test="${rsRoleVsFun.list ne null && fn:length(rsRoleVsFun.list) gt 0}">
+    
+    <east:service beanName="eastUtilService" methodName="listCreate"  id="__lsOneRoleFunc">
+    </east:service>
+    <east:service beanName="eastUtilService" methodName="setValue"  id="__currentRole">
+      <east:para name="_role" value="" type="Object" />
+    </east:service>
+    <c:forEach items="${rsRoleVsFun.list}" var="_one" varStatus="_status">
+      <s:if test="${_status.index eq 0}">
+        <east:service beanName="eastUtilService" methodName="setValue"  id="__currentRole">
+          <east:para name="_role" value="${_one.ext.croleNo}" type="Object" />
+        </east:service>
+      </s:if>
+      <s:else>
+        <s:if test="${_one.ext.croleNo ne __currentRole}">
+          <MACRO> 
+            Jsp.call("/chamber_jsp/chamber_module_html/erp_role_func_map_factory.jsp","${__allFunctions}","${__lsOneRoleFunc}");
+            Jsp.result("__roleFuncMap");
+          </MACRO>
+          <east:service beanName="eastUtilService" methodName="mapPut"  id="idResult">
+            <east:para name="_map" value="${__roleFunctionMap}" type="Object" />
+            <east:para name="_key" value="${__currentRole}" type="String" />
+            <east:para name="_value" value="${__roleFuncMap}" type="Object" />
+          </east:service>
+          
+          <east:service beanName="eastUtilService" methodName="listCreate"  id="__lsOneRoleFunc">
+          </east:service>
+          <east:service beanName="eastUtilService" methodName="setValue"  id="__currentRole">
+            <east:para name="_role" value="${_one.ext.croleNo}" type="Object" />
+          </east:service>
+        </s:if>
+      </s:else>
+      <east:service beanName="eastUtilService" methodName="listAdd" id="idResult">
+        <east:para name="_list" value="${__lsOneRoleFunc}" type="List" />
+        <east:para name="_object" value="'${_one.ext.cfunNo}'" type="Object" />
+      </east:service>
+    </c:forEach>
+    <MACRO> 
+      Jsp.call("/chamber_jsp/chamber_module_html/erp_role_func_map_factory.jsp","${__allFunctions}","${__lsOneRoleFunc}");
+      Jsp.result("__roleFuncMap");
+    </MACRO>
+    <east:service beanName="eastUtilService" methodName="mapPut"  id="idResult">
+      <east:para name="_map" value="${__roleFunctionMap}" type="Object" />
+      <east:para name="_key" value="${__currentRole}" type="String" />
+      <east:para name="_value" value="${__roleFuncMap}" type="Object" />
+    </east:service>
+  </s:if>
+  
+
+  <east:service beanName="pmsService"  methodName="toMem"  id="idResult">  
+    <east:para name="sessionName" value="${roleFuncMapKeyInMem}" type="String" /> 
+    <east:para name="objectToSession" value="${__roleFunctionMap}" type="Object" /> 
+    <east:para name="_minutes" value="${expiredMinutes}" type="Integer" /> 
+  </east:service>
+</s:if>
+
+
+<MACRO>
+  Jsp.pushs("${__roleFunctionMap}");
+</MACRO>

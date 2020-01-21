@@ -1,0 +1,61 @@
+
+	<link href="../exfilm_erp_css/css/font-awesome.css?ver=1.0" rel="stylesheet" type="text/css" />
+	<link href="../exfilm_erp_css/bootstrap.min.css?ver=1.0" rel="stylesheet">
+	<link href="../exfilm_erp_css/templatemo_style.css?ver=1.0" rel="stylesheet">
+	<link href="../exfilm_erp_css/slidernav.css?ver=1.0" rel="stylesheet">
+	<link href="../exfilm_erp_css/ob_style.css?ver=1.0" rel="stylesheet">
+	<link href="../exfilm_erp_css/select2.css?ver=1.0" rel="stylesheet">
+
+	<link href="../exfilm_css/bs_div.css?ver=1.0" rel="stylesheet">  
+	<link href="../exfilm_css/bs_a.css?ver=1.0" rel="stylesheet">
+	<link href="../exfilm_css/menu_style.css?ver=1.0" rel="stylesheet">
+	<link href="../exfilm_css/chat.css?ver=1.0" rel="stylesheet">
+
+	<link href="../js/alertify/alertify.core.css" rel="stylesheet" type="text/css"/>
+	<link href="../js/alertify/alertify.bootstrap.css" rel="stylesheet" type="text/css"/>
+
+	<script src="../js/jquery-1.8.3.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../exfilm_js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../exfilm_js/moment.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/alertify/alertify.js" type="text/javascript" charset="utf-8"></script>
+
+	<script src="../js/ajax_janus.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/column_janus_mobile.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../widgets/lhgdialog/lhgdialog.js?skin=iblue" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/janus_dialog.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../My97DatePicker/WdatePicker.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../exfilm_js/select2.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../exfilm_js/digital.js" type="text/javascript" charset="utf-8"></script>
+
+	<!--#
+	<JREMOVE>
+	<link rel="stylesheet" type="text/css" href="../ckeditor/skins/v2/editor.css">
+	<script type="text/javascript" language="javascript" src="../ckeditor/ckeditor.js"></script>
+	<script type="text/javascript" src="../ckeditor/config.js"></script>
+	<script type="text/javascript" src="../ckeditor/skins/v2/skin.js"></script>
+	<script type="text/javascript" src="../ckeditor/lang/zh-cn.js"></script>
+	<script type="text/javascript" src="../ckeditor/plugins/lineheight/plugin.js"></script>
+	<script type="text/javascript" src="../ckeditor/plugins/jwplayer/plugin.js"></script>
+	<script type="text/javascript" src="../ckeditor/plugins/video/plugin.js"></script>
+	<script type="text/javascript" src="../ckeditor/plugins/audio/plugin.js"></script>
+	<script type="text/javascript" src="../ckeditor/plugins/jwplayer/lang/zh-cn.js"></script>
+	<script type="text/javascript" src="../ckeditor/plugins/jwplayer/lang/zh-cn.js"></script>
+	<script type="text/javascript" src="../ckeditor/plugins/styles/styles/default.js"></script>
+	</JREMOVE>
+	#-->
+	<!--#
+	<MACRO>
+		Jsp.includejsp("/exfilm_jsp/exfilm_const_html/erp_const_define.jsp");
+		Jsp.includejsp("/exfilm_jsp/exfilm_module_html/erp_login_staff_info.jsp");
+		Jsp.result("_loginStaff","_roleFuncMap");
+	</MACRO>
+	#-->
+	<script>
+	/*# 
+	<c:if test="${_loginStaff eq null || _loginStaff.ext.cstaffNo eq null || _loginStaff.ext.cstaffNo eq ''}">
+		setTimeout(function(){
+			parent.parent.parent.window.location.href = "<%=basePath%>bs_ajaxIndex!exfilm!exfilm_erp_html!login.do";
+		},200);
+	</c:if>
+	#*/
+	</script> 

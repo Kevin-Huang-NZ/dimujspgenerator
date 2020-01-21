@@ -1,0 +1,32 @@
+<!--#<JREMOVE>#--> 
+FUN:Confused
+  生成某一个角色和功能的映射关系
+<!--#</JREMOVE>#-->
+<MACRO>
+  Jsp.pops("__allFunctions","__roleFunctions");
+</MACRO>
+  
+  
+<east:service beanName="eastUtilService" methodName="mapCreate"  id="__functionMap">
+</east:service>
+
+<c:forEach items="${__allFunctions}" var="_one" varStatus="_status">
+  <east:service beanName="eastUtilService" methodName="mapPut"  id="idResult">
+    <east:para name="_map" value="${__functionMap}" type="Object" />
+    <east:para name="_key" value="${_one}" type="String" />
+    <east:para name="_value" value="0" type="Object" />
+  </east:service>
+</c:forEach>
+
+<c:forEach items="${__roleFunctions}" var="_one" varStatus="_status">
+  <east:service beanName="eastUtilService" methodName="mapPut"  id="idResult">
+    <east:para name="_map" value="${__functionMap}" type="Object" />
+    <east:para name="_key" value="${_one}" type="String" />
+    <east:para name="_value" value="1" type="Object" />
+  </east:service>
+</c:forEach>
+
+
+<MACRO>
+  Jsp.pushs("${__functionMap}");
+</MACRO>

@@ -1,0 +1,29 @@
+<!--#<JREMOVE>
+FUN:Confused
+hh:mm格式的时间，加指定分钟。
+</JREMOVE>#-->
+       
+<%@ page import="java.util.*" %>
+<%@ page import="java.text.*" %>
+
+<MACRO>
+  Jsp.pops("__hhmm","__minute");
+</MACRO>
+
+<%
+String hhmm = String.valueOf(request.getAttribute("__hhmm"));
+Integer minute = Integer.valueOf(String.valueOf(request.getAttribute("__minute")));
+
+DateFormat dateFormat = new SimpleDateFormat("HH:mm");
+Date hhmmDate = dateFormat.parse(hhmm);
+Date newHhmmDate = new Date(hhmmDate.getTime() + minute*60*1000);
+String newHhmm = dateFormat.format(newHhmmDate);
+
+request.setAttribute( "__newHhmm", newHhmm );
+%>
+
+
+
+<MACRO>
+  Jsp.pushs("${__newHhmm}");
+</MACRO>

@@ -1,0 +1,125 @@
+<!--#<JREMOVE>#-->  
+导出顾客后台充值数据到xls文件。
+参数：
+  customerInfo:查询条件 - 顾客信息
+  cstatus：查询条件 - 状态
+  xlsPathFileName: 导出文件路径和名称，相对路径。
+<!--#</JREMOVE>#-->
+
+
+
+<east:service beanName="pmsService.pmsDaoImpl.daoBsDataDic" methodName="getNewsDicClassNameChildrenEx"  id="dicMoneyAllocStatus">
+  <east:para name="className" value="dicMoneyAllocStatus" type="String" />
+</east:service>
+<MACRO>
+  Jsp.call("/chamber_jsp/chamber_funs_html/fun_customer_money_alloc.jsp","1","9999999","${requestEx.customerInfo}","${requestEx.cstatus}");
+  Jsp.result("rsCustomerMoneyAlloc","rsPagination");
+</MACRO>
+<east:service beanName="eastUtilService" methodName="listCreate"  id="lsExcelData">
+</east:service>
+
+<s:if test="${rsCustomerMoneyAlloc ne null && fn:length(rsCustomerMoneyAlloc) gt 0}">
+  
+  <c:forEach items="${rsCustomerMoneyAlloc}" var="_one" varStatus="_status">
+    <east:service beanName="eastUtilService" methodName="mapCreate"  id="oneRow">
+    </east:service>
+    
+    
+    <east:service beanName="eastUtilService" methodName="mapPut"  id="idResult">
+      <east:para name="_map" value="${oneRow}" type="Object" />
+      <east:para name="_key" value="ccustomer" type="String" />
+      <east:para name="_value" value="${_one.customerName}(${_one.customerPhone})" type="Object" />
+    </east:service>
+    
+    <east:service beanName="eastUtilService" methodName="mapPut"  id="idResult">
+      <east:para name="_map" value="${oneRow}" type="Object" />
+      <east:para name="_key" value="camount" type="String" />
+      <east:para name="_value" value="${_one.camount}" type="Object" />
+    </east:service>
+    
+    <east:service beanName="eastUtilService" methodName="mapPut"  id="idResult">
+      <east:para name="_map" value="${oneRow}" type="Object" />
+      <east:para name="_key" value="coperator" type="String" />
+      <east:para name="_value" value="${_one.optName}(${_one.optPhone})" type="Object" />
+    </east:service>
+    
+    <east:service beanName="eastUtilService" methodName="mapPut"  id="idResult">
+      <east:para name="_map" value="${oneRow}" type="Object" />
+      <east:para name="_key" value="coptDatetime" type="String" />
+      <east:para name="_value" value="${_one.coptDatetime}" type="Object" />
+    </east:service>
+    
+    <east:service beanName="eastUtilService" methodName="mapPut"  id="idResult">
+      <east:para name="_map" value="${oneRow}" type="Object" />
+      <east:para name="_key" value="cmemoApply" type="String" />
+      <east:para name="_value" value="${_one.cmemoApply}" type="Object" />
+    </east:service>
+    
+    <s:if test="${_one.cstatus ne 0}">
+      <east:service beanName="eastUtilService" methodName="setValue" id="cchecker">
+        <east:para name="_val" value="${_one.checkerName}(${_one.checkerPhone})" type="Object" />
+      </east:service>
+    </s:if>
+    <s:else>
+      <east:service beanName="eastUtilService" methodName="setValue" id="cchecker">
+        <east:para name="_val" value="" type="Object" />
+      </east:service>
+    </s:else>
+    <east:service beanName="eastUtilService" methodName="mapPut"  id="idResult">
+      <east:para name="_map" value="${oneRow}" type="Object" />
+      <east:para name="_key" value="cchecker" type="String" />
+      <east:para name="_value" value="${cchecker}" type="Object" />
+    </east:service>
+        
+    <east:service beanName="eastUtilService" methodName="mapPut"  id="idResult">
+      <east:para name="_map" value="${oneRow}" type="Object" />
+      <east:para name="_key" value="ccheckDatetime" type="String" />
+      <east:para name="_value" value="${_one.ccheckDatetime}" type="Object" />
+    </east:service>
+        
+    <east:service beanName="eastUtilService" methodName="mapPut"  id="idResult">
+      <east:para name="_map" value="${oneRow}" type="Object" />
+      <east:para name="_key" value="cmemoCheck" type="String" />
+      <east:para name="_value" value="${_one.cmemoCheck}" type="Object" />
+    </east:service>
+    
+    <east:service beanName="eastUtilService" methodName="setValue"  id="cstatusName">
+      <east:para name="_value" value="" type="Object" />
+    </east:service>
+    <c:forEach items="${dicMoneyAllocStatus}" var="_dicOne" varStatus="_dicStatus">
+      <s:if test="${_dicOne.dicVal eq _one.cstatus}">
+        <east:service beanName="eastUtilService" methodName="setValue"  id="cstatusName">
+          <east:para name="_value" value="${_dicOne.dicName}" type="Object" />
+        </east:service>
+      </s:if>
+    </c:forEach>
+    <east:service beanName="eastUtilService" methodName="mapPut"  id="idResult">
+      <east:para name="_map" value="${oneRow}" type="Object" />
+      <east:para name="_key" value="cstatus" type="String" />
+      <east:para name="_value" value="${cstatusName}" type="Object" />
+    </east:service>
+    
+    <east:service beanName="eastUtilService" methodName="listAdd" id="idResult">
+      <east:para name="_list" value="${lsExcelData}" type="List" />
+      <east:para name="_object" value="${oneRow}" type="Object" />
+    </east:service>
+  </c:forEach>
+  
+  <!--#<JREMOVE>准备导出标题。</JREMOVE>#-->
+  <east:service beanName="eastUtilService" methodName="setValue" id="_titles">
+    <east:para name="_val" value="顾客;申请充值金额;操作员;操作时间;申请时备注;审核人员;审核时间;审核备注;状态" type="Object" />
+  </east:service>
+  <!--#<JREMOVE>准备导出数据列的key。</JREMOVE>#-->  
+  <east:service beanName="eastUtilService" methodName="setValue" id="_keys">
+    <east:para name="_val" value="ccustomer;camount;coperator;coptDatetime;cmemoApply;cchecker;ccheckDatetime;cmemoCheck;cstatus" type="Object" />
+  </east:service>
+  <!--#<JREMOVE>执行导出。</JREMOVE>#-->  
+  <MACRO>
+    Jsp.call("/chamber_jsp/chamber_module_html/export_xls.jsp","${lsExcelData}","${_titles}","${_keys}","${requestEx.xlsPathFileName}");
+  </MACRO>
+  {"state":"success"} 
+</s:if>
+<s:else>
+  {"state":"faliure", "msg":"没有满足查询条件的数据。"} 
+</s:else>
+	

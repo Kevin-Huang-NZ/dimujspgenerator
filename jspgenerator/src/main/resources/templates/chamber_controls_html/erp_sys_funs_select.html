@@ -1,0 +1,37 @@
+<!--#<JREMOVE>
+  选择或者取消选择系统功能。
+  参数：
+  croleNo
+  cfunNo
+  pick
+</JREMOVE>#-->
+
+<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="createBeanExByClassName" id="colSysRoleVsFun">       
+  <east:para name="className" value="colSysRoleVsFun" type="String" />
+</east:service>
+<s:if test="${requestEx.pick eq '1'}">
+  <MACRO>
+    Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${colSysRoleVsFun}","croleNo","${requestEx.croleNo}");
+    Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${colSysRoleVsFun}","cfunNo","${requestEx.cfunNo}");
+    
+    Jsp.call("/bspms_jsp/bspms_funs_html/ajax_save_bean_fun.jsp" ,"${colSysRoleVsFun}");
+  </MACRO>
+</s:if>
+<s:else>
+  <east:service beanName="eastUtilService" methodName="setValue"  id="tnSysRoleVsFun">
+    <east:para name="_tableName" value="${colSysRoleVsFun.externTable}" type="Object" />
+    <east:para name="_default" value="t_news" type="Object" />
+  </east:service>  
+  <east:service beanName="pmsService" methodName="nativeSqlExc" id="_result">      
+    <east:para name="nativeSql" value="DELETE FROM ${tnSysRoleVsFun} 
+        WHERE ${colSysRoleVsFun.keepName.newsClass} = 'colSysRoleVsFun'
+          AND column_id=1603 
+          AND ${colSysRoleVsFun.extKeepName.croleNo} = '${requestEx.croleNo}'
+          AND ${colSysRoleVsFun.extKeepName.cfunNo} = '${requestEx.cfunNo}'
+      " type="String" />
+    <east:para name="token" value="123qweasd" type="String" />
+  </east:service>  
+</s:else>
+
+
+{"state":"success"}

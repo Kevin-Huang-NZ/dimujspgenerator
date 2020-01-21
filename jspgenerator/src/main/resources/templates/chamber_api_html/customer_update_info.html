@@ -1,0 +1,28 @@
+<!--#<JREMOVE>
+	顾客更新基本信息。
+	检索参数：id和ccustomerNo之间2选1
+	id：顾客的id
+	ccustomerNo：顾客的编号
+	更新的字段：
+	cnickname
+</JREMOVE>#-->
+<east:service beanName="eastUtilService" methodName="setValue" id="hasError">
+	<east:para name="_value" value="0" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue" id="msg">
+	<east:para name="_value" value="" type="Object" />
+</east:service>
+
+
+<MACRO>
+	Jsp.call("/chamber_jsp/chamber_funs_html/fun_customer_update_info.jsp","${requestEx.id}","${requestEx.ccustomerNo}","${requestEx.cnickname}");
+	Jsp.result("hasError","msg");
+</MACRO>
+
+	
+<s:if test="${hasError eq '0'}">
+	{"state":"success"}
+</s:if>
+<s:else>
+	{"state":"failure", "msg":"${msg}"}
+</s:else>

@@ -1,0 +1,134 @@
+<!--#<JREMOVE>#--> 
+FUN:Confused
+  检索公告
+<!--#</JREMOVE>#-->
+<MACRO>
+  Jsp.pops("__pageNo","__pageSize","__orderBy","__orderIsNumber","__ascDesc","__keyWord","__ctype","__cisShow","__cstatus");
+</MACRO>
+
+
+<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="createBeanExByClassName" id="colNotice">      
+  <east:para name="className" value="colNotice" type="String" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue"  id="tnNotice">
+  <east:para name="_tableName" value="${colNotice.externTable}" type="Object" />
+  <east:para name="_default" value="t_news" type="Object" />
+</east:service>
+
+<s:if test="${__keyWord ne null && __keyWord ne ''}">
+         
+  <east:service beanName="eastUtilService" methodName="replaceStr" id="__keyWord">
+    <east:para name="_sVal" value="${__keyWord}" type="String" />
+    <east:para name="_sReplaced" value="%" type="String" />
+    <east:para name="_sReplaceNew" value="\%" type="String" />
+  </east:service>
+  <east:service beanName="eastUtilService" methodName="replaceStr" id="__keyWord">
+    <east:para name="_sVal" value="${__keyWord}" type="String" />
+    <east:para name="_sReplaced" value="." type="String" />
+    <east:para name="_sReplaceNew" value="\." type="String" />
+  </east:service>
+  <east:service beanName="eastUtilService" methodName="setValue"  id="__whereKeyWord">
+    <east:para name="_val" value="AND (t1.${colNotice.extKeepName.cnoticeTitle} LIKE '%${__keyWord}%'
+        OR t1.${colNotice.extKeepName.csummary} LIKE '%${__keyWord}%')" type="Object" />
+  </east:service>
+</s:if>
+
+<s:if test="${__ctype ne null && __ctype ne ''}">
+  <east:service beanName="eastUtilService" methodName="setValue"  id="__whereType">
+    <east:para name="_val" value="AND t1.${colNotice.extKeepName.ctype} = '${__ctype}'" type="Object" />
+  </east:service>
+</s:if>
+<s:if test="${__cisShow ne null && __cisShow ne ''}">
+  <east:service beanName="eastUtilService" methodName="setValue"  id="__whereIsShow">
+    <east:para name="_val" value="AND t1.${colNotice.extKeepName.cisShow} = '${__cisShow}'" type="Object" />
+  </east:service>
+</s:if>
+<s:if test="${__cstatus ne null && __cstatus ne ''}">
+  <east:service beanName="eastUtilService" methodName="setValue"  id="__whereStatus">
+    <east:para name="_val" value="AND t1.${colNotice.extKeepName.cstatus} = '${__cstatus}'" type="Object" />
+  </east:service>
+</s:if>
+
+
+<!--#<JREMOVE>
+<s:if test="${__startDate ne null && __startDate ne ''}">
+  <east:service beanName="eastUtilService" methodName="setValue"  id="__whereStartDate">
+    <east:para name="_val" value="AND t1.${colNotice.extKeepName.capplyDate} >= '${__startDate}'" type="Object" />
+  </east:service>
+</s:if>
+
+<s:if test="${__endDate ne null && __endDate ne ''}">
+  <east:service beanName="eastUtilService" methodName="setValue"  id="__whereEndDate">
+    <east:para name="_val" value="AND t1.${colNotice.extKeepName.capplyDate} <= '${__endDate}'" type="Object" />
+  </east:service>
+</s:if>
+
+<s:if test="${__status ne null && __status ne ''}">
+  <east:service beanName="eastUtilService" methodName="setValue"  id="__whereStatus">
+    <east:para name="_val" value="AND t1.${colNotice.extKeepName.cstatus} = '${__status}'" type="Object" />
+  </east:service>
+</s:if>
+</JREMOVE>#-->
+
+
+<east:service beanName="eastUtilService" methodName="setValue"  id="__fromIndex">
+  <east:para name="_val" value="${__pageSize * (__pageNo - 1)}" type="Object" />
+</east:service>
+      
+<s:if test="${__orderIsNumber eq '1'}">
+  <east:service beanName="eastUtilService" methodName="setValue"  id="__orderStatement">
+    <east:para name="_val" value="ORDER BY CAST(${__orderBy} AS DECIMAL(12,5)) ${__ascDesc}" type="Object" />
+  </east:service>
+</s:if>
+<s:else>
+  <east:service beanName="eastUtilService" methodName="setValue"  id="__orderStatement">
+    <east:para name="_val" value="ORDER BY ${__orderBy} ${__ascDesc}" type="Object" />
+  </east:service>
+</s:else>
+
+<east:service beanName="pmsService" methodName="nativeQuerySqlMap" id="__rsResult">
+  <east:para name="nativeSql" value="SELECT t1.id AS id
+         ,t1.${colNotice.extKeepName.cnoticeTitle} AS cnoticeTitle
+         ,t1.${colNotice.extKeepName.ctype} AS ctype
+         ,t1.${colNotice.extKeepName.cpublishDate} AS cpublishDate
+         ,t1.${colNotice.extKeepName.cexpiredDate} AS cexpiredDate
+         ,t1.${colNotice.extKeepName.cisShow} AS cisShow
+         ,t1.${colNotice.extKeepName.ccoverImage} AS ccoverImage
+         ,t1.${colNotice.extKeepName.cfilmNo} AS cfilmNo
+         ,t1.${colNotice.extKeepName.cstatus} AS cstatus
+		,t1.${colNotice.extKeepName.cshowIndex} AS cshowIndex
+      FROM  ${tnNotice} t1
+      WHERE t1.${colNotice.keepName.newsClass} = 'colNotice'
+        AND t1.column_id=1603
+        ${__whereKeyWord}
+        ${__whereType}
+        ${__whereIsShow}
+        ${__whereStatus}
+      ${__orderStatement}
+      LIMIT ${__fromIndex},${__pageSize}
+      "
+      type="String" />
+  <east:para name="_out_nodes_name" value="id,cnoticeTitle,ctype,cpublishDate,cexpiredDate,cisShow,ccoverImage,cfilmNo,cstatus,cshowIndex" type="String" />
+  <east:para name="token" value="123qweasd" type="String" />
+</east:service>
+
+<east:service beanName="pmsService" methodName="nativeQuerySqlMap" id="__rsPagination">
+  <east:para name="nativeSql" value="SELECT count('1') AS totalRecords
+        , CEIL(count('1')/${__pageSize}) AS totalPages
+      FROM  ${tnNotice} t1
+        ${__statementFilm}
+      WHERE t1.${colNotice.keepName.newsClass} = 'colNotice'
+        AND t1.column_id=1603
+        ${__whereKeyWord}
+        ${__whereType}
+        ${__whereIsShow}
+        ${__whereStatus}
+       "
+      type="String" />
+  <east:para name="_out_nodes_name" value="totalRecords,totalPages" type="String" />
+  <east:para name="token" value="123qweasd" type="String" />
+</east:service>
+
+<MACRO>
+  Jsp.pushs("${__rsResult}","${__rsPagination}");
+</MACRO>

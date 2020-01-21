@@ -1,0 +1,104 @@
+<!--#<JREMOVE>#--> 
+FUN:Confused
+  检索系统功能
+<!--#</JREMOVE>#-->
+<MACRO>
+  Jsp.pops("__pageNo","__pageSize","__orderBy","__orderIsNumber","__ascDesc","__keyWord");
+</MACRO>
+
+
+<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="createBeanExByClassName" id="colSysFuns">      
+  <east:para name="className" value="colSysFuns" type="String" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue"  id="tnSysFuns">
+  <east:para name="_tableName" value="${colSysFuns.externTable}" type="Object" />
+  <east:para name="_default" value="t_news" type="Object" />
+</east:service>
+
+<s:if test="${__keyWord ne null && __keyWord ne ''}">
+         
+  <east:service beanName="eastUtilService" methodName="replaceStr" id="__keyWord">
+    <east:para name="_sVal" value="${__keyWord}" type="String" />
+    <east:para name="_sReplaced" value="%" type="String" />
+    <east:para name="_sReplaceNew" value="\%" type="String" />
+  </east:service>
+  <east:service beanName="eastUtilService" methodName="replaceStr" id="__keyWord">
+    <east:para name="_sVal" value="${__keyWord}" type="String" />
+    <east:para name="_sReplaced" value="." type="String" />
+    <east:para name="_sReplaceNew" value="\." type="String" />
+  </east:service>
+  <east:service beanName="eastUtilService" methodName="setValue"  id="__whereKeyWord">
+    <east:para name="_val" value="AND (t1.${colSysFuns.extKeepName.cfunNo} LIKE '%${__keyWord}%'
+        OR t1.${colSysFuns.extKeepName.cname} LIKE '%${__keyWord}%')" type="Object" />
+  </east:service>
+</s:if>
+
+<!--#<JREMOVE>
+<s:if test="${__startDate ne null && __startDate ne ''}">
+  <east:service beanName="eastUtilService" methodName="setValue"  id="__whereStartDate">
+    <east:para name="_val" value="AND t1.${colSysFuns.extKeepName.capplyDate} >= '${__startDate}'" type="Object" />
+  </east:service>
+</s:if>
+
+<s:if test="${__endDate ne null && __endDate ne ''}">
+  <east:service beanName="eastUtilService" methodName="setValue"  id="__whereEndDate">
+    <east:para name="_val" value="AND t1.${colSysFuns.extKeepName.capplyDate} <= '${__endDate}'" type="Object" />
+  </east:service>
+</s:if>
+
+<s:if test="${__status ne null && __status ne ''}">
+  <east:service beanName="eastUtilService" methodName="setValue"  id="__whereStatus">
+    <east:para name="_val" value="AND t1.${colSysFuns.extKeepName.cstatus} = '${__status}'" type="Object" />
+  </east:service>
+</s:if>
+</JREMOVE>#-->
+
+
+<east:service beanName="eastUtilService" methodName="setValue"  id="__fromIndex">
+  <east:para name="_val" value="${__pageSize * (__pageNo - 1)}" type="Object" />
+</east:service>
+      
+<s:if test="${__orderIsNumber eq '1'}">
+  <east:service beanName="eastUtilService" methodName="setValue"  id="__orderStatement">
+    <east:para name="_val" value="ORDER BY CAST(${__orderBy} AS DECIMAL(12,5)) ${__ascDesc}" type="Object" />
+  </east:service>
+</s:if>
+<s:else>
+  <east:service beanName="eastUtilService" methodName="setValue"  id="__orderStatement">
+    <east:para name="_val" value="ORDER BY ${__orderBy} ${__ascDesc}" type="Object" />
+  </east:service>
+</s:else>
+      
+<east:service beanName="pmsService" methodName="nativeQuerySqlMap" id="__rsResult">
+  <east:para name="nativeSql" value="SELECT t1.id AS id
+         ,t1.${colSysFuns.extKeepName.cfunNo} AS cfunNo
+         ,t1.${colSysFuns.extKeepName.cname} AS cname
+         ,t1.${colSysFuns.extKeepName.cmemo} AS cmemo
+      FROM  ${tnSysFuns} t1
+      WHERE t1.${colSysFuns.keepName.newsClass} = 'colSysFuns'
+        AND t1.column_id=1603
+        ${__whereKeyWord}
+      ${__orderStatement}
+      LIMIT ${__fromIndex},${__pageSize}
+      "
+      type="String" />
+  <east:para name="_out_nodes_name" value="id,cfunNo,cname,cmemo" type="String" />
+  <east:para name="token" value="123qweasd" type="String" />
+</east:service>
+
+<east:service beanName="pmsService" methodName="nativeQuerySqlMap" id="__rsPagination">
+  <east:para name="nativeSql" value="SELECT count('1') AS totalRecords
+        , CEIL(count('1')/${__pageSize}) AS totalPages
+      FROM  ${tnSysFuns} t1
+      WHERE t1.${colSysFuns.keepName.newsClass} = 'colSysFuns'
+        AND t1.column_id=1603
+        ${__whereKeyWord}
+       "
+      type="String" />
+  <east:para name="_out_nodes_name" value="totalRecords,totalPages" type="String" />
+  <east:para name="token" value="123qweasd" type="String" />
+</east:service>
+
+<MACRO>
+  Jsp.pushs("${__rsResult}","${__rsPagination}");
+</MACRO>

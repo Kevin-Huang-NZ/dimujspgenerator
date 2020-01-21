@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>员工操作日志详情</title>
+    <meta name="description" content="">
+    <meta name="author" content="templatemo">
+    <link href="../chamber_erp_css/font-awesome.css?ver=1.0" rel="stylesheet" type="text/css" />
+    <link href="../chamber_erp_css/bootstrap.min.css?ver=1.0" rel="stylesheet">
+    <link href="../chamber_erp_css/templatemo_style.css?ver=1.0" rel="stylesheet">
+    <link href="../chamber_erp_css/slidernav.css?ver=1.0" rel="stylesheet">
+    <link href="../chamber_erp_css/ob_style.css?ver=1.0" rel="stylesheet">
+    
+    <link href="../chamber_css/bs_div.css?ver=1.0" rel="stylesheet">  
+    <link href="../chamber_css/bs_a.css?ver=1.0" rel="stylesheet">
+    <link href="../chamber_css/menu_style.css?ver=1.0" rel="stylesheet">
+	<link href="../chamber_css/chat.css?ver=1.0" rel="stylesheet">
+  
+    <link href="../js/alertify/alertify.core.css" rel="stylesheet" type="text/css"/>
+    <link href="../js/alertify/alertify.bootstrap.css" rel="stylesheet" type="text/css"/>
+    
+    <script src="../js/jquery-1.8.3.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/moment.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/alertify/alertify.js" type="text/javascript" charset="utf-8"></script>
+    
+    <script src="../js/ajax_janus.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/column_janus_mobile.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../widgets/lhgdialog/lhgdialog.js?skin=iblue" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/janus_dialog.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../My97DatePicker/WdatePicker.js" type="text/javascript" charset="utf-8"></script>
+  
+    <!--#
+    <MACRO>
+      Jsp.includejsp("/chamber_jsp/chamber_const_html/erp_const_define.jsp");
+      Jsp.includejsp("/chamber_jsp/chamber_module_html/erp_login_staff_info.jsp");
+      Jsp.result("_loginStaff","_roleFuncMap");
+    </MACRO>
+    #-->
+    <script>
+    /*# 
+      <c:if test="${_loginStaff eq null || _loginStaff.ext.cstaffNo eq null || _loginStaff.ext.cstaffNo eq ''}">
+        setTimeout(function(){
+            parent.parent.parent.window.location.href = "<%=basePath%>bs_ajaxIndex!chamber!chamber_erp_html!login.do";
+          },200);
+      </c:if>
+    #*/
+    </script> 
+  </head>
+  
+<!--#
+<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="getOneByIdAlwaysWithClass"  id="_log">
+  <east:para name="tnewsid" value="${requestEx.id}" type="String" />
+  <east:para name="className" value="colOperateLog" type="String" />
+</east:service>
+<MACRO>
+  Jsp.call("/chamber_jsp/chamber_module_html/operate_log_exbean_decode.jsp","${_log}");
+  Jsp.result("_filedList");
+</MACRO>
+#-->
+
+  <body>
+    <div class="templatemo-flex-row">
+      <!-- Main content -->
+      <div class="templatemo-content col-1 light-gray-bg"> 
+        <div class="templatemo-content-container">
+          <!--内容部分开始-->
+          <div class="div_tableList">
+            <div style="padding:20px;float: right;">
+              <a id="btnClose" class="bs_a_bar_btn bs_color_wihte bs_bk_green_1B" href="">关闭</a>
+            </div>
+            
+            <table cellpadding="6" cellspacing="0">
+              <thead>
+                <tr>
+                  <th>字段名</th>
+                  <th>数据</th> 
+                </tr>
+              </thead>
+              <tbody>
+                <!--#
+                <c:forEach items="${_filedList}" var="_one" varStatus="_status">
+                  
+                  <tr>
+                    <td>${_one.key}</td>
+                    <td>${_one.val}</td>
+                  </tr>
+                </c:forEach>  
+                #-->                         
+                
+                <!--#<JREMOVE>#-->
+                <tr>
+                  <td>1</td>
+                </tr>
+                <!--#</JREMOVE>#-->
+              </tbody>
+            </table>
+          </div>
+          <!--内容部分结束-->
+        </div>
+      </div>
+    </div>
+    
+    <script>
+    	$(function(){
+    	  $('#btnClose').on('click', function(){
+          __JDialogCallbackAndClose();
+    	  })
+    	})
+    </script>
+      
+  </body>
+</html>

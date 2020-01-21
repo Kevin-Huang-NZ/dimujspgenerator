@@ -1,0 +1,57 @@
+<!--#<JREMOVE>
+FUN:Confused
+顾客冻结积分解冻。
+</JREMOVE>#-->
+
+<MACRO>
+  Jsp.pops("__customer", "__camount");
+</MACRO>
+
+
+<east:service beanName="eastUtilService" methodName="setValue"  id="__hasError">
+  <east:para name="_value" value="0" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue"  id="__msg">
+  <east:para name="_value" value="" type="Object" />
+</east:service>
+
+
+<!--#<JREMOVE>因出入金可能与通证交易相关，所以将出入金的检查移到外边，在所有数据更新之前检查，防止数据不一致。
+<MACRO>
+  Jsp.call("/chamber_jsp/chamber_module_html/customer_money_check.jsp","${__ccustomerNo}","${__camount}","1");
+  Jsp.result("__hasError","__msg","__customer");
+</MACRO>
+</JREMOVE>#-->
+
+<s:if test="${__hasError eq '0'}">
+  <east:service beanName="eastUtilService" methodName="addDoubleString"  id="__blance">
+    <east:para name="_val1" value="${__camount}" type="String" />
+    <east:para name="_val2" value="${__customer.ext.camount}" type="String" />
+  </east:service>
+  <east:service beanName="eastUtilService" methodName="addDoubleString"  id="__freezingAmount">
+    <east:para name="_val1" value="${__customer.ext.cfreezingAmount}" type="String" />
+    <east:para name="_val2" value="${0 - __camount}" type="String" />
+  </east:service>
+
+	<MACRO>
+		Jsp.call("/chamber_jsp/chamber_module_html/float_formatV2_fun.jsp","${__blance}"); 
+		Jsp.result("__blanceFmt");
+	</MACRO>
+
+	<MACRO>
+		Jsp.call("/chamber_jsp/chamber_module_html/float_formatV2_fun.jsp","${__freezingAmount}"); 
+		Jsp.result("__freezingAmountFmt");
+	</MACRO>
+	
+  <MACRO>
+    Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${__customer}","camount","${__blanceFmt}");
+    Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${__customer}","cfreezingAmount","${__freezingAmountFmt}");
+    
+    Jsp.call("/bspms_jsp/bspms_funs_html/ajax_save_bean_fun.jsp" ,"${__customer}");
+  </MACRO>
+
+</s:if>
+
+<MACRO>
+  Jsp.pushs("${__hasError}","${__msg}");
+</MACRO>

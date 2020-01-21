@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <title></title>
+  </head>
+  
+    
+<!--#
+<MACRO>
+  Jsp.includejsp("/chamber_jsp/chamber_module_html/erp_login_staff_info.jsp");
+  Jsp.result("_loginStaff","_roleFuncMap");
+</MACRO>
+#-->
+<!--#
+<east:service beanName="eastUtilService" methodName="setValue"  id="indexUrl">
+  <east:para name="_value" value="" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="mapGet"  id="_canAccess">
+  <east:para name="_map" value="${_roleFuncMap}" type="Object" />
+  <east:para name="_key" value="'index'" type="String" /> 
+</east:service>
+<s:if test="${_canAccess eq '1'}">
+  <east:service beanName="eastUtilService" methodName="setValue"  id="indexUrl">
+    <east:para name="_value" value="bs_ajaxIndex!chamber!chamber_erp_html!index.do" type="Object" />
+  </east:service>
+</s:if>
+<east:service beanName="eastUtilService" methodName="mapGet"  id="_canAccess">
+  <east:para name="_map" value="${_roleFuncMap}" type="Object" />
+  <east:para name="_key" value="'index_mine'" type="String" /> 
+</east:service>
+<s:if test="${_canAccess eq '1'}">
+  <east:service beanName="eastUtilService" methodName="setValue"  id="indexUrl">
+    <east:para name="_value" value="bs_ajaxIndex!chamber!chamber_erp_html!index_mine.do" type="Object" />
+  </east:service>
+</s:if>
+#-->
+  <frameset rows="88,*" cols="*" frameborder="no" border="0" framespacing="0">
+  	<frame src="../chamber_erp_html/frame_top.html" name="topFrame" scrolling="no"  noresize="noresize" id="topFrame" title="topFrame" />
+  	
+    <!--#<JREMOVE>#-->
+  	<frame src="../chamber_erp_html/index.html" name="centerFrame" scrolling="yes" noresize="noresize" id="centerFrame" title="centerFrame" />
+    <!--#</JREMOVE>#-->
+  	<!--#
+    <frame src="<%=basePath%>${indexUrl}" name="centerFrame" scrolling="yes" noresize="noresize" id="centerFrame" title="centerFrame" />
+    #-->
+  </frameset>
+  <noframes>
+    <body>
+    </body>
+  </noframes>
+</html>

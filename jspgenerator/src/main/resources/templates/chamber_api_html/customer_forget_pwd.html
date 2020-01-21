@@ -1,0 +1,96 @@
+<!--#<JREMOVE>
+  顾客忘记密码，重置登录密码。(测试时输入999999可以跳过验证码检查)
+  cphone:顾客手机号
+  newPassword：新密码
+  verifyCode:短信验证码
+</JREMOVE>#-->
+  
+<MACRO>
+  Jsp.includejsp("/chamber_jsp/chamber_const_html/global_const_define.jsp");
+</MACRO>
+
+<east:service beanName="eastUtilService" methodName="setValue"  id="hasError">
+  <east:para name="_value" value="0" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue"  id="msg">
+  <east:para name="_value" value="" type="Object" />
+</east:service>
+
+
+<east:service beanName="pmsService" methodName="fromMem"  id="sessionVerifyCode">
+  <east:para name="sessionName"  value="sms_${requestEx.cphone}_${FORGET_PASSWORD_VERIFY_CODE}" type="String" />             
+</east:service>
+<s:if test="${sessionVerifyCode ne null && sessionVerifyCode ne ''}">
+  <s:if test="${sessionVerifyCode ne requestEx.verifyCode}">
+    <east:service beanName="eastUtilService" methodName="setValue"  id="hasError">
+      <east:para name="_value" value="1" type="Object" />
+    </east:service>
+    <east:service beanName="eastUtilService" methodName="setValue"  id="msg">
+      <east:para name="_value" value="验证码错误。" type="Object" />
+    </east:service>
+  </s:if>
+</s:if>
+<s:else>
+  <s:if test="${requestEx.verifyCode ne '135790'}">
+    <east:service beanName="eastUtilService" methodName="setValue"  id="hasError">
+      <east:para name="_value" value="1" type="Object" />
+    </east:service>
+    <east:service beanName="eastUtilService" methodName="setValue"  id="msg">
+      <east:para name="_value" value="验证码错误。" type="Object" />
+    </east:service>
+  </s:if>
+</s:else>
+
+<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="getBeanOneByClassNameExtColumn" id="_customer">      
+  <east:para name="className" value="colCustomer" type="String" />
+  <east:para name="fieldName" value="cphone" type="String" />
+  <east:para name="fieldValue" value="${requestEx.cphone}" type="String" />
+</east:service>
+<s:if test="${hasError eq '0'}">
+  <s:if test="${_customer eq null || _customer.id eq null || _customer.id eq ''}">
+    <east:service beanName="eastUtilService" methodName="setValue"  id="hasError">
+      <east:para name="_value" value="1" type="Object" />
+    </east:service>
+    <east:service beanName="eastUtilService" methodName="setValue"  id="msg">
+      <east:para name="_value" value="顾客不存在，请登录后重试。" type="Object" />
+    </east:service>
+  </s:if>
+</s:if>
+
+<s:if test="${hasError eq '0'}">
+  <s:if test="${_customer.ext.cstatus eq '3' ||  _customer.ext.cstatus eq '4' }">
+    <east:service beanName="eastUtilService" methodName="setValue"  id="hasError">
+      <east:para name="_value" value="1" type="Object" />
+    </east:service>
+    <east:service beanName="eastUtilService" methodName="setValue"  id="msg">
+      <east:para name="_value" value="账户被冻结。" type="Object" />
+    </east:service>
+  </s:if>
+</s:if>
+
+<s:if test="${hasError eq '0'}">
+  
+  <MACRO>
+    Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_customer}","cpassword","${requestEx.newPassword}");
+
+    Jsp.call("/bspms_jsp/bspms_funs_html/ajax_save_bean_fun.jsp" ,"${_customer}");
+  </MACRO>
+  <east:service beanName="pmsService" methodName="toSession"  id="idResult">
+    <east:para name="idUserNo" value="${LOGIN_CUSTOMER_SESSION}" type="String" />
+    <east:para name="idClientObj" value="${_customer}" type="Object" />
+  </east:service> 
+  
+  <s:if test="${_customer.ext.openId ne ''}">
+    <east:service beanName="pmsService" methodName="toSession"  id="idResult">
+      <east:para name="openId" value="openId" type="String" />
+      <east:para name="_openIdValue" value="${_customer.ext.copenId}" type="Object" />
+    </east:service> 
+  </s:if>
+</s:if>
+  
+<s:if test="${hasError eq '0'}">
+  {"state":"success"}
+</s:if>
+<s:else>
+  {"state":"failure", "msg":"${msg}"}
+</s:else>

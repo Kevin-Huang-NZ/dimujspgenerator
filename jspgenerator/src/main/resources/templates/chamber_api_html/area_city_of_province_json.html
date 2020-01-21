@@ -1,0 +1,22 @@
+<!--#<JREMOVE>
+	检索省市下的城市列表。
+	参数：
+	cprovince省市中文。
+</JREMOVE>#-->
+
+<%@ page trimDirectiveWhitespaces="true" buffer="128kb" autoFlush="true" language="Java" pageEncoding="UTF-8" %>
+<MACRO>
+	Jsp.call("/chamber_jsp/chamber_funs_html/fun_area_city_of_province.jsp","${requestEx.cprovince}");
+	Jsp.result("lsCity");
+</MACRO>
+
+{"state":"success","error_code":"0","data_size":"${fn:length(lsCity)}","data":[
+	<c:forEach items="${lsCity}" var="_one" varStatus="_status"> 
+		<s:if test="${_status.index gt 0}">,</s:if>
+		{ 
+			"cprovince":"${_one.cprovince}",
+			"ccity":"${_one.ccity}"
+		}	 
+	</c:forEach>
+]}
+	

@@ -1,0 +1,48 @@
+<!--#<JREMOVE>
+FUN:Confused
+  保存区域。
+</JREMOVE>#-->
+<MACRO>
+  Jsp.pops("__cprovince","__ccity","__careaName","__ctype","__clevel");
+</MACRO>
+
+<east:service beanName="eastUtilService" methodName="setValue"  id="__hasError">
+  <east:para name="_value" value="0" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue"  id="__msg">
+  <east:para name="_value" value="" type="Object" />
+</east:service>
+
+<east:service beanName="eastUtilService" methodName="md5" id="__md5">
+  <east:para name="_sourceObj" value="${__cprovince}${__careaName}" type="String" />
+</east:service> 
+<MACRO>
+  Jsp.call("/bspms_jsp/bspms_modules_html/cn_to_pingying.jsp","${__cprovince}${__careaName}");
+  Jsp.result("__pinyin");
+</MACRO>
+
+<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="getBeanOneByClassNameExtColumn" id="__area">      
+  <east:para name="className" value="colArea" type="String" />
+  <east:para name="fieldName" value="careaNo" type="String" />
+  <east:para name="fieldValue" value="${__pinyin}_${__md5}" type="String" />
+</east:service>
+
+<s:if test="${__area eq null || __area.id eq null || __area.id eq ''}">
+  <east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="createBeanExByClassName" id="__area">       
+    <east:para name="className" value="colArea" type="String" />
+  </east:service>
+</s:if>
+<MACRO>
+  Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${__area}","careaNo","${__pinyin}_${__md5}");
+  Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${__area}","careaName","${__careaName}");
+  Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${__area}","cprovince","${__cprovince}");
+  Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${__area}","ccity","${__ccity}");
+  Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${__area}","ctype","${__ctype}");
+  Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${__area}","clevel","${__clevel}");
+  
+  Jsp.call("/bspms_jsp/bspms_funs_html/ajax_save_bean_fun.jsp" ,"${__area}");
+</MACRO>
+  
+<MACRO>
+  Jsp.pushs("${__hasError}","${__msg}","${__area}");
+</MACRO>

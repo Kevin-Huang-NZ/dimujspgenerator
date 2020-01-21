@@ -1,0 +1,31 @@
+<!--#<JREMOVE>
+	设置某张银行卡为默认。
+	参数：
+	id
+</JREMOVE>#-->
+<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="getOneByIdAlwaysWithClass" id="_bankCard">
+	<east:para name="tnewsid" value="${requestEx.id}" type="String" />
+	<east:para name="className" value="colBankCard" type="String" />
+</east:service>
+	
+<east:service beanName="eastUtilService" methodName="setValue" id="tnBankCard">
+	<east:para name="_tableName" value="${_bankCard.externTable}" type="Object" />
+	<east:para name="_default" value="t_news" type="Object" />
+</east:service>
+<east:service beanName="pmsService" methodName="nativeSqlExc" id="_result">
+	<east:para name="nativeSql" value="UPDATE ${tnBankCard} 
+			SET ${_bankCard.extKeepName.cisDefault} = '0' 
+			WHERE ${_bankCard.keepName.newsClass} = 'colBankCard'
+				AND column_id=1603
+				AND ${_bankCard.extKeepName.ccustomerNo} = '${_bankCard.ext.ccustomerNo}'
+				AND ${_bankCard.extKeepName.cisDefault} = '1'" type="String" />
+	<east:para name="token" value="123qweasd" type="String" />
+</east:service>
+	
+<MACRO>
+	Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_bankCard}","cisDefault","1");
+	
+	Jsp.call("/bspms_jsp/bspms_funs_html/ajax_save_bean_fun.jsp" ,"${_bankCard}");
+</MACRO>
+
+{"state":"success"}

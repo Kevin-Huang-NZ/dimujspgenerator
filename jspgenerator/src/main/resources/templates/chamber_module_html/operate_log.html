@@ -1,0 +1,109 @@
+<!--#<JREMOVE>#--> 
+FUN:Confused
+  检索员工操作记录
+<!--#</JREMOVE>#-->
+<MACRO>
+  Jsp.pops("__pageNo","__pageSize","__orderBy","__extIsNumber","__ascDesc","__operator","__tableName","__startDate","__endDate");
+</MACRO>
+
+
+<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="createBeanExByClassName" id="colOperateLog">      
+  <east:para name="className" value="colOperateLog" type="String" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue"  id="tnOperateLog">
+  <east:para name="_tableName" value="${colOperateLog.externTable}" type="Object" />
+  <east:para name="_default" value="t_news" type="Object" />
+</east:service>
+
+<s:if test="${__operator ne null && __operator ne ''}">
+         
+  <east:service beanName="eastUtilService" methodName="replaceStr" id="__operator">
+    <east:para name="_sVal" value="${__operator}" type="String" />
+    <east:para name="_sReplaced" value="%" type="String" />
+    <east:para name="_sReplaceNew" value="\%" type="String" />
+  </east:service>
+  <east:service beanName="eastUtilService" methodName="replaceStr" id="__operator">
+    <east:para name="_sVal" value="${__operator}" type="String" />
+    <east:para name="_sReplaced" value="." type="String" />
+    <east:para name="_sReplaceNew" value="\." type="String" />
+  </east:service>
+  <east:service beanName="eastUtilService" methodName="setValue"  id="__whereOperator">
+    <east:para name="_val" value="AND t1.${colOperateLog.extKeepName.coperatorName} LIKE '%${__keyWord}%'" type="Object" />
+  </east:service>
+</s:if>
+
+<s:if test="${__tableName ne null && __tableName ne ''}">
+  <east:service beanName="eastUtilService" methodName="setValue"  id="__whereTableName">
+    <east:para name="_val" value="AND t1.${colOperateLog.extKeepName.cbeanTableName} = '${__tableName}'" type="Object" />
+  </east:service>
+</s:if>
+
+<s:if test="${__startDate ne null && __startDate ne ''}">
+  <east:service beanName="eastUtilService" methodName="setValue"  id="__whereStartDate">
+    <east:para name="_val" value="AND t1.${colOperateLog.extKeepName.coperatDatetime} >= '${__startDate} 00:00:00'" type="Object" />
+  </east:service>
+</s:if>
+
+<s:if test="${__endDate ne null && __endDate ne ''}">
+  <east:service beanName="eastUtilService" methodName="setValue"  id="__whereEndDate">
+    <east:para name="_val" value="AND t1.${colOperateLog.extKeepName.coperatDatetime} <= '${__endDate} 23:59:59'" type="Object" />
+  </east:service>
+</s:if>
+
+
+<east:service beanName="eastUtilService" methodName="setValue"  id="__fromIndex">
+  <east:para name="_val" value="${__pageSize * (__pageNo - 1)}" type="Object" />
+</east:service>
+      
+<s:if test="${__orderIsNumber eq '1'}">
+  <east:service beanName="eastUtilService" methodName="setValue"  id="__orderStatement">
+    <east:para name="_val" value="ORDER BY CAST(${__orderBy} AS DECIMAL(12,5)) ${__ascDesc}" type="Object" />
+  </east:service>
+</s:if>
+<s:else>
+  <east:service beanName="eastUtilService" methodName="setValue"  id="__orderStatement">
+    <east:para name="_val" value="ORDER BY ${__orderBy} ${__ascDesc}" type="Object" />
+  </east:service>
+</s:else>
+      
+<east:service beanName="pmsService" methodName="nativeQuerySqlMap" id="__rsResult">
+  <east:para name="nativeSql" value="SELECT t1.id AS id
+         ,t1.${colOperateLog.extKeepName.coperatorName} AS coperatorName
+         ,t1.${colOperateLog.extKeepName.coperatMemo} AS coperatMemo
+         ,t1.${colOperateLog.extKeepName.coperatDatetime} AS coperatDatetime
+         ,t1.${colOperateLog.extKeepName.cevent} AS cevent
+         ,t1.${colOperateLog.extKeepName.cbeanTableName} AS cbeanTableName
+      FROM  ${tnOperateLog} t1
+      WHERE t1.${colOperateLog.keepName.newsClass} = 'colOperateLog'
+        AND t1.column_id=1603
+        ${__whereOperator}
+        ${__whereTableName}
+        ${__whereStartDate}
+        ${__whereEndDate}
+      ${__orderStatement}
+      LIMIT ${__fromIndex},${__pageSize}
+      "
+      type="String" />
+  <east:para name="_out_nodes_name" value="id,coperatorName,coperatMemo,coperatDatetime,cevent,cbeanTableName" type="String" />
+  <east:para name="token" value="123qweasd" type="String" />
+</east:service>
+
+<east:service beanName="pmsService" methodName="nativeQuerySqlMap" id="__rsPagination">
+  <east:para name="nativeSql" value="SELECT count('1') AS totalRecords
+        , CEIL(count('1')/${__pageSize}) AS totalPages
+      FROM  ${tnOperateLog} t1
+      WHERE t1.${colOperateLog.keepName.newsClass} = 'colOperateLog'
+        AND t1.column_id=1603
+        ${__whereOperator}
+        ${__whereTableName}
+        ${__whereStartDate}
+        ${__whereEndDate}
+       "
+      type="String" />
+  <east:para name="_out_nodes_name" value="totalRecords,totalPages" type="String" />
+  <east:para name="token" value="123qweasd" type="String" />
+</east:service>
+
+<MACRO>
+  Jsp.pushs("${__rsResult}","${__rsPagination}");
+</MACRO>

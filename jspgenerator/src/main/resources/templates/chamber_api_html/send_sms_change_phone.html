@@ -1,0 +1,72 @@
+<!--#<JREMOVE>#-->  
+	发送修改手机用短信验证码
+	参数：
+		cphone：手机号
+	返回值：
+		resultCode：发送结果。0表示成功
+<!--#</JREMOVE>#-->
+<MACRO>
+  Jsp.includejsp("/chamber_jsp/chamber_const_html/global_const_define.jsp");
+</MACRO>
+
+<east:service beanName="eastUtilService" methodName="setValue"  id="hasError">
+  <east:para name="_value" value="0" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue"  id="msg">
+  <east:para name="_value" value="" type="Object" />
+</east:service>
+
+<east:service beanName="eastUtilService" methodName="getDateTime"  id="_nowDateTime">
+</east:service> 
+<east:service beanName="pmsService" methodName="fromSession"  id="prevSendTime">
+  <east:para name="sessionName"  value="${requestEx.cphone}_${CODE_SEND_TIME}" type="String" />             
+</east:service>
+<s:if test="${prevSendTime ne null && prevSendTime ne ''}">
+  <east:service beanName="eastUtilService" methodName="diffSecondsDate"  id="_diff">
+    <east:para name="_time1" value="_nowDateTime" type="String" />
+    <east:para name="_time2" value="prevSendTime" type="String" />
+  </east:service>
+  <s:if test="${_diff < 60}">
+    <east:service beanName="eastUtilService" methodName="setValue"  id="hasError">
+      <east:para name="_value" value="1" type="Object" />
+    </east:service>
+    <east:service beanName="eastUtilService" methodName="setValue"  id="msg">
+      <east:para name="_value" value="验证码发送太频繁，请稍后再试。" type="Object" />
+    </east:service>
+  </s:if>
+</s:if>
+	
+<s:if test="${hasError eq '0'}">
+	<east:service beanName="eastUtilService" methodName="getRandom"  id="randomCode"> 
+	</east:service>
+		
+	<east:service beanName="eastUtilService" methodName="setValue"  id="templateParamJson">
+		<east:para name="_val" value="{\"code\":\"${randomCode}\"}" type="Object" />
+	</east:service>
+
+	<MACRO>
+		Jsp.call("/chamber_jsp/chamber_funs_html/sms_send.jsp","${requestEx.cphone}","SMS_163570075","${templateParamJson}");
+		Jsp.result("_result");
+	</MACRO>
+	
+	<east:service beanName="pmsService"  methodName="toSession"  id="idResult">
+		<east:para name="sessionName"  value="${requestEx.cphone}_${CODE_SEND_TIME}" type="String" />
+		<east:para name="objectToSession" value="${_nowDateTime}" type="Object" />
+	</east:service>
+	<east:service beanName="pmsService"  methodName="toMem"  id="idResult">
+		<east:para name="sessionName" value="sms_${requestEx.cphone}_${CHANGE_PHONE_VERIFY_CODE}" type="String" />
+		<east:para name="objectToSession" value="${randomCode}" type="Object" />
+		<east:para name="timeOutMinutes" value="2" type="Integer" />
+	</east:service>
+</s:if>
+
+<s:if test="${hasError eq '0'}">
+	{"state":"success","error_code":"0","data_size":"1","data":[  
+		{
+			"resultCode":"${_result}"
+		}
+	]}
+</s:if>
+<s:else>
+  {"state":"failed","msg":"${msg}"}
+</s:else>

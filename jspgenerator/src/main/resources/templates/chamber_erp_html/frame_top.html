@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title></title>
+		<meta name="description" content="">
+		<meta name="author" content="templatemo">
+		<link href="../chamber_erp_css/font-awesome.css?ver=1.0" rel="stylesheet" type="text/css" />
+		<link href="../chamber_erp_css/bootstrap.min.css?ver=1.0" rel="stylesheet">
+		<link href="../chamber_erp_css/templatemo_style.css?ver=1.0" rel="stylesheet">
+		<link href="../chamber_erp_css/slidernav.css?ver=1.0" rel="stylesheet">
+		<link href="../chamber_erp_css/ob_style.css?ver=1.0" rel="stylesheet">
+		
+    <script language="JavaScript" src="../js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript " src="../js/bootstrap.min.js"></script>
+	</head>
+<!--#
+<JREMOVE>
+<MACRO>
+  Jsp.includejsp("/chamber_jsp/chamber_module_html/erp_login_staff_info.jsp");
+  Jsp.result("_loginStaff","_roleFuncMap");
+</MACRO>
+</JREMOVE>
+#-->
+	<body>
+    <!--#<JREMOVE>
+		<div class="templatemo-top-nav-container">
+		  <div class="row">
+		    <nav class="templatemo-top-nav col-lg-12 col-md-12">
+		      <ul class="text-uppercase">
+            <east:service beanName="eastUtilService" methodName="mapGet"  id="_canAccess">
+              <east:para name="_map" value="${_roleFuncMap}" type="Object" />
+              <east:para name="_key" value="'index'" type="String" /> 
+            </east:service>
+            <s:if test="${_canAccess eq '1'}">
+            <li>
+              <a href="../chamber_erp_html/index.html" target="centerFrame">
+                <i class="fa fa-home fa-4x icon_top"></i>
+                <p style="width: 100%;text-align: center;">首页</p>
+              </a>
+              <i></i>
+            </li>
+            </s:if>
+		      </ul>  
+		    </nav> 
+		  </div>
+		</div>
+    </JREMOVE>#-->
+	</body>
+</html>

@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>轮播图</title>
+    <meta name="description" content="">
+    <meta name="author" content="templatemo">
+    <link href="../chamber_erp_css/font-awesome.css?ver=1.0" rel="stylesheet" type="text/css" />
+    <link href="../chamber_erp_css/bootstrap.min.css?ver=1.0" rel="stylesheet">
+    <link href="../chamber_erp_css/templatemo_style.css?ver=1.0" rel="stylesheet">
+    <link href="../chamber_erp_css/slidernav.css?ver=1.0" rel="stylesheet">
+    <link href="../chamber_erp_css/ob_style.css?ver=1.0" rel="stylesheet">
+    <link href="../chamber_erp_css/orderBy.css?ver=1.0" rel="stylesheet">
+    
+    <link href="../chamber_css/bs_div.css?ver=1.0" rel="stylesheet">  
+    <link href="../chamber_css/bs_a.css?ver=1.0" rel="stylesheet">
+    <link href="../chamber_css/menu_style.css?ver=1.0" rel="stylesheet">
+	<link href="../chamber_css/chat.css?ver=1.0" rel="stylesheet">
+  
+    <link href="../js/alertify/alertify.core.css" rel="stylesheet" type="text/css"/>
+    <link href="../js/alertify/alertify.bootstrap.css" rel="stylesheet" type="text/css"/>
+    <script src="../js/jquery-1.8.3.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/moment.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/alertify/alertify.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/ajax_janus.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/common_janus.alert.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/column_janus_mobile.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/janus_dialog.js" type="text/javascript" charset="utf-8"></script>
+	
+    <script src="../chamber_erp_js/orderby.js" type="text/javascript" charset="utf-8"></script>
+	
+    <script src="../widgets/lhgdialog/lhgdialog.js?skin=iblue" type="text/javascript" charset="utf-8"></script>
+    <script src="../My97DatePicker/WdatePicker.js" type="text/javascript" charset="utf-8"></script>
+	
+   
+    <!--#<JREMOVE>#-->
+    <script type="text/javascript">
+      $(function() {
+        $(".bss_menuson").each(function(_index,_ele){
+          if ($(_ele).find('a').length == 0) {
+            $(_ele).parent().remove();
+          }
+        })
+        
+        $('.bss_title').click(function() {
+          var $ul = $(this).next('ul');
+          $('dd').find('.bss_menuson').slideUp();
+          if($ul.is(':visible')) {
+            $(this).next('.bss_menuson').slideUp();
+          } else {
+            $(this).next('.bss_menuson').slideDown();
+          }
+          
+          if ($ul.length == 0) {
+            $(".bss_leftmenu a").removeClass("active");
+            $(this).addClass("active");
+          }
+        });
+        
+        $(".bss_menuson a").click(function() {
+          $(".bss_leftmenu a").removeClass("active");
+          $(this).addClass("active").parent().siblings('a').addClass("active");
+        });
+      })
+    </script>
+    <!--#</JREMOVE>#-->
+    <script>
+      function onCheckboxId(_this){
+        var checked =  $(_this).attr("checked");
+        var checkedNo =  $(_this).val();
+        if(checked == "checked"){
+          
+          $("input[name='checkboxData']").each(function(index,ele) {
+            if ($(_this).prop("checked")) {
+              var otherCheckedNo =  $(this).val();
+              if (checkedNo !== otherCheckedNo) {
+                $(this).prop("checked", false);
+              }
+            }
+          });
+        }
+      }
+    </script>
+  </head>
+  
+<!--#
+<MACRO>
+  Jsp.includejsp("/chamber_jsp/chamber_const_html/erp_const_define.jsp");
+  Jsp.includejsp("/chamber_jsp/chamber_module_html/erp_login_staff_info.jsp");
+  Jsp.result("_loginStaff","_roleFuncMap");
+</MACRO>
+#-->
+
+<!--#
+<east:service beanName="eastUtilService" methodName="setValue"  id="pageNo">
+ <east:para name="_val" value="${requestEx.pageNo}" type="Object" />
+ <east:para name="_default_val" value="1" type="Object" />
+</east:service>  
+<east:service beanName="eastUtilService" methodName="setValue"  id="pageSize">
+  <east:para name="_val" value="${requestEx.pageSize}" type="Object" />
+  <east:para name="_default_val" value="10" type="Object" />
+</east:service>   
+<east:service beanName="eastUtilService" methodName="setValue"  id="_orderBy">
+  <east:para name="_val" value="${requestEx.orderBy}" type="Object" />
+  <east:para name="_default_val" value="cshowIndex" type="Object" />
+</east:service>   
+<east:service beanName="eastUtilService" methodName="setValue"  id="_orderIsNumber">
+  <east:para name="_val" value="${requestEx.orderIsNumber}" type="Object" />
+  <east:para name="_default_val" value="1" type="Object" />
+</east:service>   
+<east:service beanName="eastUtilService" methodName="setValue"  id="_ascDesc">
+  <east:para name="_val" value="${requestEx.ascDesc}" type="Object" />
+  <east:para name="_default_val" value="desc" type="Object" />
+</east:service>  
+#-->
+
+<!--#
+<MACRO>
+  Jsp.call("/chamber_jsp/chamber_funs_html/fun_index_image.jsp","${pageNo}","${pageSize}","${_orderBy}","${_orderIsNumber}","${_ascDesc}","${requestEx.cposition}","${requestEx.cisShow}");
+  Jsp.result("rsIndexImage","rsPagination");
+</MACRO>
+
+<MACRO>
+  Jsp.call("/chamber_jsp/chamber_module_html/calculate_pagination_for_original_sql.jsp","${rsPagination}","${pageNo}");
+  Jsp.result("totalRecords","totalPages","pagePrev","pageNext","pageOne","pageTwo","pageThree","pageFour","pageFive","pageSix","pageSeven");
+</MACRO>
+#-->
+<!--#
+<east:service beanName="pmsService.pmsDaoImpl.daoBsDataDic" methodName="getNewsDicClassNameChildrenEx"  id="dicYesOrNo">
+  <east:para name="className" value="dicYesOrNo" type="String" />
+</east:service>
+<east:service beanName="pmsService.pmsDaoImpl.daoBsDataDic" methodName="getNewsDicClassNameChildrenEx"  id="dicImagePosition">
+  <east:para name="className" value="dicImagePosition" type="String" />
+</east:service>
+#-->
+  <body>
+    <div class="templatemo-flex-row">
+      <!--#<JREMOVE>#-->
+      <div class="templatemo-sidebar">
+        <header class="templatemo-site-header">
+          <div class="square"></div>
+        </header>
+        <div class="mobile-menu-icon">
+          <i class="fa fa-bars"></i>
+        </div>
+        <dl class="templatemo-left-nav bss_leftmenu">
+          <dd>
+            <a href="../chamber_erp_html/index.html" class="bss_title active" >
+              <i class="fa fa-home icon_left"></i>首页
+            </a>
+          </dd>
+          <dd>
+            <a class="bss_title">
+              <i class="fa fa-cog icon_left"></i>系统设置
+            </a>
+            <ul style="display: none;" class="bss_menuson">
+              <a href="../chamber_erp_html/ls_city.html">城市</a>
+            </ul>
+          </dd>
+        </dl>
+      </div>
+      <!--#</JREMOVE>#-->
+      <!-- Main content -->
+      <div class="templatemo-content col-1 light-gray-bg">  
+        <!--#<JREMOVE>#-->
+        <div class="templatemo-top-nav-container">
+          <div class="row">
+            <nav class="templatemo-top-nav col-lg-12 col-md-12">
+              <ul class="text-uppercase">
+                <li>
+                  <a href="../chamber_erp_html/index.html" >
+                    <i class="fa fa-home fa-4x icon_top"></i>
+                    <p style="width: 100%;text-align: center;">首页</p>
+                  </a>
+                  <i></i>
+                </li>
+              </ul>  
+            </nav> 
+          </div>
+        </div>
+        <!--#</JREMOVE>#-->
+        <div class="templatemo-content-container">
+          
+          <!--#
+          <MACRO>
+            Jsp.call("/chamber_jsp/chamber_erp_html/frame_title_login_bar.jsp","轮播图");
+          </MACRO>
+          #-->          
+          
+          <!--#<JREMOVE>#-->
+          <div class="div_top_header">
+            <h4>首页
+              <div class="dropdown">
+                <a data-toggle="dropdown" href="#">个人中心</a>
+                <ul class="div_top_user dropdown-menu" role="menu" aria-labelledby="dLabel">
+                  <li>
+                    <a data-toggle="modal" data-target="#myModal_03" href="#">
+                    <i class="fa fa-pencil"></i>个人信息</a>
+                  </li>
+                  <li>
+                    <a data-toggle="modal" data-target="#myModal_04" href="#">
+                    <i class="fa fa-cogs"></i>修改密码</a>
+                  </li>
+                  <li class="li_divider"></li>
+                  <li>
+                    <a href="#" id="idLoginOut">
+                    <i class="fa fa-sign-out" ></i>退出</a>
+                  </li>
+                </ul>
+              </div>
+              <span>XX，您好</span>
+            </h4>
+                
+          </div>
+          <!--#</JREMOVE>#-->
+          <!--内容部分开始-->
+          <div class="div_tableList">
+            <div style="padding: 20px;width: 70%;float: left;">
+              <form id="searchForm" action="../chamber_erp_html/ls_index_image.html" method="post" enctype="multipart/form-data">
+                <!--<input type="text" name="keyWord" value="${requestEx.keyWord}" style="width: 200px;float: left;margin-right: 15px;height: 38px;" class="form-control" placeholder="关键字" />-->
+                
+                <p style="float: left;font-size: 16px;margin: 0;margin-right: 10px;line-height: 38px;">是否显示</p>
+                <select name="cisShow" id="cisShow" style="float: left;height: 38px;margin-right: 15px;width: 90px;" class="form-control" >
+                  <option value="">全部</option>
+                  <c:forEach items="${dicYesOrNo}" var="_dicOne" varStatus="_dicStatus">
+                    <s:if test="${_dicOne.dicVal == requestEx.cisShow}">
+                      <option value="${_dicOne.dicVal}" selected="selected">${_dicOne.dicName}</option>
+                    </s:if>
+                    <s:else>
+                      <option value="${_dicOne.dicVal}">${_dicOne.dicName}</option>
+                    </s:else>
+                  </c:forEach>
+                </select>
+                
+                <p style="float: left;font-size: 16px;margin: 0;margin-right: 10px;line-height: 38px;">显示位置</p>
+                <select name="cposition" id="cposition" style="float: left;height: 38px;margin-right: 15px;width: 90px;" class="form-control" >
+                  <option value="">全部</option>
+                  <c:forEach items="${dicImagePosition}" var="_dicOne" varStatus="_dicStatus">
+                    <s:if test="${_dicOne.dicVal == requestEx.cposition}">
+                      <option value="${_dicOne.dicVal}" selected="selected">${_dicOne.dicName}</option>
+                    </s:if>
+                    <s:else>
+                      <option value="${_dicOne.dicVal}">${_dicOne.dicName}</option>
+                    </s:else>
+                  </c:forEach>
+                </select>
+                <!--#<JREMOVE>
+                <p style="float: left;font-size: 16px;margin: 0;margin-right: 10px;line-height: 38px;">申请日期</p>
+                <input type="text" style="width: 120px;float: left;margin-right: 15px;height: 38px;" class="form-control" name="startDate" id="startDate" onclick="WdatePicker({isShowClear:true,errDealMode:2,readOnly:true,dateFmt:'yyyy-MM-dd'});return false;" value="${requestEx.startDate}" readonly="readonly"/>
+                <p style="float: left;font-size: 16px;margin: 0 10px;line-height: 38px;">~</p>
+                <input type="text" style="width: 120px;float: left;margin-right: 15px;height: 38px;" class="form-control" name="endDate" id="endDate" onclick="WdatePicker({isShowClear:true,errDealMode:2,readOnly:true,dateFmt:'yyyy-MM-dd'});return false;" value="${requestEx.endDate}" readonly="readonly"/>
+                
+                </JREMOVE>#-->
+
+                <span style="float: left;margin-left: 20px;" class="input-group-btn">
+                  <!--<a href="#" id="btnSearch" class="btn btn-success" style="padding: 8px 12px;">查找</a>-->
+                </span>
+                
+                <input type="hidden" name="pageNo" id="pageNo" value="${pageNo}" />
+                <input type="hidden" name="pageSize" id="pageSize" value="${pageSize}" />
+                <input name="totalPage" type="hidden"  id="totalPage" value="${totalPages}" />
+                <input name="orderBy" type="hidden"  id="orderBy" value="${_orderBy}" />
+                <input name="orderIsNumber" type="hidden"  id="orderIsNumber" value="${_orderIsNumber}" />
+                <input name="ascDesc" type="hidden"  id="ascDesc" value="${_ascDesc}" />
+              </form>
+            </div>
+            
+            <div style="padding:20px;float: right;">
+              <a id="btnNew" class="bs_a_bar_btn bs_color_wihte bs_bk_green_1B">新建</a>
+              <a id="btnEdit" class="bs_a_bar_btn bs_color_wihte bs_bk_belu_7E">修改</a>
+              <a id="btnDelete" class="bs_a_bar_btn bs_color_wihte bs_bk_red">删除</a>
+            </div>
+            <table cellpadding="6" cellspacing="0" id="searchResult">
+              <thead>
+                <tr>
+                  <th style="min-width:20px"></th>
+                  <th>序号</th>
+                  <th>图片</th> 
+                  <th class="can_order" data-order-by="cposition" data-asc-desc="" data-order-is-number="0">显示位置</th> 
+                  <th>链接</th> 
+                  <th class="can_order" data-order-by="cisShow" data-asc-desc="" data-order-is-number="0">是否显示</th> 
+                  <th class="can_order" data-order-by="cshowIndex" data-asc-desc="" data-order-is-number="1">显示顺序</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+              <!--#<JREMOVE>   
+              <east:service beanName="eastUtilService" methodName="htmlRemove"  id="_subMemo">
+                <east:para name="_html" value="${_one.cmemo}" type="String" />
+                <east:para name="_nMaxLen" value="60" type="Integer" />
+              </east:service>
+              <td>
+                <c:forEach items="${dicStatus}" var="_dicOne" varStatus="_dicStatus">
+                  <s:if test="${_dicOne.dicVal == _one.cstatus}">
+                    ${_dicOne.dicName}
+                  </s:if>
+                </c:forEach>
+              </td>
+              <td><fmt:formatNumber value="${_one.creservedAmount}"/></td>
+              <td title="${_one.cmemo}">${_subMemo}</td>
+              </JREMOVE>#-->
+                
+              <!--#
+              <s:if test="${rsIndexImage != null && fn:length(rsIndexImage) > 0}">    
+                <c:forEach items="${rsIndexImage}" var="_one" varStatus="_status">
+                  
+                  <tr id="idTR${_one.id}" data-id="${_one.id}">
+                    <td><input name="checkboxData" type="checkbox" value="${_one.id}" onclick="onCheckboxId(this);" /></td>
+                    <td>${(pageNo - 1) * pageSize + _status.index + 1}</td>
+                    
+                    <td><img src="<%=basePath%>${_one.cimg}" style="height:25px;width:30px;"/></td>
+                    <td>
+                      <c:forEach items="${dicImagePosition}" var="_dicOne" varStatus="_dicStatus">
+                        <s:if test="${_dicOne.dicVal == _one.cposition}">
+                          ${_dicOne.dicName}
+                        </s:if>
+                      </c:forEach>
+                    </td>
+                    <td>${_one.chttpUrl}</td>
+                    <td>
+                      <c:forEach items="${dicYesOrNo}" var="_dicOne" varStatus="_dicStatus">
+                        <s:if test="${_dicOne.dicVal == _one.cisShow}">
+                          ${_dicOne.dicName}
+                        </s:if>
+                      </c:forEach>
+                    </td>
+                    <td><span>${_one.cshowIndex}</span>
+                      <a name="btnUp" data-show-index="${_one.cshowIndex}" style="text-decoration:none;"><i class="fa fa-arrow-up" style="color:black;"></i></a>
+                      <a name="btnDown" data-show-index="${_one.cshowIndex}" style="margin-left:10px; text-decoration:none;"><i class="fa fa-arrow-down" style="color:black;"></i></a>
+                    </td>
+                  </tr>                       
+                </c:forEach>
+              </s:if>
+              #-->                        
+                
+                <!--#<JREMOVE>#-->
+                <tr>
+                  <td><input name="checkboxData" type="checkbox" /></td>
+                  <td>1</td>
+                </tr>
+                <!--#</JREMOVE>#-->
+              </tbody>
+            </table>
+            <div class="div_bottom">
+              <!--#
+              <MACRO>
+                Jsp.call("/chamber_jsp/chamber_module_html/erp_display_pagination.jsp","${pageNo}","1","${pagePrev}","${pageOne}","${pageTwo}","${pageThree}","${pageFour}","${pageFive}","${pageSix}","${pageNext}","${totalPages}","${totalRecords}");
+              </MACRO>
+              #-->
+              <!--#<JREMOVE>#-->
+              <p>第1页,共20页</p>
+              <div>
+                <a href="#">第一页</a>
+                <a href="#">上一页</a>
+                <a href="#" class="a_active">1</a>
+                <a href="#">2</a>
+                <a href="#">3</a>
+                <a href="#">4</a>
+                <a href="#">5</a>
+                <span>...</span>
+                <a href="#">下一页</a>
+                <a href="#">最后一页</a>
+              </div>
+              <!--#</JREMOVE>#-->
+            </div>
+          </div>
+          <!--内容部分结束-->
+        </div>
+      </div>
+    </div>
+    
+    <!--#<JREMOVE>#-->
+    <div class="modal fade" id="myModal_03" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">个人信息</h4>
+          </div>
+          <div class="modal-body">
+            <p>姓名 : 管理高级权限</p>
+            <p>电话 : 17896543210</p>
+            <p>公司名称 : 官方</p>
+          </div>   
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="myModal_04" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">修改密码</h4>
+          </div>
+          <div class="modal-body">
+            <div>
+              <label for="cpass">
+                <p><b>*</b>原密码：</p>
+              </label>
+              <input placeholder="请输入原密码" id="cpass" type="text">
+            </div>
+            <div>
+              <label for="cpassNew">
+                <p><b>*</b>新密码：</p>
+              </label>
+              <input placeholder="密码必须是6-16位字母+数字组合!" id="cpassNew" type="text">
+            </div>
+            <div>
+              <label for="cpassNext" for="cNoticeTitle">
+                <p><b>*</b>确认密码：</p>
+              </label>
+              <input placeholder="确认密码" id="cpassNext" type="text">
+            </div>
+          </div>
+                              
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            <button type="button" class="btn btn-primary">提交</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--#</JREMOVE>#-->
+    
+    <script>
+      var searchForm = $('#searchForm');
+      function search() {
+        searchForm.submit();
+      }
+      $(function() {
+//      $('#btnSearch').on('click', function(){
+//        $('#pageNo').val('1');
+//        search();
+//      });
+        $('#cisShow').on('change', function(){
+          $('#pageNo').val('1');
+          search();
+        });
+        $('#cposition').on('change', function(){
+          $('#pageNo').val('1');
+          search();
+        });
+      });
+      function searchByPage(_page_no){
+        var intPageNo = parseInt(_page_no),
+          intTotalPage = parseInt($('#totalPage').val());
+        if (intPageNo > intTotalPage) {
+          intPageNo = intTotalPage;
+        }
+        if (intPageNo < 1) {
+          intPageNo = '1';
+        }
+        $('#pageNo').val(intPageNo);
+        search();
+        return false;
+      }
+    </script>
+    <script>
+      $(function() {
+        $('#btnNew').click(function() {
+          var id = 0;
+          __JdialogEx('轮播图','<%=basePath%>bs_ajaxIndex!chamber!chamber_erp_html!pop_index_image_edit.do?id='+id,
+            600,450,
+            function(_resp){
+              search();
+            },
+            65538,
+            function(_resp){}
+          );
+            return false;
+        });// end btnNew
+        
+        $('#btnEdit').click(function() {
+          var id = __Jselect_checkedEx('checkboxData'); 
+          if(id == ''){
+            return false;
+          }
+          
+          __JdialogEx('轮播图','<%=basePath%>bs_ajaxIndex!chamber!chamber_erp_html!pop_index_image_edit.do?id='+id,
+            600,450,
+            function(_resp){
+              search();
+            },
+            65538,
+            function(_resp){}
+          );
+          return false;
+        });// end btnEdit
+               
+        $('#btnDelete').click(function() {
+          var id = __Jselect_checkedEx('checkboxData'); 
+          if(id == ''){
+            return false;
+          }
+          alertify.confirm('确认删除吗?',function (e){ 
+            if(e){
+              var _url = '<%=basePath%>bs_ajaxIndex!chamber!chamber_controls_html!common_delete_by_ids.do';
+              var _url_para = {
+                "ids":id,
+                "tableName":"colIndexImage"
+              };
+              $AjaxPostASyn(_url,_url_para,
+                function(_resp){
+                  var jsonResp = JSON.parse(_resp);
+                  if(jsonResp.state == 'success'){
+                    alertify.alert('处理成功!',function(_msg){
+                      search();
+                    });   
+                  } else {
+                    alertify.alert(jsonResp.msg); 
+                  }
+                },                  
+                function(_resp){
+              }); 
+            }
+          });  
+          return false;
+        });//end of btnDelete
+               
+        
+        $('#searchResult tbody img').on('click', function(){
+          var imgFullUrl = encodeURIComponent($(this).prop('src'));
+          __JdialogEx('查看图片','<%=basePath%>bsnms_ajaxIndex!chamber!chamber_erp_html!common_show_picture.do?imgFullUrl='+imgFullUrl,
+            560,400,
+            function(_resp){
+            },
+            65538,
+            function(_resp){}
+          );
+          return false;
+        });//end of table img
+		
+		$('#searchResult tbody a[name="btnUp"]').on('click', function(){
+			var orderBy = $('#orderBy').val();
+			if (orderBy != 'cshowIndex') {
+				alertify.alert('请先使用显示顺序排序后，再调整显示顺序。');
+				return false;
+			}
+			
+			var thisTr = $(this).parent().parent();
+			var prevTr = thisTr.prev();
+			var gotoPage = parseInt('${pageNo}');
+			if (prevTr.length == 0) {
+				gotoPage = parseInt('${pageNo}') - 1;
+			}
+
+			var _url = '<%=basePath%>bs_ajaxIndex!chamber!chamber_controls_html!common_show_index_swop.do';
+			var _url_para = {
+				"tableName":"colIndexImage",
+				"id":thisTr.data('id'),
+				"upOrDown":"1",
+				"ascOrDesc":$('#ascDesc').val()
+			};
+			$AjaxPostASyn(_url,_url_para,
+			function(_resp){
+				var jsonResp = JSON.parse(_resp);
+				if(jsonResp.state == 'success'){
+					searchByPage(gotoPage);
+				} else {
+				}
+			},
+			function(_resp){
+			}); 
+		});//end of btnUp
+               
+        $('#searchResult tbody a[name="btnDown"]').on('click', function(){
+			var orderBy = $('#orderBy').val();
+			if (orderBy != 'cshowIndex') {
+				alertify.alert('请先使用显示顺序排序后，再调整显示顺序。');
+				return false;
+			}
+			
+			var thisTr = $(this).parent().parent();
+			var nextTr = thisTr.next();
+			var gotoPage = parseInt('${pageNo}');
+			if (nextTr.length == 0) {
+				gotoPage = parseInt('${pageNo}') + 1;
+			}
+          
+			var _url = '<%=basePath%>bs_ajaxIndex!chamber!chamber_controls_html!common_show_index_swop.do';
+			var _url_para = {
+				"tableName":"colIndexImage",
+				"id":thisTr.data('id'),
+				"upOrDown":"0",
+				"ascOrDesc":$('#ascDesc').val()
+			};
+			$AjaxPostASyn(_url,_url_para,
+				function(_resp){
+					var jsonResp = JSON.parse(_resp);
+					if(jsonResp.state == 'success'){
+						searchByPage(gotoPage);
+					} else {
+					}
+				},
+				function(_resp){
+			}); 
+		});//end of btnDown
+      });
+    </script> 
+      
+  </body>
+</html>

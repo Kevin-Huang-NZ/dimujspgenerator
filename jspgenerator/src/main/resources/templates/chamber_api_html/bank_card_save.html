@@ -1,0 +1,23 @@
+<!--#<JREMOVE>
+	保存顾客银行卡。
+</JREMOVE>#-->
+<east:service beanName="eastUtilService" methodName="setValue" id="hasError">
+	<east:para name="_value" value="0" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue" id="msg">
+	<east:para name="_value" value="" type="Object" />
+</east:service>
+
+
+<MACRO>
+	Jsp.call("/chamber_jsp/chamber_funs_html/fun_bank_card_save.jsp","${requestEx.id}","${requestEx.ccustomerNo}","${requestEx.ccardNo}","${requestEx.cbankName}","${requestEx.cbranchName}","${requestEx.ccardName}");
+	Jsp.result("hasError","msg","_bankCard");
+</MACRO>
+
+	
+<s:if test="${hasError eq '0'}">
+	{"state":"success"}
+</s:if>
+<s:else>
+	{"state":"failure", "msg":"${msg}"}
+</s:else>

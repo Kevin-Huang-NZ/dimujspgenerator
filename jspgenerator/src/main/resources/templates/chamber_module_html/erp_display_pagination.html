@@ -1,0 +1,39 @@
+<!--#<JREMOVE>
+FUN:Confused
+展示分页栏
+</JREMOVE>#-->
+       
+<MACRO>
+  Jsp.pops("__pageNo","__first","__prev","__p1","__p2","__p3","__p4","__p5","__p6","__next","__last");
+</MACRO>
+
+
+
+<p>第${__pageNo}页,共${__last}页</p>
+<div>
+  <a style="cursor:pointer" onclick="searchByPage('${__first}'); return false;">第一页</a>
+  <a style="cursor:pointer" onclick="searchByPage('${__prev}'); return false;">上一页</a>
+  <s:if test="${__p1 ne null && __p1 ne ''}"> 
+    <a style="cursor:pointer" onclick="searchByPage('${__p1}'); return false;" <s:if test="${__p1 eq __pageNo}"> class="a_active" </s:if> >${__p1}</a>
+  </s:if>
+  <s:if test="${__p2 ne null && __p2 ne ''}"> 
+    <a style="cursor:pointer" onclick="searchByPage('${__p2}'); return false;" <s:if test="${__p2 eq __pageNo}"> class="a_active" </s:if> >${__p2}</a>
+  </s:if>
+  <s:if test="${__p3 ne null && __p3 ne ''}"> 
+    <a style="cursor:pointer" onclick="searchByPage('${__p3}'); return false;" <s:if test="${__p3 eq __pageNo}"> class="a_active" </s:if> >${__p3}</a>
+  </s:if>
+  <s:if test="${__p4 ne null && __p4 ne ''}"> 
+    <a style="cursor:pointer" onclick="searchByPage('${__p4}'); return false;" <s:if test="${__p4 eq __pageNo}"> class="a_active" </s:if> >${__p4}</a>
+  </s:if>
+  <s:if test="${__p5 ne null && __p5 ne ''}"> 
+    <a style="cursor:pointer" onclick="searchByPage('${__p5}'); return false;" <s:if test="${__p5 eq __pageNo}"> class="a_active" </s:if> >${__p5}</a>
+  </s:if>
+  <s:if test="${__p6 ne null && __p6 ne ''}"> 
+    <a style="cursor:pointer" onclick="searchByPage('${__p6}'); return false;" <s:if test="${__p6 eq __pageNo}"> class="a_active" </s:if> >${__p6}</a>
+  </s:if>
+  
+  <a style="cursor:pointer" onclick="searchByPage('${__next}'); return false;">下一页</a>
+  <a style="cursor:pointer" onclick="searchByPage('${__last}'); return false;">最后一页</a>
+</div>
+
+

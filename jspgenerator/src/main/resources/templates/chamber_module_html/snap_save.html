@@ -1,0 +1,67 @@
+<!--#<JREMOVE>#--> 
+FUN:Confused
+  保存快照
+<!--#</JREMOVE>#-->
+<MACRO>
+  Jsp.pops("__id","__ctableName","__cversion");
+</MACRO>
+
+<east:service beanName="eastUtilService" methodName="setValue"  id="__hasError">
+  <east:para name="_value" value="0" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue"  id="__msg">
+  <east:para name="_value" value="" type="Object" />
+</east:service>
+
+<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="getOneByIdAlwaysWithClass"  id="__objSnapSource">
+  <east:para name="tnewsid" value="${__id}" type="String" />
+  <east:para name="className" value="${__ctableName}" type="String" />
+</east:service>
+
+<s:if test="${__objSnapSource eq null || __objSnapSource.id eq ''}">
+  <east:service beanName="eastUtilService" methodName="setValue"  id="__hasError">
+    <east:para name="_value" value="1" type="Object" />
+  </east:service>
+  <east:service beanName="eastUtilService" methodName="setValue"  id="__msg">
+    <east:para name="_value" value="快照保存失败，数据源不存在。" type="Object" />
+  </east:service>
+</s:if>
+
+<s:if test="${__hasError eq '0'}">
+  <east:service beanName="eastUtilService" methodName="mapCreate"  id="__snapMap"> 
+  </east:service> 
+  <east:service beanName="eastUtilService" methodName="mapPut"  id="idResult"> 
+    <east:para name="_map" value="${__snapMap}" type="Map" />
+    <east:para name="_key"  value="data" type="String" /> 
+    <east:para name="_obj"   value="${__objSnapSource}" type="Object" />
+  </east:service>  
+  
+  <east:service beanName="eastUtilService" methodName="getDateTime"  id="_nowDateTime">
+  </east:service>
+  
+  <MACRO>
+    Jsp.includejsp("/chamber_jsp/chamber_module_html/erp_login_staff_info.jsp");
+    Jsp.result("_loginStaff","_roleFuncMap");
+  </MACRO>
+  
+  <east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo"   methodName="createBeanExByClassName" id="__snap">                      
+    <east:para name="className" value="colSnap" type="String" />
+  </east:service>
+  
+  <MACRO>
+    Jsp.call("/bspms_jsp/bspms_modules_html/bsnews_map_to_json.jsp","${__snapMap}");
+    Jsp.result("__snapJson");
+    
+    Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${__snap}","ctableName","${__ctableName}");
+    Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${__snap}","csourceId","${__id}");
+    Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${__snap}","cupdateTime","${_nowDateTime}");
+    Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${__snap}","coperator","${_loginStaff.ext.cstaffNo}");
+    Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${__snap}","coptContent","${__snapJson}");
+    Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${__snap}","cversion","${__cversion}");
+    Jsp.call("/bspms_jsp/bspms_funs_html/ajax_save_bean_fun.jsp" ,"${__snap}");
+  </MACRO>
+</s:if>
+
+<MACRO>
+  Jsp.pushs("${__hasError}","${__msg}");
+</MACRO>

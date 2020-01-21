@@ -1,0 +1,125 @@
+<!--#<JREMOVE>
+FUN:Confused
+计算原生sql分页需要的变量。
+</JREMOVE>#-->
+       
+<MACRO>
+  Jsp.pops("__rsPagination","__pageNo");
+</MACRO>
+
+  <c:forEach items="${__rsPagination}" var="_one" varStatus="_status">
+    <east:service beanName="eastUtilService" methodName="setValue"  id="__totalRecords">
+      <east:para name="_value" value="${_one.totalRecords}" type="Object" />
+    </east:service> 
+    <east:service beanName="eastUtilService" methodName="setValue"  id="__totalPages">
+      <east:para name="_value" value="${_one.totalPages}" type="Object" />
+    </east:service> 
+    
+    <s:if test="${(__pageNo - 1) <= 0}">
+      <east:service beanName="eastUtilService" methodName="setValue"  id="__pagePrev">
+        <east:para name="_value" value="1" type="Object" />
+      </east:service> 
+    </s:if>
+    <s:else>
+      <east:service beanName="eastUtilService" methodName="setValue"  id="__pagePrev">
+        <east:para name="_value" value="${__pageNo - 1}" type="Object" />
+      </east:service> 
+    </s:else>
+    
+    <s:if test="${(__pageNo + 1) > __totalPages}">
+      <east:service beanName="eastUtilService" methodName="setValue"  id="__pageNext">
+        <east:para name="_value" value="${__totalPages}" type="Object" />
+      </east:service> 
+    </s:if>
+    <s:else>
+      <east:service beanName="eastUtilService" methodName="setValue"  id="__pageNext">
+          <east:para name="_value" value="${__pageNo + 1}" type="Object" />
+        </east:service> 
+    </s:else>
+    
+    <s:if test="${__pageNo > 5}">
+      <east:service beanName="eastUtilService" methodName="setValue"  id="__pageOne">
+        <east:para name="_value" value="${__pageNo-4}" type="Object" />
+      </east:service> 
+      <east:service beanName="eastUtilService" methodName="setValue"  id="__pageTwo">
+        <east:para name="_value" value="${__pageNo-3}" type="Object" />
+      </east:service> 
+      <east:service beanName="eastUtilService" methodName="setValue"  id="__pageThree">
+        <east:para name="_value" value="${__pageNo-2}" type="Object" />
+      </east:service> 
+      <east:service beanName="eastUtilService" methodName="setValue"  id="__pageFour">
+        <east:para name="_value" value="${__pageNo-1}" type="Object" />
+      </east:service> 
+      <east:service beanName="eastUtilService" methodName="setValue"  id="__pageFive">
+        <east:para name="_value" value="${__pageNo}" type="Object" />
+      </east:service> 
+      <east:service beanName="eastUtilService" methodName="setValue"  id="__pageSix">
+        <east:para name="_value" value="${__pageNo + 1}" type="Object" />
+      </east:service> 
+      <east:service beanName="eastUtilService" methodName="setValue"  id="__pageSeven">
+        <east:para name="_value" value="${__pageNo + 2}" type="Object" />
+      </east:service> 
+    </s:if>
+    <s:else>
+      <east:service beanName="eastUtilService" methodName="setValue"  id="__pageOne">
+        <east:para name="_value" value="1" type="Object" />
+      </east:service> 
+      <east:service beanName="eastUtilService" methodName="setValue"  id="__pageTwo">
+        <east:para name="_value" value="2" type="Object" />
+      </east:service> 
+      <east:service beanName="eastUtilService" methodName="setValue"  id="__pageThree">
+        <east:para name="_value" value="3" type="Object" />
+      </east:service> 
+      <east:service beanName="eastUtilService" methodName="setValue"  id="__pageFour">
+        <east:para name="_value" value="4" type="Object" />
+      </east:service> 
+      <east:service beanName="eastUtilService" methodName="setValue"  id="__pageFive">
+        <east:para name="_value" value="5" type="Object" />
+      </east:service> 
+      <east:service beanName="eastUtilService" methodName="setValue"  id="__pageSix">
+        <east:para name="_value" value="6" type="Object" />
+      </east:service> 
+      <east:service beanName="eastUtilService" methodName="setValue"  id="__pageSeven">
+        <east:para name="_value" value="7" type="Object" />
+      </east:service> 
+    </s:else>
+    <c:if test="${__pageOne > __totalPages}">
+      <east:service beanName="eastUtilService" methodName="setValue"  id="__pageOne">
+        <east:para name="_value" value="" type="Object" />
+      </east:service> 
+    </c:if>
+    <c:if test="${__pageTwo > __totalPages}">
+      <east:service beanName="eastUtilService" methodName="setValue"  id="__pageTwo">
+        <east:para name="_value" value="" type="Object" />
+      </east:service> 
+    </c:if>
+    <c:if test="${__pageThree > __totalPages}">
+      <east:service beanName="eastUtilService" methodName="setValue"  id="__pageThree">
+        <east:para name="_value" value="" type="Object" />
+      </east:service> 
+    </c:if>
+    <c:if test="${__pageFour > __totalPages}">
+      <east:service beanName="eastUtilService" methodName="setValue"  id="__pageFour">
+        <east:para name="_value" value="" type="Object" />
+      </east:service> 
+    </c:if>
+    <c:if test="${__pageFive > __totalPages}">
+      <east:service beanName="eastUtilService" methodName="setValue"  id="__pageFive">
+        <east:para name="_value" value="" type="Object" />
+      </east:service> 
+    </c:if>
+    <c:if test="${__pageSix > __totalPages}">
+      <east:service beanName="eastUtilService" methodName="setValue"  id="__pageSix">
+        <east:para name="_value" value="" type="Object" />
+      </east:service> 
+    </c:if>
+    <c:if test="${__pageSeven > __totalPages}">
+      <east:service beanName="eastUtilService" methodName="setValue"  id="__pageSeven">
+        <east:para name="_value" value="" type="Object" />
+      </east:service> 
+    </c:if>
+  </c:forEach>
+
+<MACRO>
+  Jsp.pushs("${__totalRecords}","${__totalPages}","${__pagePrev}","${__pageNext}","${__pageOne}","${__pageTwo}","${__pageThree}","${__pageFour}","${__pageFive}","${__pageSix}","${__pageSeven}");
+</MACRO>

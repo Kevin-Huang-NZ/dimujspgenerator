@@ -1,0 +1,20 @@
+<!--#<JREMOVE>
+FUN:Confused
+	用户操作的lock操作。
+	主要涉及到：客户资金，币种等方式方式。
+</JREMOVE>#-->
+
+<MACRO>
+	Jsp.pops("__customerNo","__seconds");
+</MACRO> 
+<east:service beanName="eastUtilService" methodName="setValue"  id="__idSeconds">
+	<east:para name="_val" value="${__seconds}" type="Object" />
+	<east:para name="_default" value="3" type="Object" />
+</east:service> 
+<MACRO>
+		Jsp.redisLock("customer_${__customerNo}","${__idSeconds}");
+</MACRO>
+<MACRO>
+	Jsp.pushs("${__customerNo}");
+</MACRO>
+

@@ -1,0 +1,62 @@
+<!--#<JREMOVE>
+顾客银行卡详情。
+参数：
+	id
+</JREMOVE>#-->
+<%@ page trimDirectiveWhitespaces="true" buffer="128kb" autoFlush="true" language="Java" pageEncoding="UTF-8" %>
+<east:service beanName="eastUtilService" methodName="setValue" id="_hasError">
+	<east:para name="_value" value="0" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue" id="_msg">
+	<east:para name="_value" value="" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue" id="_hasData">
+	<east:para name="_value" value="0" type="Object" />
+</east:service>
+	
+<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="getOneByIdAlwaysWithClass" id="_bankCard">
+	<east:para name="tnewsid" value="${requestEx.id}" type="String" />
+	<east:para name="className" value="colBankCard" type="String" />
+</east:service>
+
+<s:if test="${_bankCard ne null && _bankCard.id ne null && _bankCard.id ne ''}">
+	<east:service beanName="eastUtilService" methodName="setValue" id="_hasData">
+		<east:para name="_value" value="1" type="Object" />
+	</east:service>
+</s:if>
+	
+<s:if test="${_hasError eq '0'}">
+	<s:if test="${_hasData eq '1'}">
+		<?xml version="1.0" encoding="UTF-8"?>
+		<items xmlns="http://foo.com">
+			<state>success</state>
+			<error_code>0</error_code>
+			<data_size>1</data_size>
+			<item>
+				<id><![CDATA[${_bankCard.id}]]></id>
+				<ccustomerNo><![CDATA[${_bankCard.ext.ccustomerNo}]]></ccustomerNo>
+				<ccardNo><![CDATA[${_bankCard.ext.ccardNo}]]></ccardNo>
+				<cbankName><![CDATA[${_bankCard.ext.cbankName}]]></cbankName>
+				<cbranchName><![CDATA[${_bankCard.ext.cbranchName}]]></cbranchName>
+				<ccardName><![CDATA[${_bankCard.ext.ccardName}]]></ccardName>
+				<cisDefault><![CDATA[${_bankCard.ext.cisDefault}]]></cisDefault>
+			</item>
+		</items>
+	</s:if>
+	<s:else>
+		<?xml version="1.0" encoding="UTF-8"?>
+		<items xmlns="http://foo.com">
+			<state>success</state>
+			<error_code>0</error_code>
+			<data_size>0</data_size>
+		</items>
+	</s:else>
+</s:if>
+<s:else>
+	<?xml version="1.0" encoding="UTF-8"?>
+	<items xmlns="http://foo.com">
+		<state>failed</state>
+		<error_msg>${_msg}</error_msg>
+		<item></item>
+	</items>
+</s:else>

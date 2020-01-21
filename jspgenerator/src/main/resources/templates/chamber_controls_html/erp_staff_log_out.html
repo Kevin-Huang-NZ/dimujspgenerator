@@ -1,0 +1,22 @@
+
+<MACRO>
+  Jsp.includejsp("/chamber_jsp/chamber_const_html/erp_const_define.jsp");
+</MACRO>
+
+<east:service beanName="pmsService"  methodName="toSession"  id="idResult">
+  <east:para name="_id"  value="${LOGIN_STAFF_SESSION}" type="String" />
+  <east:para name="_content" value="" type="java.lang.Object" />
+</east:service>
+<east:service beanName="pmsService"  methodName="toSession"  id="idResult">
+  <east:para name="_id"  value="${LOGIN_STAFF_ROLE_FUN}" type="String" />
+  <east:para name="_content" value="" type="java.lang.Object" />
+</east:service>
+<east:service beanName="pmsService"  methodName="toSession"  id="idResult">
+  <east:para name="_id"  value="s10" type="String" />
+  <east:para name="_content" value="" type="java.lang.Object" />
+</east:service>
+
+<east:service beanName="pmsService"  methodName="sessionInvalid"  id="idResult">
+</east:service>	
+
+{"state":"success","callbackUrl":"${requestEx.callbackUrl}"}  

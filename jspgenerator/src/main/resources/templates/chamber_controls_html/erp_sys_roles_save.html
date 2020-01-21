@@ -1,0 +1,66 @@
+<!--#<JREMOVE>
+  保存系统权限。
+</JREMOVE>#-->
+<east:service beanName="eastUtilService" methodName="setValue"  id="hasError">
+  <east:para name="_value" value="0" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue"  id="msg">
+  <east:para name="_value" value="" type="Object" />
+</east:service>
+
+
+<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="getAllByNativeField"  id="rsCheckRoleNo">
+  <east:para name="newsClass"  value="colSysRoles" type="String" />
+  <east:para name="page" value="1" type="Integer" />
+  <east:para name="pageSize" value="1" type="Integer" />
+  <east:para name="searchTVL" value="{\"tag\":\"croleNo;cname\",\"val\":\"${requestEx.croleNo};${requestEx.cname}\",\"link\":\"!{EQ}\",\"type\":\"1\"}
+        ,{\"tag\":\"id\",\"val\":\"${requestEx.id}\",\"link\":\"!{NE}\",\"type\":\"1\"}" type="String" />
+  <east:para name="orderName" value="cdate" type="String" />
+  <east:para name="descOrAsc" value="true" type="Boolean" />
+</east:service>
+
+<s:if test="${rsCheckRoleNo.list ne null && fn:length(rsCheckRoleNo.list) gt 0}">
+  <east:service beanName="eastUtilService" methodName="setValue"  id="hasError">
+    <east:para name="_value" value="1" type="Object" />
+  </east:service>
+  <east:service beanName="eastUtilService" methodName="setValue"  id="msg">
+    <east:para name="_value" value="系统权限编号或者名称重复,保存失败。" type="Object" />
+  </east:service>
+</s:if>
+
+<s:if test="${hasError eq '0'}">
+  <s:if test="${requestEx.id eq '0'}">
+    <east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="createBeanExByClassName" id="_sysRoles">       
+      <east:para name="className" value="colSysRoles" type="String" />
+    </east:service>
+    <!--#<JREMOVE>
+    <east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="getDefaultPattern"  id="_generatedNo">
+      <east:para name="patternStr" value="{seq('TN%09d')}" type="String" />
+    </east:service>
+    <east:service beanName="eastUtilService" methodName="getNowDate"  id="_nowDate">
+    </east:service>
+    <east:service beanName="eastUtilService" methodName="getDateTime"  id="_nowDateTime">
+    </east:service>
+    </JREMOVE>#-->
+  </s:if>
+  <s:else>
+    <east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="getOneByIdAlwaysWithClass"  id="_sysRoles">
+      <east:para name="tnewsid" value="${requestEx.id}" type="String" />
+      <east:para name="className" value="colSysRoles" type="String" />
+    </east:service>
+  </s:else>
+  <MACRO>
+    Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_sysRoles}","cname","${requestEx.cname}");
+    Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_sysRoles}","croleNo","${requestEx.croleNo}");
+    Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_sysRoles}","cmemo","${requestEx.cmemo}");
+    
+    Jsp.call("/bspms_jsp/bspms_funs_html/ajax_save_bean_fun.jsp" ,"${_sysRoles}");
+  </MACRO>
+</s:if>
+  
+<s:if test="${hasError eq '0'}">
+  {"state":"success"}
+</s:if>
+<s:else>
+  {"state":"failure", "msg":"${msg}"}
+</s:else>

@@ -1,0 +1,29 @@
+<!--#<JREMOVE>
+FUN:Confused
+  保存客户出入金记录。
+</JREMOVE>#-->
+<MACRO>
+  Jsp.pops("__ccustomerNo","__camount","__cinOut","__cbalance","__ctradeNo","__ctype","__cincomeFrom");
+</MACRO>
+<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="createBeanExByClassName" id="__moneyRecord">       
+  <east:para name="className" value="colMoneyRecord" type="String" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="getDateTime"  id="_nowDateTime">
+</east:service>
+<MACRO>
+  Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${__moneyRecord}","ccustomerNo","${__ccustomerNo}");
+  Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${__moneyRecord}","camount","${__camount}");
+  Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${__moneyRecord}","cinOut","${__cinOut}");
+  Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${__moneyRecord}","cbalance","${__cbalance}");
+  Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${__moneyRecord}","crecordTime","${_nowDateTime}");
+  Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${__moneyRecord}","ctradeNo","${__ctradeNo}");
+  Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${__moneyRecord}","ctype","${__ctype}");
+  Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${__moneyRecord}","cupdateDatetime","${_nowDateTime}");
+  Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${__moneyRecord}","cincomeFrom","${__cincomeFrom}");
+  
+  Jsp.call("/bspms_jsp/bspms_funs_html/ajax_save_bean_fun.jsp" ,"${__moneyRecord}");
+</MACRO>
+
+<MACRO>
+  Jsp.pushs("${__moneyRecord}");
+</MACRO>

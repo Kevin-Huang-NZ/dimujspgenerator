@@ -1,0 +1,72 @@
+<!--#<JREMOVE>
+  保存员工。
+</JREMOVE>#-->
+<east:service beanName="eastUtilService" methodName="setValue"  id="hasError">
+  <east:para name="_value" value="0" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue"  id="msg">
+  <east:para name="_value" value="" type="Object" />
+</east:service>
+
+<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="getAllByNativeField"  id="rsCheckPhone">
+  <east:para name="newsClass"  value="colStaff" type="String" />
+  <east:para name="page" value="1" type="Integer" />
+  <east:para name="pageSize" value="1" type="Integer" />
+  <east:para name="searchTVL" value="{\"tag\":\"cphone\",\"val\":\"${requestEx.cphone}\",\"link\":\"!{EQ}\",\"type\":\"1\"}
+        ,{\"tag\":\"id\",\"val\":\"${requestEx.id}\",\"link\":\"!{NE}\",\"type\":\"1\"}" type="String" />
+  <east:para name="orderName" value="cdate" type="String" />
+  <east:para name="descOrAsc" value="true" type="Boolean" />
+</east:service>
+
+<s:if test="${rsCheckPhone.list ne null && fn:length(rsCheckPhone.list) gt 0}">
+  <east:service beanName="eastUtilService" methodName="setValue"  id="hasError">
+    <east:para name="_value" value="1" type="Object" />
+  </east:service>
+  <east:service beanName="eastUtilService" methodName="setValue"  id="msg">
+    <east:para name="_value" value="手机号重复,保存失败。" type="Object" />
+  </east:service>
+</s:if>
+
+
+<s:if test="${hasError eq '0'}">
+  <s:if test="${requestEx.id eq '0'}">
+    <east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="createBeanExByClassName" id="_staff">       
+      <east:para name="className" value="colStaff" type="String" />
+    </east:service>
+    <east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="getDefaultPattern"  id="_generatedNo">
+      <east:para name="patternStr" value="{seq('ST%09d')}" type="String" />
+    </east:service>
+    <MACRO>
+      Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_staff}","cstaffNo","${_generatedNo}");
+
+    </MACRO>
+    <!--#<JREMOVE>
+    <east:service beanName="eastUtilService" methodName="getNowDate"  id="_nowDate">
+    </east:service>
+    <east:service beanName="eastUtilService" methodName="getDateTime"  id="_nowDateTime">
+    </east:service>
+    </JREMOVE>#-->
+  </s:if>
+  <s:else>
+    <east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="getOneByIdAlwaysWithClass"  id="_staff">
+      <east:para name="tnewsid" value="${requestEx.id}" type="String" />
+      <east:para name="className" value="colStaff" type="String" />
+    </east:service>
+  </s:else>
+  <MACRO>
+    Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_staff}","crealName","${requestEx.crealName}");
+    Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_staff}","cphone","${requestEx.cphone}");
+    Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_staff}","cpassword","${requestEx.cpassword}");
+    Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_staff}","cstatus","${requestEx.cstatus}");
+    Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_staff}","crole","${requestEx.crole}");
+    
+    Jsp.call("/bspms_jsp/bspms_funs_html/ajax_save_bean_fun.jsp" ,"${_staff}");
+  </MACRO>
+</s:if>
+  
+<s:if test="${hasError eq '0'}">
+  {"state":"success"}
+</s:if>
+<s:else>
+  {"state":"failure", "msg":"${msg}"}
+</s:else>

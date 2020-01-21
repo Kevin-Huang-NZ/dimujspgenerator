@@ -1,0 +1,198 @@
+/*left.html*/
+.bss_leftmenu{overflow:hidden;/* margin-top: 10px; */}
+.bss_leftmenu dd{line-height:35px;font-weight:bold;font-size:14px;}
+.bss_leftmenu dd span{float:left;margin:10px 8px 0 12px;}
+.bss_leftmenu dd .bss_menuson{display:none;}
+.bss_leftmenu dd:first-child .bss_menuson{display:block;}
+.bss_menuson {line-height:30px; font-weight:normal; }
+.bss_menuson li{cursor:pointer;}
+.bss_menuson li.bss_active{position:relative; background:url(../bserp_img/libg.png) repeat-x; line-height:30px; color:#fff;}
+.bss_menuson li cite{display:block; float:left; margin-left:32px; background:url(../bserp_img/list.gif) no-repeat; width:16px; height:16px; margin-top:7px;}
+.bss_menuson li .bss_uncontent{display:block; float:left; margin-left:32px; background:url(../bserp_img/un_contnet.png) no-repeat; width:16px; height:16px; margin-top:7px;}
+.bss_menuson li.bss_active cite{background:url(../bserp_img/list1.gif) no-repeat;}
+.bss_menuson li.bss_active i{display:block; background:url(../bserp_img/sj.png) no-repeat; width:6px; height:11px; position:absolute; right:0;z-index:10000; top:9px; right:-1px;}
+.bss_menuson li a{ display:block; *display:inline; *padding-top:5px;float: left;width: 100%;padding: 30px 60px;background: red;}
+.bss_menuson li.bss_active a{color:#fff;}
+.bss_title{cursor:pointer;}
+.bss_menuson{
+	padding-left:30px ;
+}
+/**æ”¯æŒäºŒçº§èœå•è¦†ç›–æ ·å¼**/
+.bss_menuson li .bss_header{height:30px;}
+.bss_menuson li .bss_sub_menus{ display:none; background:#d9ebf3;padding:10px 0;border-bottom:1px solid #b7d5df;}
+.bss_menuson li .bss_sub_menus li{height:25px;line-height:25px;padding-left:48px;border-left:1px solid #d9ebf3;}
+.bss_menuson li .bss_sub_menus li.bss_active{position:relative;right:-1px;border-left:none;background:#fff;}
+.bss_menuson li .bss_sub_menus li a{padding-left:9px;color:#000000; background:url(../bserp_img/sub-menu-icon.png) 0 12px no-repeat;}
+.bss_menuson li .bss_sub_menus li a:hover{color:#238ac5;}
+.bss_menuson li .bss_sub_menus li.bss_active a{color:#238ac5;}
+.bss_menuson li.bss_active.bss_open cite{margin-top:12px;margin-left:37px; background:url(../bserp_img/jtx.png) no-repeat;}
+.bs_left_nav{
+	float: left;width: 100%;height: 40px;line-height: 40px;background:url(../bserp_img/nav_bk.png);background-size: auto 100%; 
+}
+.bs_left_nav li{
+	height: 100%;float: left;
+	padding: 0;display: block;
+	}
+.bs_left_nav li a{
+	float: left;display: block;
+	padding: 0 8px;
+	color: #FFFFFF;
+	min-width: 97px;
+	text-align: center;
+}
+.bs_left_nav li a:hover{
+	color: #FFFFFF;
+	background: url(../bserp_img/active_bk.png);
+	background-size:100% 100%;
+}
+.bs_nav_active{
+	background: url(../bserp_img/active_bk.png);
+	background-size:100% 100%;
+}
+table {
+  max-width: 100%;
+  background-color: transparent;
+}
+th {
+  text-align: left;
+}
+.table {
+  width: 100%;
+  margin-bottom: 20px;
+}
+.table > thead > tr > th,
+.table > tbody > tr > th,
+.table > tfoot > tr > th,
+.table > thead > tr > td,
+.table > tbody > tr > td,
+.table > tfoot > tr > td {
+  padding: 8px;
+  line-height: 1.428571429;
+  vertical-align: middle;
+  border-top: 1px solid #dddddd;
+  text-align: center;
+}
+.table > thead > tr > th {
+  vertical-align: bottom;
+  border-bottom: 2px solid #dddddd;
+  text-align: center;
+}
+.table > caption + thead > tr:first-child > th,
+.table > colgroup + thead > tr:first-child > th,
+.table > thead:first-child > tr:first-child > th,
+.table > caption + thead > tr:first-child > td,
+.table > colgroup + thead > tr:first-child > td,
+.table > thead:first-child > tr:first-child > td {
+  border-top: 0;
+}
+.table > tbody + tbody {
+  border-top: 2px solid #dddddd;
+}
+.table .table {
+  background-color: #ffffff;
+}
+.table-condensed > thead > tr > th,
+.table-condensed > tbody > tr > th,
+.table-condensed > tfoot > tr > th,
+.table-condensed > thead > tr > td,
+.table-condensed > tbody > tr > td,
+.table-condensed > tfoot > tr > td {
+  padding: 5px;
+}
+.table-bordered {
+  border: 1px solid #dddddd;
+}
+.table-bordered > thead > tr > th,
+.table-bordered > tbody > tr > th,
+.table-bordered > tfoot > tr > th,
+.table-bordered > thead > tr > td,
+.table-bordered > tbody > tr > td,
+.table-bordered > tfoot > tr > td {
+  border: 1px solid #dddddd;
+}
+.table-bordered > thead > tr > th,
+.table-bordered > thead > tr > td {
+  border-bottom-width: 2px;
+}
+.table-striped > tbody > tr:nth-child(odd) > td,
+.table-striped > tbody > tr:nth-child(odd) > th {
+  background-color: #f2f2f2;
+}
+.table-hover > tbody > tr:hover > td,
+.table-hover > tbody > tr:hover > th {
+  background-color: #f5f5f5;
+}
+table col[class*="col-"] {
+  position: static;
+  float: none;
+  display: table-column;
+}
+table td[class*="col-"],
+table th[class*="col-"] {
+  float: none;
+  display: table-cell;
+}
+.table > thead > tr > .active,
+.table > tbody > tr > .active,
+.table > tfoot > tr > .active,
+.table > thead > .active > td,
+.table > tbody > .active > td,
+.table > tfoot > .active > td,
+.table > thead > .active > th,
+.table > tbody > .active > th,
+.table > tfoot > .active > th {
+  background-color: #f5f5f5;
+}
+.table-hover > tbody > tr > .active:hover,
+.table-hover > tbody > .active:hover > td,
+.table-hover > tbody > .active:hover > th {
+  background-color: #e8e8e8;
+}
+.table > thead > tr > .success,
+.table > tbody > tr > .success,
+.table > tfoot > tr > .success,
+.table > thead > .success > td,
+.table > tbody > .success > td,
+.table > tfoot > .success > td,
+.table > thead > .success > th,
+.table > tbody > .success > th,
+.table > tfoot > .success > th {
+  background-color: #dff0d8;
+}
+.table-hover > tbody > tr > .success:hover,
+.table-hover > tbody > .success:hover > td,
+.table-hover > tbody > .success:hover > th {
+  background-color: #d0e9c6;
+}
+.table > thead > tr > .danger,
+.table > tbody > tr > .danger,
+.table > tfoot > tr > .danger,
+.table > thead > .danger > td,
+.table > tbody > .danger > td,
+.table > tfoot > .danger > td,
+.table > thead > .danger > th,
+.table > tbody > .danger > th,
+.table > tfoot > .danger > th {
+  background-color: #f2dede;
+}
+.table-hover > tbody > tr > .danger:hover,
+.table-hover > tbody > .danger:hover > td,
+.table-hover > tbody > .danger:hover > th {
+  background-color: #ebcccc;
+}
+.table > thead > tr > .warning,
+.table > tbody > tr > .warning,
+.table > tfoot > tr > .warning,
+.table > thead > .warning > td,
+.table > tbody > .warning > td,
+.table > tfoot > .warning > td,
+.table > thead > .warning > th,
+.table > tbody > .warning > th,
+.table > tfoot > .warning > th {
+  background-color: #fcf8e3;
+}
+.table-hover > tbody > tr > .warning:hover,
+.table-hover > tbody > .warning:hover > td,
+.table-hover > tbody > .warning:hover > th {
+  background-color: #faf2cc;
+}

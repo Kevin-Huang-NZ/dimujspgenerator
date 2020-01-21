@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <title>运营管理后台 - 室内装修</title>
+    <link href="../chamber_erp_css/bserp_style.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../js/alertify/alertify.core.css"/>
+    <link rel="stylesheet" type="text/css" href="../js/alertify/alertify.bootstrap.css"/>
+    
+    <script src="../js/jquery-1.8.3.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/ajax_janus.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/alertify/alertify.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../chamber_erp_js/js-cookie.js" type="text/javascript" charset="utf-8"></script>
+  
+    <script language="javascript">
+    	$(function(){
+        $('.bs_loginbox').css({'position':'absolute','left':($(window).width()-692)/2});
+        $(window).resize(function(){  
+          $('.bs_loginbox').css({'position':'absolute','left':($(window).width()-692)/2});
+        })  
+      });  
+    </script> 
+
+    <script language="javascript">
+      function inputKeyPress(event) {    
+        var keyCode = 0;  
+        if (!event) {
+          event = window.event;
+        }
+     
+        if (undefined != event.which) {
+          keyCode = event.which;
+        } else {
+          keyCode = event.keyCode;
+        }  
+        if(keyCode == 13){
+          _doLogin();
+          return;
+        }
+      }
+     
+      function _doLogin(){
+        var userName     = $('#userName').val();
+        var userPassword = $('#userPassword').val();
+        
+//      if($('#rememberMe').prop('checked')){
+          Cookies.set('chamber7W34HQJ4', userName, { expires: 3, path: '' });
+          Cookies.set('chamber0QWW294A', userPassword, { expires: 3, path: '' });
+//      }else{
+//        Cookies.set('chamber7W34HQJ4', '', { expires: 1, path: '' });
+//        Cookies.set('chamber0QWW294A', '', { expires: 1, path: '' });              
+//      }
+        var _url_para = {
+          "userName":userName,
+          "pwd":userPassword,
+          "s10":"${requestEx.s10}"
+          },
+          _url = '<%=basePath%>bs_ajaxIndex!chamber!chamber_controls_html!erp_staff_login.do';
+        $AjaxPostASyn(_url, _url_para,
+          function (_resp){
+            var jsonResp = JSON.parse(_resp);
+            if(jsonResp.state == 'success'){
+              window.location.href = '<%=basePath%>bs_ajaxIndex!chamber!chamber_erp_html!frame_main.do';
+            }else{
+              alertify.alert(jsonResp.msg);
+            }
+          }                           
+        );  
+        return false;
+      }
+    </script> 
+  </head>
+
+  <body>
+    <!--background-image:url(../chamber_img/weixin_img/background001.jpg);--> 
+    <div style="position:absolute;overflow:hidden;width:100%;height:100%; background-repeat:no-repeat; background-size: cover; overflow:hidden;">
+      <div id="mainBody">
+        <div id="cloud1" class="bs_cloud"></div>
+        <div id="cloud2" class="bs_cloud"></div>
+      </div>  
+    
+      <div class="bs_loginbody">
+        <div class="bs_loginbox" style="top: 100px;">
+        
+          <ul>
+            <li>
+              <input id="userName" type="text" class="bs_loginuser" placeholder="手机号" onkeypress="inputKeyPress(event);"  onclick="JavaScript:this.value='';"/>
+            </li>
+            <li>
+              <input id="userPassword" type="password" class="bs_loginpwd" placeholder="密码" onkeypress="inputKeyPress(event);"  onclick="JavaScript:this.value='';"/>
+            </li>
+            <!--
+             <li class="bs_yzm">
+              <span><input name="" type="text" value="验证码" onclick="JavaScript:this.value=''"/></span><cite>X3D5S</cite> 
+             </li>
+            -->
+            <li>
+              <input id="btnLogin" type="button" class="bs_loginbtn" value="登录" style="margin-left:30%" />
+            </li>
+          </ul>
+        </div>
+        
+      </div>
+    </div>
+    <script>
+      $('#btnLogin').bind("click", function(){   
+        _doLogin();
+        return false;
+      });
+      setTimeout(function(){
+        var cookieUserNameOrig = Cookies.get('chamber7W34HQJ4');
+        var cookiePasswordOrig = Cookies.get('chamber0QWW294A');
+        if (cookieUserNameOrig != '' && cookiePasswordOrig != ''){
+//        $('#rememberMe').prop('checked', true);
+          $('#userName').val(cookieUserNameOrig);
+          $('#userPassword').val(cookiePasswordOrig);
+        }
+      },1000);
+    </script>
+  </body>
+
+</html>

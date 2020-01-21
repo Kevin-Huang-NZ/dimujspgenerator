@@ -1,0 +1,13 @@
+<!--#<JREMOVE>
+FUN:Confused
+客户访问开锁操作
+</JREMOVE>#-->
+
+<MACRO>
+  Jsp.pops("__customerNo");
+</MACRO>  
+<MACRO>
+	Jsp.redisUnLock("customer_${__customerNo}");
+</MACRO>
+
+  

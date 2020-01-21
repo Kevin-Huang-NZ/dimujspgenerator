@@ -1,0 +1,26 @@
+<!--#<JREMOVE>
+	检索省市、城市下的区域列表。
+	参数：
+	cprovince:省市，中文。
+	ccity:城市，中文。
+</JREMOVE>#-->
+
+<%@ page trimDirectiveWhitespaces="true" buffer="128kb" autoFlush="true" language="Java" pageEncoding="UTF-8" %>
+<MACRO>
+	Jsp.call("/chamber_jsp/chamber_funs_html/fun_area_area_of_city_province.jsp","${requestEx.cprovince}","${requestEx.ccity}");
+	Jsp.result("lsArea");
+</MACRO>
+	
+{"state":"success","error_code":"0","data_size":"${fn:length(lsArea)}","data":[
+	<c:forEach items="${lsArea}" var="_one" varStatus="_status"> 
+		<s:if test="${_status.index gt 0}">,</s:if>
+		{
+			"careaNo":"${_one.careaNo}",
+			"cprovince":"${_one.cprovince}",
+			"ccity":"${_one.ccity}",
+			"careaName":"${_one.careaName}" 
+		}
+	</c:forEach>
+]}
+	
+	

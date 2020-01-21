@@ -1,0 +1,60 @@
+<!--#<JREMOVE>
+FUN:Confused
+	使用openId创建顾客账户。
+</JREMOVE>#-->
+<MACRO>
+	Jsp.pops("__copenId");
+</MACRO>
+
+<MACRO>
+  Jsp.includejsp("/chamber_jsp/chamber_const_html/global_const_define.jsp");
+</MACRO>
+
+<east:service beanName="eastUtilService" methodName="setValue" id="__hasError">
+	<east:para name="_value" value="0" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue" id="__msg">
+	<east:para name="_value" value="" type="Object" />
+</east:service>
+
+<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="getBeanOneByClassNameExtColumn" id="__customer">
+	<east:para name="className" value="colCustomer" type="String" />
+	<east:para name="fieldName" value="copenId" type="String" />
+	<east:para name="fieldValue" value="${__copenId}" type="String" />
+</east:service>
+
+<s:if test="${__customer ne null && __customer.id ne null && __customer.id ne ''}">
+	<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="createBeanExByClassName" id="__customer">       
+	  <east:para name="className" value="colCustomer" type="String" />
+	</east:service>
+	<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="getDefaultPattern"  id="__generatedNo">
+	  <east:para name="patternStr" value="{seq('CUST%09d')}" type="String" />
+	</east:service>
+	<east:service beanName="eastUtilService" methodName="getDateTime"  id="__nowDateTime">
+	</east:service>    
+	<MACRO>
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_customer}","ccustomerNo","${__generatedNo}");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_customer}","cnickname","");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_customer}","cphone","");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_customer}","cpassword","");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_customer}","cpayPassword","");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_customer}","cavatar","");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_customer}","cstatus","1");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_customer}","copenId","${__copenId}");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_customer}","camount","0");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_customer}","cfreezingAmount","0");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_customer}","creference","");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_customer}","creference2","");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_customer}","careaNo","");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_customer}","crealStatus","0");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_customer}","ccustomerType","0");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_customer}","clevel","${CUSTOMER_LEVEL_DEFAULT}");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_customer}","cregisterTime","${__nowDateTime}");
+
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_save_bean_fun.jsp" ,"${_customer}");
+	</MACRO>
+</s:if>
+	
+<MACRO>
+	Jsp.pushs("${__customer}");
+</MACRO>

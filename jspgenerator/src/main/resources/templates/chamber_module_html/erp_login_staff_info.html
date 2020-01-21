@@ -1,0 +1,20 @@
+<!--#<JREMOVE>#-->  
+  FUN:Confused
+	获取后台管理登录的员工信息。
+<!--#</JREMOVE>#-->
+ 
+<MACRO>
+  Jsp.includejsp("/chamber_jsp/chamber_const_html/erp_const_define.jsp");
+</MACRO>
+
+<east:service beanName="pmsService" methodName="fromSession"  id="__loginUser">
+  <east:para name="sessionName"  value="${LOGIN_STAFF_SESSION}" type="String" />             
+</east:service> 
+<east:service beanName="pmsService" methodName="fromSession"  id="__roleFuncMap">
+  <east:para name="sessionName"  value="${LOGIN_STAFF_ROLE_FUN}" type="String" />             
+</east:service> 
+ 
+ 
+<MACRO>
+  Jsp.pushs("${__loginUser}","${__roleFuncMap}");
+</MACRO>

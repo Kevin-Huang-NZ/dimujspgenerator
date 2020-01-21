@@ -1,0 +1,21 @@
+<!--#<JREMOVE>
+	检索所有的省份。
+	参数：
+	无
+</JREMOVE>#-->
+
+<%@ page trimDirectiveWhitespaces="true" buffer="128kb" autoFlush="true" language="Java" pageEncoding="UTF-8" %>
+<MACRO>
+	Jsp.call("/chamber_jsp/chamber_funs_html/fun_area_province.jsp");
+	Jsp.result("lsProvince");
+</MACRO>
+		
+{"state":"success","error_code":"0","data_size":"${fn:length(lsProvince)}","data":[
+	<c:forEach items="${lsProvince}" var="_one" varStatus="_status"> 
+		 <s:if test="${_status.index gt 0}">,</s:if>
+			{ 
+				"cprovince":"${_one.cprovince}"
+			}
+	</c:forEach>
+]}
+	

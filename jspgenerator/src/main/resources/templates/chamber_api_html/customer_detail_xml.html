@@ -1,0 +1,70 @@
+<!--#<JREMOVE>
+顾客详情。
+参数：2选1
+	id
+	ccustomerNo:顾客编号
+</JREMOVE>#-->
+<%@ page trimDirectiveWhitespaces="true" buffer="128kb" autoFlush="true" language="Java" pageEncoding="UTF-8" %>
+<east:service beanName="eastUtilService" methodName="setValue" id="_hasError">
+	<east:para name="_value" value="0" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue" id="_msg">
+	<east:para name="_value" value="" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue" id="_hasData">
+	<east:para name="_value" value="0" type="Object" />
+</east:service>
+
+<MACRO>
+	Jsp.call("/chamber_jsp/chamber_funs_html/fun_customer_one.jsp","${requestEx.id}","${requestEx.ccustomerNo}");
+	Jsp.result("_hasError","_msg","_hasData","_customer");
+</MACRO> 
+	
+<s:if test="${_hasError eq '0'}">
+	<s:if test="${_hasData eq '1'}">
+		<?xml version="1.0" encoding="UTF-8"?>
+		<items xmlns="http://foo.com">
+			<state>success</state>
+			<error_code>0</error_code>
+			<data_size>1</data_size>
+			<item>
+				<id><![CDATA[${_customer.id}]]></id>
+				<camount><![CDATA[${_customer.ext.camount}]]></camount>
+				<creference2><![CDATA[${_customer.ext.creference2}]]></creference2>
+				<careaNo><![CDATA[${_customer.ext.careaNo}]]></careaNo>
+				<cname><![CDATA[${_customer.ext.cname}]]></cname>
+				<cidCardType><![CDATA[${_customer.ext.cidCardType}]]></cidCardType>
+				<cidCardNo><![CDATA[${_customer.ext.cidCardNo}]]></cidCardNo>
+				<cidCardImage><![CDATA[${_customer.ext.cidCardImage}]]></cidCardImage>
+				<crealStatus><![CDATA[${_customer.ext.crealStatus}]]></crealStatus>
+				<cmemo><![CDATA[${_customer.ext.cmemo}]]></cmemo>
+				<ccustomerType><![CDATA[${_customer.ext.ccustomerType}]]></ccustomerType>
+				<ccustomerNo><![CDATA[${_customer.ext.ccustomerNo}]]></ccustomerNo>
+				<cnickname><![CDATA[${_customer.ext.cnickname}]]></cnickname>
+				<cphone><![CDATA[${_customer.ext.cphone}]]></cphone>
+				<cpassword><![CDATA[${_customer.ext.cpassword}]]></cpassword>
+				<cpayPassword><![CDATA[${_customer.ext.cpayPassword}]]></cpayPassword>
+				<cavatar><![CDATA[${_customer.ext.cavatar}]]></cavatar>
+				<cstatus><![CDATA[${_customer.ext.cstatus}]]></cstatus>
+				<copenId><![CDATA[${_customer.ext.copenId}]]></copenId>
+				<creference><![CDATA[${_customer.ext.creference}]]></creference>
+			</item>
+		</items>
+	</s:if>
+	<s:else>
+		<?xml version="1.0" encoding="UTF-8"?>
+		<items xmlns="http://foo.com">
+			<state>success</state>
+			<error_code>0</error_code>
+			<data_size>0</data_size>
+		</items>
+	</s:else>
+</s:if>
+<s:else>
+	<?xml version="1.0" encoding="UTF-8"?>
+	<items xmlns="http://foo.com">
+		<state>failed</state>
+		<error_msg>${_msg}</error_msg>
+		<item></item>
+	</items>
+</s:else>

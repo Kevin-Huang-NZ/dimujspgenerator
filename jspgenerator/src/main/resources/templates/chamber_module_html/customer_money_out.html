@@ -1,0 +1,43 @@
+<!--#<JREMOVE>
+FUN:Confused
+顾客出金。
+</JREMOVE>#-->
+
+<MACRO>
+  Jsp.pops("__customer","__camount","__ctradeNo","__ctype");
+</MACRO>
+
+
+<east:service beanName="eastUtilService" methodName="setValue"  id="__hasError">
+  <east:para name="_value" value="0" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue"  id="__msg">
+  <east:para name="_value" value="" type="Object" />
+</east:service>
+
+<s:if test="${__hasError eq '0'}">
+  <east:service beanName="eastUtilService" methodName="addDoubleString"  id="__blance">
+    <east:para name="_val1" value="${0 - __camount}" type="String" />
+    <east:para name="_val2" value="${__customer.ext.camount}" type="String" />
+  </east:service>
+		
+	<MACRO>
+		Jsp.call("/chamber_jsp/chamber_module_html/float_formatV2_fun.jsp","${__blance}"); 
+		Jsp.result("__blanceFmt");
+	</MACRO>
+
+  <MACRO>
+    Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${__customer}","camount","${__blanceFmt}");
+    
+    Jsp.call("/bspms_jsp/bspms_funs_html/ajax_save_bean_fun.jsp" ,"${__customer}");
+  </MACRO>
+
+  <MACRO>
+    Jsp.call("/chamber_jsp/chamber_funs_html/fun_money_record_save.jsp","${__customer.ext.ccustomerNo}","${__camount}","1","${__blanceFmt}","${__ctradeNo}","${__ctype}","");
+    Jsp.result("__moneyRecord");
+  </MACRO>
+</s:if>
+
+<MACRO>
+  Jsp.pushs("${__hasError}","${__msg}","${__moneyRecord}");
+</MACRO>

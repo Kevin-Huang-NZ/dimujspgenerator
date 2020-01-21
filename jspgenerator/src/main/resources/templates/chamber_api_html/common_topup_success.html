@@ -1,0 +1,35 @@
+<!--#<JREMOVE>
+	充值支付成功回调。
+	参数：
+	orderNo：支付订单号
+	cextenalNo：外部支付单号
+	token：
+</JREMOVE>#-->
+<MACRO>
+	Jsp.includejsp("/chamber_jsp/chamber_const_html/global_const_define.jsp");
+</MACRO>
+<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="getBeanOneByClassNameExtColumn" id="_topupRecord">
+	<east:para name="className" value="colTopupOrder" type="String" />
+	<east:para name="fieldName" value="corderNo" type="String" />
+	<east:para name="fieldValue" value="${requestEx.orderNo}" type="String" />
+</east:service>
+<s:if test="${_topupRecord ne null && _topupRecord.ext.cstatus eq '0' && requestEx.token eq '123456' && requestEx.cextenalNo ne ''}">
+	<east:service beanName="eastUtilService" methodName="getDateTime" id="_nowDateTime">
+	</east:service>
+	<MACRO>
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_topupRecord}","cstatus","1");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_topupRecord}","cextenalNo","${requestEx.cextenalNo}");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_topupRecord}","ccallBackTime","${_nowDateTime}");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_save_bean_fun.jsp" ,"${_topupRecord}");
+	</MACRO>
+	<s:if test="${fn:contains(_topupRecord.ext.corderNo, TOPUP_ORDER_CUSTOMER_TPP)}">
+		<MACRO>
+			Jsp.call("/chamber_jsp/chamber_module_html/customer_topup_success.jsp","${_topupRecord.ext.ccustomerNo}","${_topupRecord.ext.camount}","${requestEx.orderNo}");
+		</MACRO>
+	</s:if>
+
+	{"state":"success"}
+</s:if>
+<s:else>
+	{"state":"failed","msg":"支付订单已经被回调处理。"}
+</s:else>

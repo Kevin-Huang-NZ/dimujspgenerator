@@ -1,0 +1,139 @@
+<!--#<JREMOVE>#--> 
+FUN:Confused
+	检索客户出入金记录
+<!--#</JREMOVE>#-->
+<MACRO>
+	Jsp.pops("__pageNo","__pageSize","__orderBy","__extIsNumber","__ascDesc","__ccustomerNo","__ctype");
+</MACRO>
+
+<east:service beanName="eastUtilService" methodName="setValue" id="__pageNo">
+	<east:para name="_value" value="${__pageNo}" type="Object" />
+	<east:para name="_defaultValue" value="1" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue" id="__pageSize">
+	<east:para name="_value" value="${__pageSize}" type="Object" />
+	<east:para name="_defaultValue" value="999999" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue" id="__orderBy">
+	<east:para name="_value" value="${__orderBy}" type="Object" />
+	<east:para name="_defaultValue" value="crecordTime" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue" id="__extIsNumber">
+	<east:para name="_value" value="${__extIsNumber}" type="Object" />
+	<east:para name="_defaultValue" value="0" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue" id="__ascDesc">
+	<east:para name="_value" value="${__ascDesc}" type="Object" />
+	<east:para name="_defaultValue" value="desc" type="Object" />
+</east:service>
+
+<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="createBeanExByClassName" id="colMoneyRecord">
+	<east:para name="className" value="colMoneyRecord" type="String" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue" id="tnMoneyRecord">
+	<east:para name="_tableName" value="${colMoneyRecord.externTable}" type="Object" />
+	<east:para name="_default" value="t_news" type="Object" />
+</east:service>
+
+<s:if test="${__ccustomerNo ne null && __ccustomerNo ne ''}">
+	<east:service beanName="eastUtilService" methodName="setValue" id="__whereCustomerNo">
+		<east:para name="_val" value="AND t1.${colMoneyRecord.extKeepName.ccustomerNo} = '${__ccustomerNo}'" type="Object" />
+	</east:service>
+</s:if>
+<s:if test="${__ctype ne null && __ctype ne ''}">
+	<east:service beanName="eastUtilService" methodName="setValue" id="__whereType">
+		<east:para name="_val" value="AND t1.${colMoneyRecord.extKeepName.ctype} = '${__ctype}'" type="Object" />
+	</east:service>
+</s:if>
+<!--#<JREMOVE>
+
+<s:if test="${__keyWord ne null && __keyWord ne ''}">
+	<east:service beanName="eastUtilService" methodName="replaceStr" id="__keyWord">
+		<east:para name="_sVal" value="${__keyWord}" type="String" />
+		<east:para name="_sReplaced" value="%" type="String" />
+		<east:para name="_sReplaceNew" value="\%" type="String" />
+	</east:service>
+	<east:service beanName="eastUtilService" methodName="replaceStr" id="__keyWord">
+		<east:para name="_sVal" value="${__keyWord}" type="String" />
+		<east:para name="_sReplaced" value="." type="String" />
+		<east:para name="_sReplaceNew" value="\." type="String" />
+	</east:service>
+	<east:service beanName="eastUtilService" methodName="setValue" id="__whereKeyWord">
+		<east:para name="_val" value="AND (t1.${colMoneyRecord.extKeepName.ccustomerNo} LIKE '%${__keyWord}%'
+			OR t1.${colMoneyRecord.extKeepName.camount} LIKE '%${__keyWord}%')" type="Object" />
+	</east:service>
+</s:if>
+<s:if test="${__startDate ne null && __startDate ne ''}">
+	<east:service beanName="eastUtilService" methodName="setValue" id="__whereStartDate">
+		<east:para name="_val" value="AND t1.${colMoneyRecord.extKeepName.capplyDate} >= '${__startDate}'" type="Object" />
+	</east:service>
+</s:if>
+
+<s:if test="${__endDate ne null && __endDate ne ''}">
+	<east:service beanName="eastUtilService" methodName="setValue" id="__whereEndDate">
+		<east:para name="_val" value="AND t1.${colMoneyRecord.extKeepName.capplyDate} <= '${__endDate}'" type="Object" />
+	</east:service>
+</s:if>
+
+</JREMOVE>#-->
+
+
+<east:service beanName="eastUtilService" methodName="setValue" id="__fromIndex">
+	<east:para name="_val" value="${__pageSize * (__pageNo - 1)}" type="Object" />
+</east:service>
+
+<s:if test="${__extIsNumber eq '1'}">
+	<east:service beanName="eastUtilService" methodName="setValue" id="__orderStatement">
+		<east:para name="_val" value="ORDER BY CAST(${__orderBy} AS DECIMAL(12,5)) ${__ascDesc}" type="Object" />
+	</east:service>
+</s:if>
+<s:else>
+	<east:service beanName="eastUtilService" methodName="setValue" id="__orderStatement">
+		<east:para name="_val" value="ORDER BY ${__orderBy} ${__ascDesc}" type="Object" />
+	</east:service>
+</s:else>
+
+<east:service beanName="pmsService" methodName="nativeQuerySqlMap" id="__rsResult">
+	<east:para name="nativeSql" value="SELECT t1.id AS id
+			,t1.${colMoneyRecord.extKeepName.ccustomerNo} AS ccustomerNo
+			,t1.${colMoneyRecord.extKeepName.camount} AS camount
+			,t1.${colMoneyRecord.extKeepName.cinOut} AS cinOut
+			,t1.${colMoneyRecord.extKeepName.cbalance} AS cbalance
+			,t1.${colMoneyRecord.extKeepName.crecordTime} AS crecordTime
+			,t1.${colMoneyRecord.extKeepName.ctradeNo} AS ctradeNo
+			,t1.${colMoneyRecord.extKeepName.ctype} AS ctype
+			,t1.${colMoneyRecord.extKeepName.cmemo} AS cmemo
+			,t1.${colMoneyRecord.extKeepName.cincomeFrom} AS cincomeFrom
+		FROM ${tnMoneyRecord} t1
+		WHERE t1.${colMoneyRecord.keepName.newsClass} = 'colMoneyRecord'
+			AND t1.column_id=1603
+			${__whereCustomerNo}
+			${__whereType}
+			${__orderStatement}
+		LIMIT ${__fromIndex},${__pageSize}
+		"
+		type="String" />
+	<east:para name="_out_nodes_name" value="id,ccustomerNo,camount,cinOut,cbalance,crecordTime,ctradeNo,ctype,cmemo,cincomeFrom" type="String" />
+	<east:para name="token" value="123qweasd" type="String" />
+</east:service>
+
+<east:service beanName="pmsService" methodName="nativeQuerySqlMap" id="__rsPagination">
+	<east:para name="nativeSql" value="SELECT count('1') AS totalRecords
+			, CEIL(count('1')/${__pageSize}) AS totalPages
+		FROM (
+			SELECT t1.id
+			FROM ${tnMoneyRecord} t1
+			WHERE t1.${colMoneyRecord.keepName.newsClass} = 'colMoneyRecord'
+				AND t1.column_id=1603
+				${__whereCustomerNo}
+				${__whereType}
+		) pv
+		"
+		type="String" />
+	<east:para name="_out_nodes_name" value="totalRecords,totalPages" type="String" />
+	<east:para name="token" value="123qweasd" type="String" />
+</east:service>
+
+<MACRO>
+	Jsp.pushs("${__rsResult}","${__rsPagination}");
+</MACRO>

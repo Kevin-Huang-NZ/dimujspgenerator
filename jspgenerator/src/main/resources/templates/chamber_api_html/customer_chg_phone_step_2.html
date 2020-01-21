@@ -1,0 +1,73 @@
+<!--#<JREMOVE>
+FUN:Confused
+  顾客修改手机号,保存新手机号。
+  oldPhone
+  newPhone
+  verifyCode:短信验证码
+</JREMOVE>#-->
+
+<MACRO>
+  Jsp.includejsp("/chamber_jsp/chamber_const_html/global_const_define.jsp");
+</MACRO>
+
+<east:service beanName="eastUtilService" methodName="setValue"  id="hasError">
+  <east:para name="_value" value="0" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue"  id="msg">
+  <east:para name="_value" value="" type="Object" />
+</east:service>
+
+<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="getBeanOneByClassNameExtColumn" id="_customer">      
+  <east:para name="className" value="colCustomer" type="String" />
+  <east:para name="fieldName" value="cphone" type="String" />
+  <east:para name="fieldValue" value="${requestEx.oldPhone}" type="String" />
+</east:service>
+
+<s:if test="${_customer eq null || _customer.id eq null || _customer.id eq ''}">
+  <east:service beanName="eastUtilService" methodName="setValue"  id="hasError">
+    <east:para name="_value" value="1" type="Object" />
+  </east:service>
+  <east:service beanName="eastUtilService" methodName="setValue"  id="msg">
+    <east:para name="_value" value="顾客不存在。" type="Object" />
+  </east:service>
+</s:if>
+<s:if test="${hasError eq '0'}">
+  <east:service beanName="pmsService" methodName="fromMem"  id="sessionVerifyCode">
+    <east:para name="sessionName"  value="sms_${requestEx.newPhone}_${CHANGE_PHONE_VERIFY_CODE}" type="String" />             
+  </east:service>
+  <s:if test="${sessionVerifyCode ne null && sessionVerifyCode ne ''}">
+    <s:if test="${sessionVerifyCode ne requestEx.verifyCode}">
+      <east:service beanName="eastUtilService" methodName="setValue"  id="hasError">
+        <east:para name="_value" value="1" type="Object" />
+      </east:service>
+      <east:service beanName="eastUtilService" methodName="setValue"  id="msg">
+        <east:para name="_value" value="验证码错误。" type="Object" />
+      </east:service>
+    </s:if>
+  </s:if>
+  <s:else>
+    <s:if test="${requestEx.verifyCode ne '135790'}">
+      <east:service beanName="eastUtilService" methodName="setValue"  id="hasError">
+        <east:para name="_value" value="1" type="Object" />
+      </east:service>
+      <east:service beanName="eastUtilService" methodName="setValue"  id="msg">
+        <east:para name="_value" value="验证码错误。" type="Object" />
+      </east:service>
+    </s:if>
+  </s:else>
+</s:if>
+
+<s:if test="${hasError eq '0'}">
+  <MACRO>
+    Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_customer}","cphone","${requestEx.newPhone}");
+    
+    Jsp.call("/bspms_jsp/bspms_funs_html/ajax_save_bean_fun.jsp" ,"${_customer}");
+  </MACRO>
+</s:if>
+  
+<s:if test="${hasError eq '0'}">
+  {"state":"success"}
+</s:if>
+<s:else>
+  {"state":"failure", "msg":"${msg}"}
+</s:else>

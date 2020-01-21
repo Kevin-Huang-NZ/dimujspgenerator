@@ -1,0 +1,30 @@
+<!--#<JREMOVE>
+FUN:Confused
+    员工字典。
+</JREMOVE>#-->
+
+<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="createBeanExByClassName" id="__bean">       
+  <east:para name="className" value="colStaff" type="String" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue"  id="__tn">
+  <east:para name="_tableName" value="${__bean.externTable}" type="Object" />
+  <east:para name="_default" value="t_news" type="Object" />
+</east:service>
+<east:service beanName="pmsService" methodName="nativeQuerySqlMap" id="__dic">
+    <east:para name="nativeSql" value="SELECT t1.${__bean.extKeepName.cstaffNo} AS dicVal
+        ,t1.${__bean.extKeepName.crealName} AS dicName
+        FROM  ${__tn} t1
+        WHERE t1.${__bean.keepName.newsClass} = 'colStaff'
+          AND t1.column_id=1603
+          AND t1.${__bean.extKeepName.cstatus} = '1'
+          AND t1.${__bean.extKeepName.cstaffNo} <> 'admin'
+        ORDER BY t1.${__bean.extKeepName.cstaffNo} ASC
+        "
+        type="String" />
+    <east:para name="_out_nodes_name" value="dicVal,dicName" type="String" />
+    <east:para name="token" value="123qweasd" type="String" />
+</east:service>
+
+<MACRO>
+  Jsp.pushs("${__dic}");
+</MACRO>

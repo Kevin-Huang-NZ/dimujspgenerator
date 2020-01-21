@@ -1,0 +1,93 @@
+<!--#<JREMOVE>员工登录。</JREMOVE>#-->
+
+<MACRO>
+  Jsp.includejsp("/chamber_jsp/chamber_const_html/erp_const_define.jsp");
+</MACRO>
+
+<east:service beanName="eastUtilService" methodName="setValue"  id="hasError">
+  <east:para name="_value" value="0" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue"  id="msg">
+  <east:para name="_value" value="" type="Object" />
+</east:service>
+
+<s:if test="${requestEx.userName ne null && requestEx.userName ne '' && requestEx.pwd ne null && requestEx.pwd ne ''}">
+  <east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="getAllByNativeField"  id="rsStaff">
+    <east:para name="newsClass"  value="colStaff" type="String" />
+    <east:para name="page" value="1" type="Integer" />
+    <east:para name="pageSize" value="1" type="Integer" />
+    <east:para name="searchTVL" value="{\"tag\":\"cphone;cstaffNo\",\"val\":\"${requestEx.userName};${requestEx.userName}\",\"link\":\"!{EQ}\",\"type\":\"1\"}
+        ,{\"tag\":\"cpassword\",\"val\":\"${requestEx.pwd}\",\"link\":\"!{EQ}\",\"type\":\"1\"}" type="String" />
+    <east:para name="orderName" value="cdate" type="String" />
+    <east:para name="descOrAsc" value="true" type="Boolean" />
+  </east:service>
+  <s:if test="${rsStaff.list ne null && fn:length(rsStaff.list) gt 0}">
+    <east:service beanName="eastUtilService" methodName="listGet" id="loginStaff">
+      <east:para name="_list" value="${rsStaff.list}" type="Object" />
+      <east:para name="_index" value="0" type="Integer" />
+    </east:service>
+  </s:if>
+  <s:else>
+    <east:service beanName="eastUtilService" methodName="setValue"  id="hasError">
+      <east:para name="_value" value="1" type="Object" />
+    </east:service>
+    <east:service beanName="eastUtilService" methodName="setValue"  id="msg">
+      <east:para name="_value" value="登录名和密码不匹配。" type="Object" />
+    </east:service>
+  </s:else>
+</s:if>
+<s:else>
+  <east:service beanName="eastUtilService" methodName="setValue"  id="hasError">
+    <east:para name="_value" value="1" type="Object" />
+  </east:service>
+  <east:service beanName="eastUtilService" methodName="setValue"  id="msg">
+    <east:para name="_value" value="登录名和密码不能为空。" type="Object" />
+  </east:service>
+</s:else>
+
+<s:if test="${hasError eq '0'}">
+  <s:if test="${loginStaff.ext.cstatus ne '1'}">
+    <east:service beanName="eastUtilService" methodName="setValue"  id="hasError">
+      <east:para name="_value" value="1" type="Object" />
+    </east:service>
+    <east:service beanName="eastUtilService" methodName="setValue"  id="msg">
+      <east:para name="_value" value="账户被冻结,不能登录。" type="Object" />
+    </east:service>
+  </s:if>
+</s:if>
+
+<s:if test="${hasError eq '0'}">
+  <s:if test="${loginStaff.ext.crole eq null || loginStaff.ext.crole eq ''}">
+    <east:service beanName="eastUtilService" methodName="setValue"  id="hasError">
+      <east:para name="_value" value="1" type="Object" />
+    </east:service>
+    <east:service beanName="eastUtilService" methodName="setValue"  id="msg">
+      <east:para name="_value" value="没有管理后台的登录权限。" type="Object" />
+    </east:service>
+  </s:if>
+</s:if>
+
+<s:if test="${hasError eq '0'}">
+  <MACRO>
+    Jsp.call("/chamber_jsp/chamber_module_html/erp_role_func_check.jsp","${loginStaff.ext.crole}");
+    Jsp.result("_roleFuncMap");
+  </MACRO>
+  <east:service beanName="pmsService" methodName="toSession"  id="idResult">
+    <east:para name="idUserNo" value="${LOGIN_STAFF_SESSION}" type="String" />
+    <east:para name="idClientObj" value="${loginStaff}" type="Object" />
+  </east:service> 
+  
+  <east:service beanName="pmsService" methodName="toSession"  id="idResult">
+    <east:para name="idUserNo" value="${LOGIN_STAFF_ROLE_FUN}" type="String" />
+    <east:para name="idClientObj" value="${_roleFuncMap}" type="Object" />
+  </east:service> 
+  
+  <east:service beanName="pmsService" methodName="toSession"  id="idResult">
+    <east:para name="idUserNo" value="s10" type="String" />
+    <east:para name="idClientObj" value="${requestEx.s10}" type="Object" />
+  </east:service> 
+  {"state":"success"} 
+</s:if>
+<s:else>
+  {"state":"error","msg":"${msg}"} 
+</s:else>

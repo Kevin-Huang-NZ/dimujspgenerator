@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>查看视频</title>
+	<meta name="description" content="">
+	<meta name="author" content="templatemo">
+	
+	<link rel="stylesheet" type="text/css" href="../chamber_erp_css/font-awesome.css?ver=1.0"/>
+	<link rel="stylesheet" type="text/css" href="../chamber_erp_css/bootstrap.min.css?ver=1.0">
+  <link rel="stylesheet" type="text/css" href="../js/alertify/alertify.core.css"/>
+  <link rel="stylesheet" type="text/css" href="../js/alertify/alertify.bootstrap.css"/>
+	
+  <script src="../js/jquery-1.8.3.min.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../js/moment.js" type="text/javascript" charset="utf-8"></script>
+  
+  <script src="../js/ajax_janus.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../js/column_janus_mobile.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../js/alertify/alertify.js" type="text/javascript" charset="utf-8"></script>
+  
+  <script src="../widgets/lhgdialog/lhgdialog.js?skin=iblue" type="text/javascript" charset="utf-8"></script>
+  <script src="../js/janus_dialog.js" type="text/javascript" charset="utf-8"></script>
+	
+	<script type="text/javascript " src="../My97DatePicker/WdatePicker.js"></script>
+
+
+</head>
+<!--#      
+<east:service beanName="eastUtilService" methodName="decodeUriString" id="_decodeUrl">
+  <east:para name="_sourceObj" value="${requestEx.videoFullUrl}" type="String" />
+</east:service>
+#-->
+<body>
+	<div class="center-block" style="width: 540px;">
+    <div style="width:500px;margin: 0 auto;" controls autoplay>
+      <!--#<JREMOVE>#-->
+      <video width="480" height="320" src="../chamber_img/video.mp4">
+      	当前浏览器不支持 video直接播放，点击这里下载视频： <a href="${_decodeUrl}" download>下载视频</a>
+      </video>
+      <!--#</JREMOVE>#-->
+      <!--#
+      <video width="480" height="320" src="${_decodeUrl}" controls autoplay>
+        当前浏览器不支持 video直接播放，点击这里下载视频： <a href="${_decodeUrl}" download>下载视频</a>
+      </video>
+      #-->
+    </div>
+	</div>
+</body>
+
+</html>

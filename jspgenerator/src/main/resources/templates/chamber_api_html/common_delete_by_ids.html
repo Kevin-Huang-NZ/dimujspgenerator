@@ -1,0 +1,26 @@
+<!--#<JREMOVE>
+	用id删除数据。
+	参数：
+	ids:多个id逗号连接
+	tableName
+</JREMOVE>#-->
+
+<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="createBeanExByClassName" id="_bean">
+	<east:para name="className" value="${requestEx.tableName}" type="String" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue" id="_tableName">
+	<east:para name="_tableName" value="${_bean.externTable}" type="Object" />
+	<east:para name="_default" value="t_news" type="Object" />
+</east:service>
+<east:service beanName="pmsService" methodName="nativeSqlExc" id="_result">
+	<east:para name="nativeSql" value="DELETE FROM ${_tableName} WHERE id IN (${requestEx.ids})" type="String" />
+	<east:para name="token" value="123qweasd" type="String" />
+</east:service>
+<east:service beanName="pmsService" methodName="nativeSqlExc" id="_result">
+	<east:para name="nativeSql" value="DELETE FROM t_files 
+		WHERE table_name='${_tableName}' AND table_id IN (${requestEx.ids}) " 
+		type="String" />
+	<east:para name="token" value="123qweasd" type="String" />
+</east:service>
+
+{"state":"success"}

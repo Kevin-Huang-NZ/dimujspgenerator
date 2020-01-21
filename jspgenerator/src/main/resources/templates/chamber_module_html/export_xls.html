@@ -1,0 +1,19 @@
+<!--#<JREMOVE>
+  FUN:Confused
+导出列表数据到xls文件。
+参数：
+  __listData：多条数据的列表，每天数据是一个Map
+  __titles：导出xls文件中数据列的title字符串,title间分号连接
+  __keys：导出xls文件中数据列的key字符串,key间分号连接。该key用于从数据列表的map中获取数据
+  __filePath:导出文件相对路径
+</JREMOVE>#-->
+
+<MACRO>
+  Jsp.pops("__listData","__titles","__keys","__filePath");
+</MACRO>
+<east:service beanName="eastUtilService" methodName="exportMapListToXls"  id="idRecordCount">
+  <east:para name="_list1" value="${__listData}" type="List" />
+  <east:para name="_extTitles" value="${__titles}" type="String" />
+  <east:para name="_extFields" value="${__keys}" type="String" />
+  <east:para name="_extXlsPathFileName" value="${__filePath}" type="String" />
+</east:service> 

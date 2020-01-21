@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>公告</title>
+    <meta name="description" content="">
+    <meta name="author" content="templatemo">
+    <link href="../chamber_erp_css/font-awesome.css?ver=1.0" rel="stylesheet" type="text/css" />
+    <link href="../chamber_erp_css/bootstrap.min.css?ver=1.0" rel="stylesheet">
+    <link href="../chamber_erp_css/templatemo_style.css?ver=1.0" rel="stylesheet">
+    <link href="../chamber_erp_css/slidernav.css?ver=1.0" rel="stylesheet">
+    <link href="../chamber_erp_css/ob_style.css?ver=1.0" rel="stylesheet">
+    <link href="../chamber_erp_css/select2.css?ver=1.0" rel="stylesheet">
+    
+    <link href="../chamber_css/bs_div.css?ver=1.0" rel="stylesheet">  
+    <link href="../chamber_css/bs_a.css?ver=1.0" rel="stylesheet">
+    <link href="../chamber_css/menu_style.css?ver=1.0" rel="stylesheet">
+    <!-- <link href="../chamber_css/chat.css?ver=1.0" rel="stylesheet"> -->
+    
+    <link href="../js/alertify/alertify.core.css" rel="stylesheet" type="text/css"/>
+    <link href="../js/alertify/alertify.bootstrap.css" rel="stylesheet" type="text/css"/>
+    
+    <script src="../js/jquery-1.8.3.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/moment.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/alertify/alertify.js" type="text/javascript" charset="utf-8"></script>
+    
+    <script src="../js/ajax_janus.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/column_janus_mobile.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../widgets/lhgdialog/lhgdialog.js?skin=iblue" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/janus_dialog.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../My97DatePicker/WdatePicker.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/select2.js" type="text/javascript" charset="utf-8"></script>
+    
+    <link rel="stylesheet" type="text/css" href="../ckeditor/skins/v2/editor.css">
+    <script type="text/javascript" language="javascript" src="../ckeditor/ckeditor.js"></script>
+    <script type="text/javascript" src="../ckeditor/config.js"></script>
+    <script type="text/javascript" src="../ckeditor/skins/v2/skin.js"></script>
+    <script type="text/javascript" src="../ckeditor/lang/zh-cn.js"></script>
+    <script type="text/javascript" src="../ckeditor/plugins/lineheight/plugin.js"></script>
+    <script type="text/javascript" src="../ckeditor/plugins/jwplayer/plugin.js"></script>
+    <script type="text/javascript" src="../ckeditor/plugins/video/plugin.js"></script>
+    <script type="text/javascript" src="../ckeditor/plugins/audio/plugin.js"></script>
+    <script type="text/javascript" src="../ckeditor/plugins/jwplayer/lang/zh-cn.js"></script>
+    <script type="text/javascript" src="../ckeditor/plugins/jwplayer/lang/zh-cn.js"></script>
+    <script type="text/javascript" src="../ckeditor/plugins/styles/styles/default.js"></script>
+    <!--#
+    <MACRO>
+      Jsp.includejsp("/chamber_jsp/chamber_const_html/erp_const_define.jsp");
+      Jsp.includejsp("/chamber_jsp/chamber_module_html/erp_login_staff_info.jsp");
+      Jsp.result("_loginStaff","_roleFuncMap");
+    </MACRO>
+    #-->
+    <script>
+    /*# 
+      <c:if test="${_loginStaff eq null || _loginStaff.ext.cstaffNo eq null || _loginStaff.ext.cstaffNo eq ''}">
+        setTimeout(function(){
+          parent.parent.parent.window.location.href = "<%=basePath%>bs_ajaxIndex!chamber!chamber_erp_html!login.do";
+        },200);
+      </c:if>
+    #*/
+    </script> 
+  </head>
+
+<!--#
+<east:service beanName="pmsService.pmsDaoImpl.daoBsDataDic" methodName="getNewsDicClassNameChildrenEx"  id="dicYesOrNo">
+  <east:para name="className" value="dicYesOrNo" type="String" />
+</east:service>
+<east:service beanName="pmsService.pmsDaoImpl.daoBsDataDic" methodName="getNewsDicClassNameChildrenEx"  id="dicNoticeType">
+  <east:para name="className" value="dicNoticeType" type="String" />
+</east:service>
+<east:service beanName="pmsService.pmsDaoImpl.daoBsDataDic" methodName="getNewsDicClassNameChildrenEx"  id="dicNoticeStatus">
+  <east:para name="className" value="dicNoticeStatus" type="String" />
+</east:service>
+#-->
+
+<!--#
+<s:if test="${requestEx.id ne 0}">
+  <east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="getOneByIdAlwaysWithClass"  id="_notice">
+    <east:para name="tnewsid" value="${requestEx.id}" type="String" />
+    <east:para name="className" value="colNotice" type="String" />
+  </east:service>
+</s:if>
+<s:else>
+  <east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="createBeanExByClassName" id="_notice">       
+    <east:para name="className" value="colNotice" type="String" />
+  </east:service>
+</s:else>
+#-->
+<!--#
+<s:if test="${requestEx.id ne 0}">
+  <east:service beanName="eastUtilService" methodName="setValue"  id="defaultIsShow">
+    <east:para name="_value" value="${_notice.ext.cisShow}" type="Object" />
+  </east:service>
+  <east:service beanName="eastUtilService" methodName="setValue"  id="defaultPublishDate">
+    <east:para name="_value" value="${_notice.ext.cpublishDate}" type="Object" />
+  </east:service>
+  <east:service beanName="eastUtilService" methodName="setValue"  id="defaultStatus">
+    <east:para name="_value" value="${_notice.ext.cstatus}" type="Object" />
+  </east:service>
+  <east:service beanName="eastUtilService" methodName="setValue"  id="defaultShowIndex">
+    <east:para name="_value" value="${_notice.ext.cshowIndex}" type="Object" />
+  </east:service>
+</s:if>
+<s:else>
+  <east:service beanName="eastUtilService" methodName="setValue"  id="defaultIsShow">
+    <east:para name="_value" value="1" type="Object" />
+  </east:service>
+  <east:service beanName="eastUtilService" methodName="getDateTime"  id="defaultPublishDate">
+  </east:service>
+  <east:service beanName="eastUtilService" methodName="setValue"  id="defaultStatus">
+    <east:para name="_value" value="1" type="Object" />
+  </east:service>
+	<MACRO>
+		Jsp.call("/chamber_jsp/chamber_module_html/common_max_show_index.jsp","colNotice");
+		Jsp.result("defaultShowIndex");
+	</MACRO>
+</s:else>
+
+#-->
+
+  <body>
+    <div class="" id="" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" style="width:800px;">
+        <form name="frmSubmit" id="frmSubmit"  enctype="multipart/form-data" method="post" action="<%=basePath%>admin/east_ajax_do_add_news_no_pass.do" autocomplete="off">
+          <input type="hidden" name="id" value="${requestEx.id}" />
+          
+          <div class="">
+            <div class="modal-header">
+              <h4 class="modal-title" id="myModalLabel">公告</h4>
+            </div>
+            <div class="modal-body">
+            
+              <div>
+                <label for="cnoticeTitle">
+                  <p><b>*</b>标题：</p>
+                </label>
+                <input type="text" id="cnoticeTitle" name="cnoticeTitle" value="${_notice.ext.cnoticeTitle}" />
+              </div>
+              <div>
+                <label for="ctype">
+                  <p><b>*</b>公告类型：</p>
+                </label>
+                <select id="ctype" name="ctype">
+                  <option value="">请选择...</option>
+                  <c:forEach items="${dicNoticeType}" var="_oneDic" varStatus="_statusDic">
+                    <s:if test="${_oneDic.dicVal eq _notice.ext.ctype}">
+                      <option value="${_oneDic.dicVal}" selected="selected">${_oneDic.dicName}</option>
+                    </s:if>
+                    <s:else>
+                      <option value="${_oneDic.dicVal}">${_oneDic.dicName}</option>
+                    </s:else>
+                  </c:forEach>
+                </select>
+              </div>
+              <div>
+                <label for="cpublishDate">
+                  <p><b>*</b>发布时间：</p>
+                </label>
+                <input type="text" id="cpublishDate" name="cpublishDate" value="${defaultPublishDate}" onclick="WdatePicker({isShowClear:true,errDealMode:2,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'});return false;" readonly="readonly"/>
+              </div>
+              <div>
+                <label for="cexpiredDate">
+                  <p><b>*</b>有效期：</p>
+                </label>
+                <input type="text" id="cexpiredDate" name="cexpiredDate" value="${_notice.ext.cexpiredDate}" onclick="WdatePicker({isShowClear:true,errDealMode:2,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'});return false;" readonly="readonly"/>
+              </div>
+              <div>
+                <label for="cisShow">
+                  <p><b>*</b>是否显示：</p>
+                </label>
+                <select id="cisShow" name="cisShow">
+                  <c:forEach items="${dicYesOrNo}" var="_oneDic" varStatus="_statusDic">
+                    <s:if test="${_oneDic.dicVal eq defaultIsShow}">
+                      <option value="${_oneDic.dicVal}" selected="selected">${_oneDic.dicName}</option>
+                    </s:if>
+                    <s:else>
+                      <option value="${_oneDic.dicVal}">${_oneDic.dicName}</option>
+                    </s:else>
+                  </c:forEach>
+                </select>
+              </div>
+              <div>
+                <label for="cshowIndex">
+                  <p><b>*</b>显示顺序：</p>
+                </label>
+                <input type="text" id="cshowIndex" name="cshowIndex" value="${defaultShowIndex}" />
+              </div>
+              <div>
+                <label for="cstatus">
+                  <p><b>*</b>状态：</p>
+                </label>
+                <select id="cstatus" name="cstatus">
+                  <c:forEach items="${dicNoticeStatus}" var="_oneDic" varStatus="_statusDic">
+                    <s:if test="${_oneDic.dicVal eq defaultStatus}">
+                      <option value="${_oneDic.dicVal}" selected="selected">${_oneDic.dicName}</option>
+                    </s:if>
+                    <s:else>
+                      <option value="${_oneDic.dicVal}">${_oneDic.dicName}</option>
+                    </s:else>
+                  </c:forEach>
+                </select>
+              </div>
+              <div>
+                <label for="ccoverImage">
+                  <p>封面图：</p>
+                </label>
+                <button type="button" id="btnUpload">上传图片</button>
+                <input type="hidden" id="ccoverImage" value="${_notice.ext.ccoverImage}" name="ccoverImage" />
+                <s:if test="${_notice.ext.ccoverImage ne null && _notice.ext.ccoverImage ne ''}">
+                  <a id="displayImage" style="color:#337ab7" href="./${_notice.ext.ccoverImage}" target="_blank">查看图片</a>
+                </s:if>
+                <s:else>
+                  <a id="displayImage" style="display:none;color:#337ab7" target="_blank">查看图片</a>
+                </s:else>
+              </div>
+              <div>
+                <label for="csummary">
+                  <p>摘要：</p>
+                </label>
+                <textarea id="csummary" name="csummary" rows="3" cols="50">${_notice.ext.csummary}</textarea>
+              </div>
+              <!--#
+              <east:service beanName="eastUtilService" methodName="ProxyCaller.objCall2NV"  id="_contentDisp">
+                <east:para name="_class" value="com.east.regex.HtmlUtil" type="String" /> 
+                <east:para name="_fun" value="fetchBody" type="String" />  
+                <east:para name="_html" value="${_notice.ext.ccontent}" type="String" />  
+              </east:service>
+              #-->
+              <div>
+                <label for="contentDisp">
+                  <p><b>*</b>内容：</p>
+                </label>
+                <textarea id="contentDisp" rows="8" cols="54" placeholder="内容" class="text_border80" style="width:24em!important;margin-left: 10em;min-height: 300px;">${_contentDisp}</textarea>
+                <input type="hidden" id="ccontent" name="ccontent" />
+              </div>
+            
+
+              
+              <!--#
+              <JREMOVE>
+              <east:service beanName="eastUtilService" methodName="ProxyCaller.objCall2NV"  id="_contentDisp">
+                <east:para name="_class" value="com.east.regex.HtmlUtil" type="String" /> 
+                <east:para name="_fun" value="fetchBody" type="String" />  
+                <east:para name="_html" value="${_notice.ext.ccontent}" type="String" />  
+              </east:service>
+              <div>
+                <label for="contentDisp">
+                  <p><b>*</b>内容：</p>
+                </label>
+                <textarea id="contentDisp" rows="8" cols="54" placeholder="内容" class="text_border80" style="width:24em!important;margin-left: 10em;min-height: 300px;">${_contentDisp}</textarea>
+                <input type="hidden" id="ccontent" name="ccontent" />
+              </div>
+              </JREMOVE>
+              #-->
+              
+            </div><!--modal-body-->
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" style="margin-right: 45%;" id="btnSave">保存</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <script>
+      var _editorContent = null;
+      setTimeout(function(){
+        _editorContent = CKEDITOR.replace('contentDisp',{width:760,height:300} );
+      },200);
+    </script>
+    <script>
+      $(function(){
+        $('.select2').select2();
+        
+        $('#btnSave').bind("click", function() {
+          
+          var cnoticeTitle = $("#cnoticeTitle").val();
+          if(cnoticeTitle == '') {
+            alertify.alert("请填写标题。");
+            return false;
+          }
+          var ctype = $("#ctype").val();
+          if(ctype == '') {
+            alertify.alert("请选择公告类型。");
+            return false;
+          }
+          
+          var cpublishDate = $("#cpublishDate").val();
+          if(cpublishDate == '') {
+            alertify.alert("请选择发布日期。");
+            return false;
+          }
+          
+          var cexpiredDate = $("#cexpiredDate").val();
+          if(cexpiredDate == '') {
+            alertify.alert("请选择有效期。");
+            return false;
+          }
+          
+          if(moment(cexpiredDate,'YYYY-MM-DD HH:mm:ss').isBefore(moment(cpublishDate,'YYYY-MM-DD HH:mm:ss'))){
+            alertify.alert("有效期不能早于发布日期。");
+            return false;
+          }
+		  
+          var cshowIndex = $("#cshowIndex").val();
+          if(!/^[1-9][0-9]*$/.test(cshowIndex)) {
+            alertify.alert("请填写正确的显示顺序，显示顺序只能是正整数，数值大的显示在前边。");
+            return false;
+          }
+          
+          var csummary = $("#csummary").val();
+          if (csummary.length > 500) {
+            alertify.alert("摘要内容超长，最多500字符。");
+            return false;
+          }
+          
+          var _content =  _editorContent.getData();
+          if (_content.length == 0) {
+            alertify.alert("内容不能为空！");
+            return false;
+          } else if(_content.length > (1500000)){
+            alertify.alert("内容文字长度过长，无法保存！");
+            return false;
+          }
+          $("#ccontent").val(_content);
+          
+          
+          var _url_para = $("#frmSubmit").serialize(),
+            _url = "<%=basePath%>bs_ajaxIndex!chamber!chamber_controls_html!erp_notice_save.do";
+          $AjaxPostASyn(_url, _url_para,
+            function(_resp) {
+              var jsonResp = JSON.parse(_resp);
+              if(jsonResp.state == 'success') {
+                alertify.alert("操作成功!", function(_msg) {
+                  __JDialogCallbackAndClose();
+                });
+              } else {
+                alertify.alert(jsonResp.msg);
+              }
+            },
+            function(_resp) {});
+          return false;
+        });// end btnSave
+      })
+    </script>
+
+    <script>
+      function handleOneImage(sub_lists){
+        var _fileId = '';
+        for(var k = 0; k < sub_lists.length; k++) {
+          _fileId = sub_lists[k].id.trim();
+        }
+        var _url_para = "fileId=" + _fileId,
+          _url = "bs_ajaxIndex!chamber!chamber_controls_html!common_get_uploaded_image_path.do";
+        $AjaxPostASyn(_url, _url_para,
+          function(_resp) {
+            if(_resp.indexOf('success') >= 0) {
+              var jsonResp = JSON.parse(_resp);
+              $("#ccoverImage").val(jsonResp.path);
+              $("#displayImage").prop("href", "./" + jsonResp.path).show();
+            }
+          },
+          function(_resp) {});
+      }
+      
+      function ajax_multi_complete(responseText, _order) {
+        if(responseText.indexOf("success") >= 0) {
+          if(responseText.indexOf(".jsp") >= 0 || responseText.indexOf(".exe") >= 0) {
+            alert("上传文件不正确!");
+            return;
+          }
+
+          var __obj = eval("(" + responseText + ")");
+          var sub_lists = __obj.data;
+          if(sub_lists.length > 0) {
+            switch(_order) {
+              case '1':
+                handleOneImage(sub_lists);
+                break;
+              default:
+                break;
+            }
+          }
+        } else {
+          console.log("出现错误!");
+        }
+      }
+
+      var _bdPopWin = null;
+      var _bdTnewsId = 0;
+      var _bdP2Num = 0;
+
+      function fileUpdateOkArray(_paramObjs) {
+        if(_paramObjs.length > 0) {
+          var _captions = "";
+          var _fileNames = "";
+          for(k = 0; k < _paramObjs.length; k++) {
+            if(k > 0) {
+              _captions = _captions + ";";
+              _fileNames = _fileNames + ";";
+            }
+            _captions = _captions + _paramObjs[k].orgFileName;
+            _fileNames = _fileNames + _paramObjs[k].fileName;
+          }
+
+          var orderNum = _bdP2Num,
+            _url_para = "p1=t_news&p2=0&p4=" + _captions + "&p3=" + _fileNames + "&p5=" + orderNum + "&p6=UploadFileDir&p7=upload",
+            _url = "bs_ajaxIndex!bspms!bspms_controls_html!ajax_save_attachs.do"; //存储到file
+          $AjaxPostASyn(_url, _url_para,
+            function(_resp) {
+              _resp = _resp.trim();
+
+              if(_resp.indexOf('success') >= 0) {
+
+                var _respJson = JSON.parse(_resp);
+                try {
+                  ajax_multi_complete(_resp, _bdP2Num);
+                } catch(_ee) {}
+                setTimeout(function() {
+                  _bdPopWin.close();
+                }, 300);
+              }
+            },
+            function(_resp) {});
+        }
+        return false;
+      }
+
+      function uploadBdPicXMulti(_newsIdVar, _targetIdVar, _p1Var, _p2Var, _p3Var, _p4Var) {
+        _bdTnewsId = _newsIdVar;
+        _targetId = _targetIdVar;
+        _bdP2Num = _p2Var;
+        _bdPopWin = __JdialogEx("上传文件", "bs_ajaxIndex!bspms!bserp_uploaderimagebd_html!pop_image_upload.do", 400, 360,
+          function(_resp) {}, 65538,
+          function() {});
+        return false;
+      }
+
+      $(function() {
+        $("#btnUpload").on("click", function() {
+          uploadBdPicXMulti("${_notice.id}", "ccoverImage", "6", "1", "0", "0");
+        });
+      });
+    </script>
+  </body>
+</html>

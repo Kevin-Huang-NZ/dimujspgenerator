@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<title>DIMU Jsp Generator</title>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+		<link rel="stylesheet" href="css/alertify.min.css"/>
+		<link rel="stylesheet" href="css/themes/default.min.css"/>
+		<link rel="stylesheet" href="css/themes/semantic.min.css"/>
+		<link rel="stylesheet" href="css/themes/bootstrap.min.css"/>
+		
+		<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+		<script src="js/alertify.min.js"></script>
+		<script src="js/jquery.sprintf.js"></script>
+	</head>
+	<body>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-8 offset-md-2 p-3 text-center">
+					<h3>DIMU生成ERP目录下使用的HTML文件</h3>
+				</div>
+				<div>
+					<ul class="list-group list-group-flush">
+						<li class="list-group-item">1、使用前检查classpath:resource/application.properties中的数据库连接</li>
+						<li class="list-group-item">2、使用freemarker生成html文件，模板文件在html/tmpl</li>
+						<li class="list-group-item">3、生成的html文件在html/generated</li>
+						<li class="list-group-item">4、在下方文本框中输入项目的英文名，用于路径定义</li>
+					</ul>
+				</div>
+			</div>
+			<form class="mt-5">
+				<div class="form-group row">
+					<label for="projectName" class="col-md-2 col-form-label" >项目英文名</label>
+					<div class="col-md-4">
+						<input type="text" class="form-control" id="projectName" value="bsrobot">
+					</div>
+					<div class="col-md-6">
+						<button id="btnGenerate" type="button" class="btn btn-primary">生成HTML代码</button>
+					</div>
+				</div>
+			</form>
+			<div class="row mt-5">
+				<div id="message" class="bg-info text-white text-center p-3 col-md-12" style="display:none;">没有数据。请检查后台连接的数据库，并确认已经定义数据结构。</div>
+				<div id="loading" class="col-md-12">
+					<div class="p-5 mx-auto w-25 text-center">
+						<i class="fas fa-spinner fa-5x fa-pulse"></i>
+					</div>
+				</div>
+			</div>
+			<div id="data" class="row mt-5" style="display:none;">
+				<div class="col-md-3">
+				    <div class="list-group" id="groups" role="tablist">
+						<!--
+						<a class="list-group-item list-group-item-action active" id="colExjob" data-toggle="list" href="#list-colExjob" role="tab" aria-controls="colExjob">场外工作</a>
+						<a class="list-group-item list-group-item-action" id="colCommunite" data-toggle="list" href="#list-colCommunite" role="tab" aria-controls="colCommunite">公益社区</a>
+						-->
+				    </div>
+				</div>
+				<div class="col-md-9">
+					<div class="tab-content" id="tables">
+						<!-- 
+						<div class="tab-pane fade show active" id="list-colExjob" role="tabpanel" aria-labelledby="colExjob">
+							<table class="table">
+								<thead>
+									<tr>
+										<th scope="col"><input type="checkbox" name="selectAll"></th>
+										<th scope="col">表名</th>
+										<th scope="col">标题</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td><input type="checkbox" name="tableName" value="colCompany"></td>
+										<td>colCompany</td>
+										<td>企业</td>
+									</tr>
+									<tr>
+										<td><input type="checkbox" name="tableName" value="colProvider"></td>
+										<td>colProvider</td>
+										<td>服务方</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="tab-pane fade" id="list-colCommunite" role="tabpanel" aria-labelledby="colCommunite">
+							<table class="table">
+								<thead>
+									<tr>
+										<th scope="col"><input type="checkbox" name="selectAll"></th>
+										<th scope="col">表名</th>
+										<th scope="col">标题</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td><input type="checkbox" name="tableName" value="colEvent"></td>
+										<td>colEvent</td>
+										<td>公益活动</td>
+									</tr>
+									<tr>
+										<td><input type="checkbox" name="tableName" value="colClient"></td>
+										<td>colClient</td>
+										<td>活动参与人</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+				 		-->
+					</div>
+				</div>
+			</div>
+		</div>
+		<script>
+			
+			$(function(){
+				loadGroups();
+				
+				$('#btnGenerate').on('click', function(){
+					var tables = new Array();
+					$('.tab-pane:visible').find('input[name="tableName"]').each(function(_index,_ele){
+						//console.log($(_ele).prop('checked'));
+						if ($(_ele).prop('checked')) {
+							tables.push($(_ele).val());
+						}
+					})
+					
+					if (tables.length == 0) {
+						alertify.alert('请选择要生成的表。');
+						return false;
+					}
+					
+					var projectName = $('#projectName').val();
+					
+					if (projectName.length == 0) {
+						alertify.alert('请填写项目英文名。');
+						return false;
+					}
+					//console.log(tables.join(';'));
+
+					//contentType:"application/x-www-form-urlencoded",
+					//$.ajaxSetup({contentType: "x-www-form-urlencoded"});
+					var url = 'http://127.0.0.1:8090/table/generate',
+						param = {
+							projectName:projectName,
+							tables:tables
+						};
+					$.post(
+						url,
+						param, 
+						function(resp){
+							console.log(resp);
+						}, 
+						"json"
+					)
+				  	.fail(function(resp) {
+					  	console.log(resp.responseText);
+				  	});
+				})// end of btnGenerate click
+			})
+			
+			function bindAction() {
+				$('#groups a').on('click', function (e) {
+					//console.log('select a group......' + $(this).prop('id'));
+					e.preventDefault();
+					
+					var $this = $(this),
+						groupId = $this.prop('id');
+					
+					if ($('#list-' + groupId).find('tbody tr').length == 0) {
+						loadTables(groupId);
+					}
+					
+					$this.tab('show');
+					
+					return false;
+				}) // end groups click
+			}
+		</script>
+		<script>
+			function loadGroups() {
+				$.ajax({
+					type:"get",
+					contentType:"application/x-www-form-urlencoded",
+					url:"http://127.0.0.1:8090/groups",
+					data:{},
+					success: function(resp){
+						initHtmlGroups(resp);
+					},
+					error: function(resp){
+						console.log(resp.responseText);
+					}
+				});
+			}
+			
+			function initHtmlGroups(resp) {
+				if (resp.status == 'success') {
+					showGroups(resp.data);
+				} else {
+					showMsg(resp.data)
+				}
+			}
+			
+			function showMsg(data) {
+				$('#loading').hide();
+				$('#data').hide();
+				$('#message').html(data.errMsg);
+				$('#message').show();
+			}
+			
+			function showGroups(groups) {
+				if (groups.length == 0) {
+					showMsg({
+						errMsg:'没有数据。请检查后台连接的数据库，并确认已经定义数据结构。'
+					});
+					return;
+				}
+				
+				var groupTab = new Array(),
+					groupTabContent = new Array();
+				
+				groups.forEach(function(ele,index){
+					groupTab.push(printTmplGroupTab(index, ele.id, ele.groupName));
+					groupTabContent.push(printTmplGroupTabContent(index, ele.id));
+				})
+				
+				$('#groups').html(groupTab.join(''));
+				$('#tables').html(groupTabContent.join(''));
+				
+				$('#loading').hide();
+				$('#message').hide();
+				$('#data').show();
+				
+				bindAction();
+				$('#groups a:first').trigger('click');
+			}
+			
+
+			
+			function loadTables(groupId) {
+
+				/*
+				$.ajaxSetup({contentType: "application/json", scriptCharset: "utf-8"});
+				var url = 'http://127.0.0.1:8090/tables',
+					param = JSON.stringify({
+						"groupId": groupId
+					});
+				$.post(
+					url,
+					param, 
+					function(resp){
+						initHtmlTables(groupId, resp);
+					}, 
+					"json"
+				)
+			  	.fail(function(resp) {
+				  	console.log(resp.responseText);
+			  	});
+				*/
+				$.ajax({
+					type:"get",
+					contentType:"application/x-www-form-urlencoded", 
+					scriptCharset: "utf-8",
+					url:"http://127.0.0.1:8090/group/"+groupId+"/tables",
+					data:{},
+					success: function(resp){
+						initHtmlTables(groupId, resp);
+					},
+					error: function(resp){
+						console.log(resp.responseText);
+					}
+				});
+			}
+			
+			function initHtmlTables(groupId, resp) {
+				if (resp.status == 'success') {
+					showTables(groupId, resp.data);
+				}
+			}
+			
+			function showTables(groupId, tables) {
+				if (tables.length == 0) {
+					return;
+				}
+				
+				var tableContent = new Array();
+				
+				tables.forEach(function(ele,index){
+					tableContent.push(printTmplTable(ele.tableNo, ele.tableName));
+				})
+				
+				$('#list-' + groupId).find('tbody').html(tableContent.join(''));
+			}
+		</script>
+		<script>
+			function printTmplGroupTab(index, groupId,groupName) {
+				var tmpl = $('#tmplGroupTab').html();
+				tmpl = tmpl.replace("<!--","");
+				tmpl = tmpl.replace("-->","");
+				
+				var activeClass = "";
+				if (index == 0) {
+					activeClass = "active";
+				}
+				
+				var html = $.sprintf(tmpl
+					,activeClass,groupId,groupId,groupId,groupName);
+		        return html;
+			}
+			
+			function printTmplGroupTabContent(index,groupId) {
+				var tmpl = $('#tmplGroupTabContent').html();
+				tmpl = tmpl.replace("<!--","");
+				tmpl = tmpl.replace("-->","");
+				
+				var activeClass = "";
+				if (index == 0) {
+					activeClass = "show active";
+				}
+				
+				var html = $.sprintf(tmpl
+					,activeClass,groupId,groupId);
+		        return html;
+			}
+			
+			function printTmplTable(tableNo, tableName) {
+				var tmpl = $('#tmplTable').html();
+				tmpl = tmpl.replace("<!--","");
+				tmpl = tmpl.replace("-->","");
+				
+				var html = $.sprintf(tmpl
+					,tableNo,tableNo,tableName);
+		        return html;
+			}
+		</script>
+		<div style="display:none;">
+			<div id="tmplGroupTab">
+				<!-- 
+				<a class="list-group-item list-group-item-action %s" id="%s" data-toggle="list" href="#list-%s" role="tab" aria-controls="%s">%s</a>
+				-->
+			</div>
+			<div id="tmplGroupTabContent">
+				<!-- 
+				<div class="tab-pane fade %s" id="list-%s" role="tabpanel" aria-labelledby="%s">
+					<table class="table">
+						<thead>
+							<tr>
+								<th scope="col"><input type="checkbox" name="selectAll" onclick="checkAll(this);"></th>
+								<th scope="col">表名</th>
+								<th scope="col">标题</th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				</div>
+				-->
+			</div>
+			<div id="tmplTable">
+				<!-- 
+				<tr onclick="checkTr(this);">
+					<td><input type="checkbox" name="tableName" value="%s" onclick="checkOne(this);"></td>
+					<td>%s</td>
+					<td>%s</td>
+				</tr>
+				-->
+			</div>
+		</div>
+		<script>
+			function checkAll(_this) {
+				var $this = $(_this);
+				$this.parents('table').find('tbody input[name="tableName"]').prop('checked', $this.prop('checked'));
+			}
+			
+			function checkTr(_this) {
+				//console.log('test stopPropagation');
+				//console.log($(_this).find('input[name="tableName"]'));
+				$(_this).find('input[name="tableName"]').trigger('click');
+			}
+			
+			function checkOne(_this) {
+				var $this = $(_this);
+				if ($this.parents('tbody').find('input[name="tableName"]:not(:checked)').length == 0) {
+					$this.parents('table').find('thead input[name="selectAll"]').prop('checked', true);
+				} else {
+					$this.parents('table').find('thead input[name="selectAll"]').prop('checked', false);
+				}
+				event.stopPropagation();
+			}
+		</script>
+	</body>
+</html>

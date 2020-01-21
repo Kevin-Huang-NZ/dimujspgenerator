@@ -1,0 +1,78 @@
+<!--#<JREMOVE>
+FUN:Confused
+	保存新闻。
+</JREMOVE>#-->
+<MACRO>
+	Jsp.pops("__id","__cnewsTitle","__csubNewsTitle","__cspecialTitle","__csource","__cpublishDate","__csummary","__ccontent","__cisShow","__cnewsType","__chttpUrl","__ccoverImage","__cshowIndex");
+</MACRO>
+
+<east:service beanName="eastUtilService" methodName="setValue" id="__hasError">
+	<east:para name="_value" value="0" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue" id="__msg">
+	<east:para name="_value" value="" type="Object" />
+</east:service>
+
+<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="getAllByNativeField" id="__rsCheckDuplicate">
+	<east:para name="newsClass" value="colNews" type="String" />
+	<east:para name="page" value="1" type="Integer" />
+	<east:para name="pageSize" value="1" type="Integer" />
+	<east:para name="searchTVL" value="{\"tag\":\"cnewsTitle\",\"val\":\"${__cnewsTitle}\",\"link\":\"!{EQ}\",\"type\":\"1\"}
+		,{\"tag\":\"csubNewsTitle\",\"val\":\"${__csubNewsTitle}\",\"link\":\"!{EQ}\",\"type\":\"1\"}
+		,{\"tag\":\"cspecialTitle\",\"val\":\"${__cspecialTitle}\",\"link\":\"!{EQ}\",\"type\":\"1\"}
+		,{\"tag\":\"id\",\"val\":\"${__id}\",\"link\":\"!{NE}\",\"type\":\"1\"}" type="String" />
+	<east:para name="orderName" value="cdate" type="String" />
+	<east:para name="descOrAsc" value="true" type="Boolean" />
+</east:service>
+
+<s:if test="${__rsCheckDuplicate.list ne null && fn:length(__rsCheckDuplicate.list) gt 0}">
+	<east:service beanName="eastUtilService" methodName="setValue" id="__hasError">
+		<east:para name="_value" value="1" type="Object" />
+	</east:service>
+	<east:service beanName="eastUtilService" methodName="setValue" id="__msg">
+		<east:para name="_value" value="新闻标题、副标题和特色标题重复。" type="Object" />
+	</east:service>
+</s:if>
+
+<s:if test="${__hasError eq '0'}">
+	<s:if test="${__id eq '0'}">
+		<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="createBeanExByClassName" id="__news">
+			<east:para name="className" value="colNews" type="String" />
+		</east:service>
+		<!--#<JREMOVE>
+		<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="getDefaultPattern" id="__generatedNo">
+			<east:para name="patternStr" value="{seq('TN%09d')}" type="String" />
+		</east:service>
+		<east:service beanName="eastUtilService" methodName="getNowDate" id="__nowDate">
+		</east:service>
+		<east:service beanName="eastUtilService" methodName="getDateTime" id="__nowDateTime">
+		</east:service>
+		</JREMOVE>#-->
+	</s:if>
+	<s:else>
+		<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="getOneByIdAlwaysWithClass" id="__news">
+			<east:para name="tnewsid" value="${requestEx.id}" type="String" />
+			<east:para name="className" value="colNews" type="String" />
+		</east:service>
+	</s:else>
+	<MACRO>
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${__news}","cnewsTitle","${__cnewsTitle}");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${__news}","csubNewsTitle","${__csubNewsTitle}");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${__news}","cspecialTitle","${__cspecialTitle}");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${__news}","csource","${__csource}");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${__news}","cpublishDate","${__cpublishDate}");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${__news}","csummary","${__csummary}");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${__news}","ccontent","${__ccontent}");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${__news}","cisShow","${__cisShow}");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${__news}","cnewsType","${__cnewsType}");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${__news}","chttpUrl","${__chttpUrl}");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${__news}","ccoverImage","${__ccoverImage}");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${__news}","cshowIndex","${__cshowIndex}");
+		
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_save_bean_fun.jsp" ,"${__news}");
+	</MACRO>
+</s:if>
+	
+<MACRO>
+	Jsp.pushs("${__hasError}","${__msg}","${__news}");
+</MACRO>

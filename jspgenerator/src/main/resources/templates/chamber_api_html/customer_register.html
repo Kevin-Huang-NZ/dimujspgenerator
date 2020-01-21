@@ -1,0 +1,105 @@
+<!--#<JREMOVE>
+  顾客注册。
+  cphone
+  verifyCode:短信验证码
+  cpassword
+  careaNo
+	cnickname
+</JREMOVE>#-->
+<MACRO>
+  Jsp.includejsp("/chamber_jsp/chamber_const_html/global_const_define.jsp");
+</MACRO>
+<east:service beanName="eastUtilService" methodName="setValue"  id="hasError">
+  <east:para name="_value" value="0" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue"  id="msg">
+  <east:para name="_value" value="" type="Object" />
+</east:service>
+
+<east:service beanName="pmsService" methodName="fromMem"  id="sessionVerifyCode">
+  <east:para name="sessionName"  value="sms_${requestEx.cphone}_${REGISTER_VERIFY_CODE}" type="String" />             
+</east:service>
+<s:if test="${sessionVerifyCode ne null && sessionVerifyCode ne ''}">
+  <s:if test="${sessionVerifyCode ne requestEx.verifyCode}">
+    <east:service beanName="eastUtilService" methodName="setValue"  id="hasError">
+      <east:para name="_value" value="1" type="Object" />
+    </east:service>
+    <east:service beanName="eastUtilService" methodName="setValue"  id="msg">
+      <east:para name="_value" value="验证码错误。" type="Object" />
+    </east:service>
+  </s:if>
+</s:if>
+<s:else>
+  <s:if test="${requestEx.verifyCode ne '135790'}">
+    <east:service beanName="eastUtilService" methodName="setValue"  id="hasError">
+      <east:para name="_value" value="1" type="Object" />
+    </east:service>
+    <east:service beanName="eastUtilService" methodName="setValue"  id="msg">
+      <east:para name="_value" value="验证码错误。" type="Object" />
+    </east:service>
+  </s:if>
+</s:else>
+
+<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="getAllByNativeField"  id="rsCheckPhone">
+  <east:para name="newsClass"  value="colCustomer" type="String" />
+  <east:para name="page" value="1" type="Integer" />
+  <east:para name="pageSize" value="1" type="Integer" />
+  <east:para name="searchTVL" value="{\"tag\":\"cphone\",\"val\":\"${requestEx.cphone}\",\"link\":\"!{EQ}\",\"type\":\"1\"}" type="String" />
+  <east:para name="orderName" value="cdate" type="String" />
+  <east:para name="descOrAsc" value="true" type="Boolean" />
+</east:service>
+
+<s:if test="${rsCheckPhone.list ne null && fn:length(rsCheckPhone.list) gt 0}">
+  <east:service beanName="eastUtilService" methodName="setValue"  id="hasError">
+    <east:para name="_value" value="1" type="Object" />
+  </east:service>
+  <east:service beanName="eastUtilService" methodName="setValue"  id="msg">
+    <east:para name="_value" value="手机号重复,注册失败。" type="Object" />
+  </east:service>
+</s:if>
+
+
+<s:if test="${hasError eq '0'}">
+	
+  <east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="createBeanExByClassName" id="_customer">       
+    <east:para name="className" value="colCustomer" type="String" />
+  </east:service>
+  <east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="getDefaultPattern"  id="_generatedNo">
+    <east:para name="patternStr" value="{seq('CUST%09d')}" type="String" />
+  </east:service>
+  <east:service beanName="eastUtilService" methodName="getDateTime"  id="_nowDateTime">
+  </east:service>    
+  <MACRO>
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_customer}","ccustomerNo","${_generatedNo}");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_customer}","cnickname","${requestEx.cnickname}");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_customer}","cphone","${requestEx.cphone}");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_customer}","cpassword","${requestEx.cpassword}");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_customer}","cpayPassword","");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_customer}","cavatar","");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_customer}","cstatus","1");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_customer}","copenId","");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_customer}","camount","0");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_customer}","cfreezingAmount","0");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_customer}","creference","");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_customer}","creference2","");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_customer}","careaNo","${requestEx.careaNo}");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_customer}","crealStatus","0");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_customer}","ccustomerType","0");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_customer}","clevel","${CUSTOMER_LEVEL_DEFAULT}");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_customer}","cregisterTime","${_nowDateTime}");
+
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_save_bean_fun.jsp" ,"${_customer}");
+  </MACRO>
+  
+  <east:service beanName="pmsService" methodName="toSession"  id="idResult">
+    <east:para name="idUserNo" value="${LOGIN_CUSTOMER_SESSION}" type="String" />
+    <east:para name="idClientObj" value="${_customer}" type="Object" />
+  </east:service> 
+</s:if>
+  
+<s:if test="${hasError eq '0'}">
+  {"state":"success"}
+</s:if>
+<s:else>
+  {"state":"failure", "msg":"${msg}"}
+</s:else>

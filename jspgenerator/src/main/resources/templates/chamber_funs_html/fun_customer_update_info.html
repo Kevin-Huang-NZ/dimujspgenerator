@@ -1,0 +1,45 @@
+<!--#<JREMOVE>
+FUN:Confused
+	更新顾客基本信息。
+</JREMOVE>#-->
+<MACRO>
+	Jsp.pops("__id","__ccustomerNo","__cnickname");
+</MACRO>
+
+<east:service beanName="eastUtilService" methodName="setValue" id="__hasError">
+	<east:para name="_value" value="0" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue" id="__msg">
+	<east:para name="_value" value="" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue" id="__hasData">
+	<east:para name="_value" value="0" type="Object" />
+</east:service>
+
+<MACRO>
+	Jsp.call("/chamber_jsp/chamber_funs_html/fun_customer_one.jsp","${__id}","${__ccustomerNo}");
+	Jsp.result("__hasError","__msg","__hasData","__customer");
+</MACRO> 
+
+<s:if test="${__hasError eq '0'}">
+	<s:if test="${__hasData eq '0'}">
+		<east:service beanName="eastUtilService" methodName="setValue" id="__hasError">
+			<east:para name="_value" value="1" type="Object" />
+		</east:service>
+		<east:service beanName="eastUtilService" methodName="setValue" id="__msg">
+			<east:para name="_value" value="顾客不存在." type="Object" />
+		</east:service>
+	</s:if>
+</s:if>
+
+<s:if test="${__hasError eq '0'}">
+	<MACRO>
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${__customer}","cnickname","${__cnickname}");
+		
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_save_bean_fun.jsp" ,"${__customer}");
+	</MACRO>
+</s:if>
+	
+<MACRO>
+	Jsp.pushs("${__hasError}","${__msg}");
+</MACRO>

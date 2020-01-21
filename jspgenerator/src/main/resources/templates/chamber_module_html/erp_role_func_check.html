@@ -1,0 +1,53 @@
+<!--#<JREMOVE>#--> 
+FUN:Confused
+  判断某一用户的角色对应那些功能
+<!--#</JREMOVE>#-->
+<MACRO>
+  Jsp.pops("__roles");
+</MACRO>
+
+<MACRO>
+  Jsp.call("/chamber_jsp/chamber_module_html/erp_load_role_func_map.jsp");
+  Jsp.result("__roleFuncMap");
+</MACRO>
+
+
+<east:service beanName="eastUtilService" methodName="mapCreate"  id="__functionMap">
+</east:service>
+
+<east:service beanName="eastUtilService" methodName="splitString" id="__lsRole">
+  <east:para name="_sStr" value="${__roles}" type="String" />
+  <east:para name="_linkLetter" value="," type="String" />
+</east:service>
+
+<c:forEach items="${__lsRole}" var="_one" varStatus="_status">
+  <east:service beanName="eastUtilService" methodName="mapGet"  id="_mapRoleFuncs">
+    <east:para name="_map" value="${__roleFuncMap}" type="Object" />
+    <east:para name="_key" value="${_one}" type="String" /> 
+  </east:service>
+  <s:if test="${_mapRoleFuncs ne null}">
+    <east:service beanName="eastUtilService" methodName="mapKeys"  id="_lsKeys">
+      <east:para name="_map" value="${_mapRoleFuncs}" type="Object" /> 
+    </east:service>
+    <c:forEach items="${_lsKeys}" var="_oneKey" varStatus="_statusKey">
+      <east:service beanName="eastUtilService" methodName="mapGet"  id="_hasFunc">
+        <east:para name="_map" value="${_mapRoleFuncs}" type="Object" />
+        <east:para name="_key" value="${_oneKey}" type="String" /> 
+      </east:service>
+      
+      <s:if test="${_status.index eq 0 || _hasFunc eq '1'}">
+        <east:service beanName="eastUtilService" methodName="mapPut"  id="idResult">
+          <east:para name="_map" value="${__functionMap}" type="Object" />
+          <east:para name="_key" value="${_oneKey}" type="String" />
+          <east:para name="_value" value="${_hasFunc}" type="Object" />
+        </east:service>
+      </s:if>
+    </c:forEach>
+  </s:if>
+  
+</c:forEach>
+
+
+<MACRO>
+  Jsp.pushs("${__functionMap}");
+</MACRO>

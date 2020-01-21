@@ -1,0 +1,52 @@
+<!--#<JREMOVE>
+  保存公告。
+</JREMOVE>#-->
+<east:service beanName="eastUtilService" methodName="setValue"  id="hasError">
+  <east:para name="_value" value="0" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue"  id="msg">
+  <east:para name="_value" value="" type="Object" />
+</east:service>
+
+
+<s:if test="${hasError eq '0'}">
+  <s:if test="${requestEx.id eq '0'}">
+    <east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="createBeanExByClassName" id="_notice">       
+      <east:para name="className" value="colNotice" type="String" />
+    </east:service>
+    <!--#<JREMOVE>
+    <east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="getDefaultPattern"  id="_generatedNo">
+      <east:para name="patternStr" value="{seq('TN%09d')}" type="String" />
+    </east:service>
+    <east:service beanName="eastUtilService" methodName="getDateTime"  id="_nowDateTime">
+    </east:service>
+    </JREMOVE>#-->
+  </s:if>
+  <s:else>
+    <east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="getOneByIdAlwaysWithClass"  id="_notice">
+      <east:para name="tnewsid" value="${requestEx.id}" type="String" />
+      <east:para name="className" value="colNotice" type="String" />
+    </east:service>
+  </s:else>
+  <MACRO>
+    Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_notice}","cnoticeTitle","${requestEx.cnoticeTitle}");
+    Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_notice}","ctype","${requestEx.ctype}");
+    Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_notice}","csummary","${requestEx.csummary}");
+    Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_notice}","ccontent","${requestEx.ccontent}");
+    Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_notice}","cpublishDate","${requestEx.cpublishDate}");
+    Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_notice}","cexpiredDate","${requestEx.cexpiredDate}");
+    Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_notice}","cisShow","${requestEx.cisShow}");
+    Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_notice}","cshowIndex","${requestEx.cshowIndex}");
+    Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_notice}","ccoverImage","${requestEx.ccoverImage}");
+    Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_notice}","cstatus","${requestEx.cstatus}");
+    
+    Jsp.call("/bspms_jsp/bspms_funs_html/ajax_save_bean_fun.jsp" ,"${_notice}");
+  </MACRO>
+</s:if>
+  
+<s:if test="${hasError eq '0'}">
+  {"state":"success"}
+</s:if>
+<s:else>
+  {"state":"failure", "msg":"${msg}"}
+</s:else>

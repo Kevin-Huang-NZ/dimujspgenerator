@@ -1,0 +1,63 @@
+<!--#<JREMOVE>
+  全局静态变量
+</JREMOVE>#-->
+
+<!--#<JREMOVE>顾客登陆session</JREMOVE>#-->
+<east:service beanName="eastUtilService" methodName="setValue"  id="LOGIN_CUSTOMER_SESSION">
+  <east:para name="_val" value="LOGIN_CUSTOMER_SESSION" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue"  id="LOGIN_CUSTOMER_SESSION_OPENID">
+  <east:para name="_val" value="openId" type="Object" />
+</east:service>
+
+<!--#<JREMOVE>顾客等级</JREMOVE>#-->
+<east:service beanName="eastUtilService" methodName="setValue"  id="CUSTOMER_LEVEL_DEFAULT">
+  <east:para name="_val" value="1" type="Object" />
+</east:service>
+	
+<!--#<JREMOVE>顾客金额操作时，加锁时间</JREMOVE>#-->
+<east:service beanName="eastUtilService" methodName="setValue"  id="CUSTOMER_OPT_LOCK_SECOND">
+  <east:para name="_val" value="3" type="Object" />
+</east:service>
+
+
+<!--#<JREMOVE>短信验证码</JREMOVE>#-->
+<east:service beanName="eastUtilService" methodName="setValue"  id="LOGIN_VERIFY_CODE">
+  <east:para name="_val" value="LOGIN_VERIFY_CODE" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue"  id="REGISTER_VERIFY_CODE">
+  <east:para name="_val" value="REGISTER_VERIFY_CODE" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue"  id="CHANGE_PHONE_VERIFY_CODE">
+  <east:para name="_val" value="CHANGE_PHONE_VERIFY_CODE" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue"  id="FORGET_PASSWORD_VERIFY_CODE">
+  <east:para name="_val" value="FORGET_PASSWORD_VERIFY_CODE" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue"  id="CODE_SEND_TIME">
+  <east:para name="_val" value="CODE_SEND_TIME" type="Object" />
+</east:service>
+
+<!--#<JREMOVE>出入金流水单记录分类
+		充值流水 1
+		提现流水 2	
+		购买家装套餐支出 5
+		家装套餐退款 6
+</JREMOVE>#-->
+<east:service beanName="eastUtilService" methodName="setValue"  id="MONEY_TYPE_CASH_IN">
+  <east:para name="_val" value="1" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue"  id="MONEY_TYPE_CASH_OUT">
+  <east:para name="_val" value="2" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue"  id="MONEY_TYPE_FIX_PACKAGE_BUY">
+  <east:para name="_val" value="5" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue"  id="MONEY_TYPE_FIX_PACKAGE_REFUND">
+  <east:para name="_val" value="6" type="Object" />
+</east:service>
+<!--#<JREMOVE>支付订单区分标记，用于订单支出成功回调时，区分业务逻辑
+</JREMOVE>#-->
+<east:service beanName="eastUtilService" methodName="setValue"  id="TOPUP_ORDER_CUSTOMER_TPP">
+  <east:para name="_val" value="CUSTOMER_TPP" type="Object" />
+</east:service>

@@ -1,0 +1,33 @@
+<!--#<JREMOVE>#-->  
+FUN:Confused
+发送短信验证码
+参数：
+	templateCode：短信模板编号
+	templateParamJson:为发送短信的json结构体。
+返回值：
+	0表示成功
+<!--#</JREMOVE>#-->
+
+<MACRO>
+	Jsp.pops("__phone","__templateCode","__templateParamJson");
+</MACRO>
+	
+<east:service beanName="eastUtilService" methodName="getShortDateTimeRand"  id="__shortDtRandom">
+	 <east:para name="nMaxLen" value="2" type="Integer" />
+</east:service>	
+	
+<%
+	String __phone = (String)request.getAttribute("__phone");
+	String __accessKeyId     = "LTAIQWyf8PkjORLh";
+	String __accessKeySecret = "YvGNK8gntRGcVCePskCKa795qOzt2D"; 
+	String __corpName = "有限公司";
+	String __templateCode  = (String)request.getAttribute("__templateCode");
+	String __templateParamJson  = (String)request.getAttribute("__templateParamJson");
+	String __sendOutMsgId  = (String)request.getAttribute("__shortDtRandom");
+	Integer nRetSMS = com.east.clocorp.sms.SmsUtil.SentAlyMMS(__phone, __accessKeyId, __accessKeySecret, __corpName, __templateCode, __templateParamJson, __sendOutMsgId);
+	request.setAttribute("__sendResult", nRetSMS);
+%> 
+
+<MACRO>
+		Jsp.pushs("${__sendResult}");
+</MACRO>

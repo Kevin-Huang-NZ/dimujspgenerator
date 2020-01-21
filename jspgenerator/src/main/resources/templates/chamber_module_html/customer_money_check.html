@@ -1,0 +1,54 @@
+<!--#<JREMOVE>
+FUN:Confused
+顾客出入金检查。
+__inOrOut: 0-入金；1-出金
+</JREMOVE>#-->
+
+<MACRO>
+  Jsp.pops("__ccustomerNo","__camount","__inOrOut");
+</MACRO>
+
+
+<east:service beanName="eastUtilService" methodName="setValue"  id="__hasError">
+  <east:para name="_value" value="0" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue"  id="__msg">
+  <east:para name="_value" value="" type="Object" />
+</east:service>
+
+<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="getBeanOneByClassNameExtColumn" id="__customer">      
+  <east:para name="className" value="colCustomer" type="String" />
+  <east:para name="fieldName" value="ccustomerNo" type="String" />
+  <east:para name="fieldValue" value="${__ccustomerNo}" type="String" />
+</east:service>
+
+<s:if test="${__customer eq null || __customer.id eq null || __customer.id eq ''}">
+  <east:service beanName="eastUtilService" methodName="setValue"  id="__hasError">
+    <east:para name="_value" value="1" type="Object" />
+  </east:service>
+  <east:service beanName="eastUtilService" methodName="setValue"  id="__msg">
+    <east:para name="_value" value="顾客不存在。" type="Object" />
+  </east:service>
+</s:if>
+
+<s:if test="${__hasError eq '0'}">
+  <s:if test="${__inOrOut eq '1'}">
+    <east:service beanName="eastUtilService" methodName="compareFloat"  id="__compareResult">
+      <east:para name="_val1" value="${__customer.ext.camount}" type="String" />
+      <east:para name="_val2" value="${__camount}" type="String" />
+    </east:service>
+    
+    <s:if test="${__compareResult eq '-1'}">
+      <east:service beanName="eastUtilService" methodName="setValue"  id="__hasError">
+        <east:para name="_value" value="1" type="Object" />
+      </east:service>
+      <east:service beanName="eastUtilService" methodName="setValue"  id="__msg">
+        <east:para name="_value" value="顾客账户余额不足。" type="Object" />
+      </east:service>
+    </s:if>
+  </s:if>
+</s:if>
+
+<MACRO>
+  Jsp.pushs("${__hasError}","${__msg}","${__customer}");
+</MACRO>

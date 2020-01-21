@@ -1,0 +1,59 @@
+<!--#<JREMOVE>
+FUN:Confused
+返回解析后的list内部存储，key(中文名称)，val(值)
+list ->map<key,val>
+</JREMOVE>#-->
+
+<MACRO>
+ Jsp.pops("__OperateLogBean");
+</MACRO>   
+
+<east:service beanName="eastUtilService" methodName="listNew"  id="__idLstNodes"> 
+</east:service> 
+
+<east:service beanName="eastUtilService" methodName="jsonDecodeToMap"  id="_mapMemo">
+	<east:para name="_val" value="${__OperateLogBean.ext.coperatMemo}" type="String" />
+</east:service> 
+<s:if test="${_mapMemo ne null && _mapMemo ne ''}">	
+
+	<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="createBeanExByClassName" id="__OpteratLogBeanNew">	  	 
+		<east:para name="className" value="${__OperateLogBean.ext.cbeanTableName}" type="String" />
+	</east:service> 
+	<east:service beanName="eastUtilService" methodName="mapKeys"  id="_lsKeys">
+		<east:para name="_val" value="${_mapMemo}" type="Map" />
+	</east:service>  
+
+	<c:forEach items="${_lsKeys}" var="_idKey" varStatus="_pageStatus">  	
+		<east:service beanName="eastUtilService" methodName="mapGet"  id="_extTitle">
+			<east:para name="_map" value="${__OpteratLogBeanNew.extKeepJson}" type="Map" />
+			<east:para name="_key" value="${_idKey}" type="String" /> 
+		</east:service>  
+		<east:service beanName="eastUtilService" methodName="mapGet"  id="_extValue">
+			<east:para name="_map" value="${_mapMemo}" type="Map" />
+			<east:para name="_key" value="${_idKey}" type="String" /> 
+		</east:service> 
+		<s:if test="${_extTitle ne null && _extTitle.caption ne ''}">
+			<east:service beanName="eastUtilService" methodName="mapNew"  id="__idMapNew"> 
+				</east:service>  
+			<east:service beanName="eastUtilService" methodName="mapPut" id="_idResultGroupResult">
+			<east:para name="_map"  value="${__idMapNew}" type="Map" />
+				<east:para name="_key" value="key" type="String" />
+				<east:para name="_val" value="${_extTitle.caption}" type="Object" />
+			</east:service>	
+			<east:service beanName="eastUtilService" methodName="mapPut" id="_idResultGroupResult">
+				<east:para name="_map"  value="${__idMapNew}" type="Map" />
+				<east:para name="_key" value="val" type="String" />
+				<east:para name="_val" value="${_extValue}" type="Object" />
+			</east:service>	
+					
+			<east:service beanName="eastUtilService" methodName="listPut" id="__idResult"> 
+				<east:para name="_list" value="${__idLstNodes}" type="List" />
+				<east:para name="_var" value="${__idMapNew}" type="Object" />
+			</east:service>	 
+		</s:if>
+	</c:forEach>	
+</s:if>
+	  
+<MACRO>
+  Jsp.pushs("${__idLstNodes}");
+</MACRO>

@@ -1,0 +1,23 @@
+<!--#<JREMOVE>
+  保存区域。
+</JREMOVE>#-->
+<east:service beanName="eastUtilService" methodName="setValue"  id="hasError">
+  <east:para name="_value" value="0" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue"  id="msg">
+  <east:para name="_value" value="" type="Object" />
+</east:service>
+
+
+<MACRO>
+  Jsp.call("/chamber_jsp/chamber_funs_html/fun_area_save.jsp","${requestEx.cprovince}","${requestEx.ccity}","${requestEx.careaName}","${requestEx.ctype}","${requestEx.clevel}");
+  
+  Jsp.result("hasError","msg","_area");
+</MACRO>
+  
+<s:if test="${hasError eq '0'}">
+  {"state":"success"}
+</s:if>
+<s:else>
+  {"state":"failure", "msg":"${msg}"}
+</s:else>

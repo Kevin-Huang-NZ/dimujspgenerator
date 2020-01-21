@@ -1,0 +1,44 @@
+<!--#<JREMOVE>
+	通用更新点击量的方法。
+	参数：
+	id:
+	tableName:例如：colNews
+	columnName:default - chits
+</JREMOVE>#-->
+<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="getOneByIdAlwaysWithClass" id="_bean">
+	<east:para name="tnewsid" value="${requestEx.id}" type="String" />
+	<east:para name="className" value="${requestEx.tableName}" type="String" />
+</east:service>
+<s:if test="${_bean.id eq '' || _bean.id eq null || _bean.id eq '0'}">
+	{"state":"failed"}
+</s:if>
+<s:else>
+	<east:service beanName="eastUtilService" methodName="setValue" id="_columnName">
+		<east:para name="_value" value="${requestEx.columnName}" type="Object" />
+		<east:para name="_defaultValue" value="chits" type="Object" />
+	</east:service>
+	
+	<east:service beanName="eastUtilService" methodName="mapGet" id="_hits">
+		<east:para name="_map" value="${_bean.ext}" type="Object" />
+		<east:para name="_key" value="${_columnName}" type="String" /> 
+	</east:service>
+	<!--#<JREMOVE>浏览量加1</JREMOVE>#-->
+	<s:if test="${_hits eq null || _hits eq ''}">
+		<east:service beanName="eastUtilService" methodName="setValue" id="_newHits">
+			<east:para name="_value" value="1" type="Object" />
+		</east:service>
+	</s:if>
+	<s:else>
+		<east:service beanName="eastUtilService" methodName="addIntString" id="_newHits">
+			<east:para name="_val1" value="${_hits}" type="String" />
+			<east:para name="_val2" value="1" type="String" />
+		</east:service>
+	</s:else>
+	
+	<MACRO>
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_bean}","${_columnName}","${_newHits}");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_save_bean_fun.jsp" ,"${_bean}");
+	</MACRO>
+	
+	{"state":"success"}
+</s:else>

@@ -1,0 +1,142 @@
+<!--#<JREMOVE>#--> 
+FUN:Confused
+	检索轮播图
+<!--#</JREMOVE>#-->
+<MACRO>
+	Jsp.pops("__pageNo","__pageSize","__orderBy","__extIsNumber","__ascDesc","__cposition","__cisShow");
+</MACRO>
+
+<east:service beanName="eastUtilService" methodName="setValue" id="__pageNo">
+	<east:para name="_value" value="${__pageNo}" type="Object" />
+	<east:para name="_defaultValue" value="1" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue" id="__pageSize">
+	<east:para name="_value" value="${__pageSize}" type="Object" />
+	<east:para name="_defaultValue" value="999999" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue" id="__orderBy">
+	<east:para name="_value" value="${__orderBy}" type="Object" />
+	<east:para name="_defaultValue" value="cshowIndex" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue" id="__extIsNumber">
+	<east:para name="_value" value="${__extIsNumber}" type="Object" />
+	<east:para name="_defaultValue" value="1" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue" id="__ascDesc">
+	<east:para name="_value" value="${__ascDesc}" type="Object" />
+	<east:para name="_defaultValue" value="desc" type="Object" />
+</east:service>
+
+<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="createBeanExByClassName" id="colIndexImage">
+	<east:para name="className" value="colIndexImage" type="String" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue" id="tnIndexImage">
+	<east:para name="_tableName" value="${colIndexImage.externTable}" type="Object" />
+	<east:para name="_default" value="t_news" type="Object" />
+</east:service>
+
+<s:if test="${__cposition ne null && __cposition ne ''}">
+	<east:service beanName="eastUtilService" methodName="setValue" id="__wherePosition">
+		<east:para name="_val" value="AND t1.${colIndexImage.extKeepName.cposition} = '${__cposition}'" type="Object" />
+	</east:service>
+</s:if>
+
+<s:if test="${__cisShow ne null && __cisShow ne ''}">
+	<east:service beanName="eastUtilService" methodName="setValue" id="__whereIsShow">
+		<east:para name="_val" value="AND t1.${colIndexImage.extKeepName.cisShow} = '${__cisShow}'" type="Object" />
+	</east:service>
+</s:if>
+
+<!--#<JREMOVE>
+
+<s:if test="${__keyWord ne null && __keyWord ne ''}">
+	<east:service beanName="eastUtilService" methodName="replaceStr" id="__keyWord">
+		<east:para name="_sVal" value="${__keyWord}" type="String" />
+		<east:para name="_sReplaced" value="%" type="String" />
+		<east:para name="_sReplaceNew" value="\%" type="String" />
+	</east:service>
+	<east:service beanName="eastUtilService" methodName="replaceStr" id="__keyWord">
+		<east:para name="_sVal" value="${__keyWord}" type="String" />
+		<east:para name="_sReplaced" value="." type="String" />
+		<east:para name="_sReplaceNew" value="\." type="String" />
+	</east:service>
+	<east:service beanName="eastUtilService" methodName="setValue" id="__whereKeyWord">
+		<east:para name="_val" value="AND (t1.${colIndexImage.extKeepName.cimg} LIKE '%${__keyWord}%'
+			OR t1.${colIndexImage.extKeepName.chttpUrl} LIKE '%${__keyWord}%')" type="Object" />
+	</east:service>
+</s:if>
+<s:if test="${__startDate ne null && __startDate ne ''}">
+	<east:service beanName="eastUtilService" methodName="setValue" id="__whereStartDate">
+		<east:para name="_val" value="AND t1.${colIndexImage.extKeepName.capplyDate} >= '${__startDate}'" type="Object" />
+	</east:service>
+</s:if>
+
+<s:if test="${__endDate ne null && __endDate ne ''}">
+	<east:service beanName="eastUtilService" methodName="setValue" id="__whereEndDate">
+		<east:para name="_val" value="AND t1.${colIndexImage.extKeepName.capplyDate} <= '${__endDate}'" type="Object" />
+	</east:service>
+</s:if>
+
+<s:if test="${__cstatus ne null && __cstatus ne ''}">
+	<east:service beanName="eastUtilService" methodName="setValue" id="__whereStatus">
+		<east:para name="_val" value="AND t1.${colIndexImage.extKeepName.cstatus} = '${__cstatus}'" type="Object" />
+	</east:service>
+</s:if>
+</JREMOVE>#-->
+
+
+<east:service beanName="eastUtilService" methodName="setValue" id="__fromIndex">
+	<east:para name="_val" value="${__pageSize * (__pageNo - 1)}" type="Object" />
+</east:service>
+
+<s:if test="${__extIsNumber eq '1'}">
+	<east:service beanName="eastUtilService" methodName="setValue" id="__orderStatement">
+		<east:para name="_val" value="ORDER BY CAST(${__orderBy} AS DECIMAL(12,5)) ${__ascDesc}" type="Object" />
+	</east:service>
+</s:if>
+<s:else>
+	<east:service beanName="eastUtilService" methodName="setValue" id="__orderStatement">
+		<east:para name="_val" value="ORDER BY ${__orderBy} ${__ascDesc}" type="Object" />
+	</east:service>
+</s:else>
+
+<east:service beanName="pmsService" methodName="nativeQuerySqlMap" id="__rsResult">
+	<east:para name="nativeSql" value="SELECT t1.id AS id
+			,t1.${colIndexImage.extKeepName.cimg} AS cimg
+			,t1.${colIndexImage.extKeepName.chttpUrl} AS chttpUrl
+			,t1.${colIndexImage.extKeepName.cisShow} AS cisShow
+			,t1.${colIndexImage.extKeepName.cposition} AS cposition
+			,t1.${colIndexImage.extKeepName.cshowIndex} AS cshowIndex
+		FROM ${tnIndexImage} t1
+		WHERE t1.${colIndexImage.keepName.newsClass} = 'colIndexImage'
+			AND t1.column_id=1603
+			${__wherePosition}
+			${__whereIsShow}
+		${__orderStatement}
+		LIMIT ${__fromIndex},${__pageSize}
+		"
+		type="String" />
+	<east:para name="_out_nodes_name" value="id,cimg,chttpUrl,cisShow,cposition,cshowIndex" type="String" />
+	<east:para name="token" value="123qweasd" type="String" />
+</east:service>
+
+<east:service beanName="pmsService" methodName="nativeQuerySqlMap" id="__rsPagination">
+	<east:para name="nativeSql" value="SELECT count('1') AS totalRecords
+			, CEIL(count('1')/${__pageSize}) AS totalPages
+		FROM (
+			SELECT t1.id
+			FROM ${tnIndexImage} t1
+			WHERE t1.${colIndexImage.keepName.newsClass} = 'colIndexImage'
+				AND t1.column_id=1603
+				${__wherePosition}
+				${__whereIsShow}
+		) pv
+		"
+		type="String" />
+	<east:para name="_out_nodes_name" value="totalRecords,totalPages" type="String" />
+	<east:para name="token" value="123qweasd" type="String" />
+</east:service>
+
+<MACRO>
+	Jsp.pushs("${__rsResult}","${__rsPagination}");
+</MACRO>

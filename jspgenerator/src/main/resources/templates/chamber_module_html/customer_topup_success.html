@@ -1,0 +1,30 @@
+<!--#<JREMOVE>
+FUN:Confused
+顾客充值成功。
+</JREMOVE>#-->
+<MACRO>
+  Jsp.pops("__ccustomerNo","__camount","__ctradeNo");
+</MACRO>
+
+<MACRO>
+	Jsp.includejsp("/chamber_jsp/chamber_const_html/global_const_define.jsp");
+</MACRO>
+
+<MACRO>
+  Jsp.call("/chamber_jsp/chamber_module_html/customer_opt_lock.jsp","${__ccustomerNo}",${CUSTOMER_OPT_LOCK_SECOND}); 
+</MACRO>
+
+<% try { %>
+	<MACRO>
+	Jsp.call("/chamber_jsp/chamber_module_html/customer_money_check.jsp","${__ccustomerNo}","${__camount}","0");
+	Jsp.result("__hasError","__msg","__customer");
+	</MACRO>
+	<MACRO>
+	Jsp.call("/chamber_jsp/chamber_module_html/customer_money_in.jsp","${__customer}","${__camount}","${__ctradeNo}","${MONEY_TYPE_CASH_IN}","");
+	Jsp.result("__hasError","__msg");
+	</MACRO>
+<% } catch(Exception ee){ };%>
+
+<MACRO>
+  Jsp.call("/chamber_jsp/chamber_module_html/customer_opt_unlock.jsp","${__ccustomerNo}"); 
+</MACRO>

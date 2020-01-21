@@ -1,0 +1,25 @@
+<!--#<JREMOVE>
+FUN:Confused
+ 功能：用于格式化小数点后2位。
+ 输出: 
+ 注意：如果出现了-0.00 修正为0.00        
+</JREMOVE>#-->  
+
+<MACRO>
+	Jsp.pops("__idRawUsedUnitsCost");
+</MACRO>
+<east:service beanName="eastUtilService" methodName="formatFloatV1"  id="__idRawUsedUnitsCost">
+	<east:para name="_sourceObj" value="${__idRawUsedUnitsCost}" type="Object" />
+	<east:para name="__sFormat" value="%.2lf" type="String" />
+</east:service>  
+
+
+<s:if test="${__idRawUsedUnitsCost eq '-0.00'}">  	 
+	<east:service beanName="eastUtilService" methodName="setValue"  id="__idRawUsedUnitsCost">
+	   <east:para name="_val" value="0.00" type="Object" />
+	</east:service> 
+</s:if>
+
+<MACRO>
+	Jsp.pushs("${__idRawUsedUnitsCost}");
+</MACRO>

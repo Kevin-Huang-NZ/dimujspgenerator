@@ -1,0 +1,32 @@
+<!--#<JREMOVE>#--> 
+FUN:Confused
+  检索城市
+<!--#</JREMOVE>#-->
+<MACRO>
+  Jsp.pops("__cprovince");
+</MACRO>
+
+<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="createBeanExByClassName" id="colArea">	  	 
+	<east:para name="className" value="colArea" type="String" />
+</east:service>	  
+<east:service beanName="eastUtilService" methodName="setValue"  id="tnArea">
+	<east:para name="_tableName" value="${colArea.externTable}" type="Object" />
+	<east:para name="_default" value="t_news" type="Object" />
+</east:service>
+<east:service beanName="pmsService" methodName="nativeQuerySqlMap" id="__rsArea">
+	<east:para name="nativeSql" value="SELECT 
+				ta.${colArea.extKeepName.cprovince} AS cprovince
+				,ta.${colArea.extKeepName.ccity} AS ccity
+			FROM  ${tnArea} ta 
+			WHERE ta.${colArea.keepName.newsClass} = 'colArea'
+				AND ta.column_id=1603
+				AND ta.${colArea.extKeepName.cprovince} = '${__cprovince}' 
+			GROUP BY ta.${colArea.extKeepName.ccity} 
+			ORDER BY ccity ASC
+			" type="String" />
+	<east:para name="params" value="cprovince,ccity" type="String" />
+	<east:para name="token" value="123qweasd" type="String" />
+</east:service>
+<MACRO>
+  Jsp.pushs("${__rsArea}");
+</MACRO>

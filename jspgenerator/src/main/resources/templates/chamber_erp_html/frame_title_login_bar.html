@@ -1,0 +1,204 @@
+<%
+  String path = request.getContextPath();
+  String basePath = request.getScheme() + "://"
+  + request.getServerName() + ":" + request.getServerPort()
+  + path + "/";
+%>
+
+<!--#<MACRO>
+Jsp.pops("titleName");
+</MACRO>#-->	
+
+<!--#
+<MACRO>
+  Jsp.includejsp("/chamber_jsp/chamber_module_html/erp_login_staff_info.jsp");
+  Jsp.result("_loginStaff","_roleFuncMap");
+</MACRO>
+#-->
+
+<script>
+/*#	
+  <c:if test="${_loginStaff eq null || _loginStaff.ext.cstaffNo eq null || _loginStaff.ext.cstaffNo eq ''}">
+	  setTimeout(function(){
+	  		parent.parent.window.location.href = "<%=basePath%>bs_ajaxIndex!chamber!chamber_erp_html!login.do";
+	  	},200);
+  </c:if>
+#*/
+</script>	
+<!--# 
+<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="getBeanOneByClassNameExtColumn" id="_loginStaff">      
+  <east:para name="className" value="colStaff" type="String" />
+  <east:para name="fieldName" value="cstaffNo" type="String" />
+  <east:para name="fieldValue" value="${_loginStaff.ext.cstaffNo}" type="String" />
+</east:service>
+#-->  
+
+<div class="div_top_header">
+	<h4>${titleName}
+		<div class="dropdown">
+		  <a data-toggle="dropdown" href="#">个人中心</a>
+      <ul class="div_top_user dropdown-menu" role="menu" aria-labelledby="dLabel">
+        <li>
+    			<a data-toggle="modal" data-target="#modalStaffInfo" href="#">
+    			<i class="fa fa-pencil"></i>个人信息</a>
+    		</li>
+    		<li>
+    			<a data-toggle="modal" data-target="#modalChangePwd" href="#">
+    			<i class="fa fa-cogs"></i>修改密码</a>
+    		</li>
+    		<li class="li_divider"></li>
+    		<li>
+    			<a href="#" id="btnLogout">
+    			<i class="fa fa-sign-out" ></i>退出</a>
+    		</li>
+      </ul>
+    </div>
+		<span>${_loginStaff.ext.crealName}，您好</span>
+	</h4>
+</div>
+
+<div class="modal fade" id="modalStaffInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+  	<form name="frmStaffInfo" id="frmStaffInfo" method="post" action="<%=basePath%>admin/east_ajax_do_add_news_no_pass.do">
+			<input type="hidden" name="tnews.id" id="tnews_id" value="${_loginStaff.id}" />
+			<input type="hidden" name="tnews.columnId" id="tnews_columnId" value="${_loginStaff.columnId}" />
+			<input type="hidden" name="tnews.${_loginStaff.keepName.newsClass}" id="tnews_openid" value="${_loginStaff.newsClass}" />
+      <input type="hidden" value="0" name="tnews.thumbIds" id="tnews_thumbIds" />
+      <input type="hidden" id="tnews_externTable" name="tnews.externTable" value="${_loginStaff.externTable}" />     	
+  	
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title" id="myModalLabel">个人信息</h4>
+        </div>
+        <div class="modal-body">
+      		<!--#
+          <div style="margin:0;margin-bottom:15px;margin-left: 20%">姓名 : <input type="text" id="cname" value="${_loginStaff.ext.crealName}" name="tnews.${_loginStaff.extKeepName.crealName}"></div>
+          <div style="margin:0;margin-bottom:15px;margin-left: 20%">电话 : <input type="text" id="cphone" value="${_loginStaff.ext.cphone}" name="tnews.${_loginStaff.extKeepName.cphone}"></div>
+          #-->
+      		<!--#<JREMOVE>#-->
+          <p>姓名 : 管理高级权限</p>
+          <p>电话 : 17896543210</p>
+          <p>帐号状态 : 启用</p>
+          <p>&nbsp;</p>
+          <p>公司名称 : 官方</p>
+          <!--#</JREMOVE>#-->
+      		<button type="button" class="btn btn-primary" id="btnSave" style="margin-left:30%;">保存</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal" style="margin-left:20%;">关闭</button>
+        </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modalChangePwd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+  	<form method="post" enctype="multipart/form-data">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title" id="myModalLabel">修改密码</h4>
+        </div>
+        <div class="modal-body">
+          <div>
+          	<label for="cpass">
+          		<p><b>*</b>原密码：</p>
+          	</label>
+          	<input placeholder="请输入原密码" id="cpass" type="password">
+          </div>
+          <div>
+          	<label for="cpassNew">
+          		<p><b>*</b>新密码：</p>
+          	</label>
+          	<input placeholder="密码必须是6-16位字母+数字组合!" id="cpassNew" type="password">
+          </div>
+          <div>
+          	<label for="cpassNext" for="cNoticeTitle">
+          		<p><b>*</b>确认密码：</p>
+          	</label>
+          	<input placeholder="确认密码" id="cpassNext" type="password" name="cpassword">
+          </div>
+        </div>
+                            
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+          <button type="button" class="btn btn-primary" id="changePW">提交</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+    
+<script>
+  $(function(){
+    
+    $('#changePW').on("click", function(){ 
+      var oldPW = $("#cpass").val();
+      var newPW = $("#cpassNew").val();
+      var confirmPW = $("#cpassNext").val();
+      
+      if(oldPW != "${_loginStaff.ext.cpassword}"){
+        alertify.alert("旧密码与原密码不符!");
+        return false;
+      }
+      if (/^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z]).{8,}$/.test(newPW)){
+      } else {
+         alertify.alert("密码必须由大小写字母和数组组合，不能少于8位。");
+         return false;
+      }
+      if(newPW != confirmPW){
+        alertify.alert("2次密码输入不一致");
+        return false;
+      }
+      
+      var _url = "bs_ajaxIndex!chamber!chamber_controls_html!erp_staff_change_password.do";
+      var _url_para = "cpassword=" + confirmPW;
+      $AjaxPostASyn(_url,_url_para,
+        function(_resp){                  
+          if(_resp.indexOf('success') >= 0){  
+            alertify.alert("修改成功!",function(_msg){
+              window.location.href = window.location.href;  
+            });             
+          }
+        },                  
+        function(_resp){}); 
+        
+      return false;
+    });//end of changePW
+    
+    $('#btnLogout').on("click", function(){
+      alertify.confirm('确定要退出吗？', function(e){
+        if(e) {
+          $AjaxPostASyn("<%=basePath%>bs_ajaxIndex!chamber!chamber_controls_html!erp_staff_log_out.do", "",
+            function(_resp){                   
+              var _respJason =  JSON.parse(_resp);                
+              if(_respJason.state == "success"){
+                window.parent.parent.location.href = ("<%=basePath%>bs_ajaxIndex!chamber!chamber_erp_html!login.do");
+              }else{
+              }
+            },                   
+            function(_resp){}
+          );
+        }
+      });
+        
+      return false;
+    });//end of btnLogout
+    
+    $('#btnSave').on("click", function() {
+  
+      var _url_para = $("#frmStaffInfo").serialize();
+      var _url = $("#frmStaffInfo").attr("action");
+      $AjaxPostASyn(_url, _url_para,
+        function(_resp) {
+          if (_resp.indexOf('success') >= 0) {
+            alertify.alert("个人信息成功!",function(_msg){
+              window.location.href=window.location.href;
+            });
+          }
+        },
+        function(_resp) {});
+        
+      return false;
+    });//end of btnSave
+  });
+</script>

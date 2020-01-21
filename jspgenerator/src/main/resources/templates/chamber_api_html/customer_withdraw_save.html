@@ -1,0 +1,114 @@
+<!--#<JREMOVE>
+提现申请。
+  参数：
+  ccustomerNo
+  camount
+  bankCardId
+</JREMOVE>#-->
+
+<MACRO>
+	Jsp.includejsp("/chamber_jsp/chamber_const_html/global_const_define.jsp");
+</MACRO>
+
+<east:service beanName="eastUtilService" methodName="setValue"  id="hasError">
+  <east:para name="_value" value="0" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue"  id="msg">
+  <east:para name="_value" value="" type="Object" />
+</east:service>
+
+<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="getAllByNativeField"  id="_rsWithdraw">
+  <east:para name="newsClass"  value="colWithdraw" type="String" />
+  <east:para name="page" value="1" type="Integer" />
+  <east:para name="pageSize" value="1" type="Integer" />
+  <east:para name="searchTVL" value="{\"tag\":\"ccustomerNo\",\"val\":\"${requestEx.ccustomerNo}\",\"link\":\"!{EQ}\",\"type\":\"1\"}
+      ,{\"tag\":\"cstatus\",\"val\":\"0\",\"link\":\"!{EQ}\",\"type\":\"1\"}" type="String" />
+  <east:para name="orderName" value="cdate" type="String" />
+  <east:para name="descOrAsc" value="true" type="Boolean" />
+</east:service>
+
+<s:if test="${_rsWithdraw.list ne null && fn:length(_rsWithdraw.list) gt 0}">
+  <east:service beanName="eastUtilService" methodName="setValue"  id="hasError">
+    <east:para name="_value" value="1" type="Object" />
+  </east:service>
+  <east:service beanName="eastUtilService" methodName="setValue"  id="msg">
+    <east:para name="_value" value="同一时间只能提交一次提现申请，您已经有一个提现申请正在处理中。" type="Object" />
+  </east:service>
+</s:if>
+
+<s:if test="${hasError eq '0'}">
+  <east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="getOneByIdAlwaysWithClass"  id="_bankCard">
+    <east:para name="tnewsid" value="${requestEx.bankCardId}" type="String" />
+    <east:para name="className" value="colBankCard" type="String" />
+  </east:service>
+  <s:if test="${_bankCard.ext.ccardNo eq null || _bankCard.ext.ccardNo eq ''}">
+    <east:service beanName="eastUtilService" methodName="setValue"  id="hasError">
+      <east:para name="_value" value="1" type="Object" />
+    </east:service>
+    <east:service beanName="eastUtilService" methodName="setValue"  id="msg">
+      <east:para name="_value" value="选择的到账银行卡不存在。" type="Object" />
+    </east:service>
+  </s:if>
+</s:if>
+
+<s:if test="${hasError eq '0'}">
+	
+	<MACRO>
+	  Jsp.call("/chamber_jsp/chamber_module_html/customer_opt_lock.jsp","${requestEx.ccustomerNo}",${CUSTOMER_OPT_LOCK_SECOND}); 
+	</MACRO>
+	
+	<% try { %>
+	<s:if test="${hasError eq '0'}">
+	  <MACRO>
+	    Jsp.call("/chamber_jsp/chamber_module_html/customer_money_check.jsp","${requestEx.ccustomerNo}","${requestEx.camount}","1");
+	    Jsp.result("hasError","msg","_customer");
+	  </MACRO>
+	</s:if>
+	<s:if test="${hasError eq '0'}">
+	  <MACRO>
+	    Jsp.call("/chamber_jsp/chamber_module_html/customer_money_freeze.jsp","${_customer}","${requestEx.camount}");
+	    Jsp.result("hasError","msg");
+	  </MACRO>
+	</s:if>
+	
+	<% } catch(Exception ee){ };%>
+	<MACRO>
+	  Jsp.call("/chamber_jsp/chamber_module_html/customer_opt_unlock.jsp","${requestEx.ccustomerNo}"); 
+	</MACRO>
+	
+</s:if>
+
+
+<s:if test="${hasError eq '0'}">
+  
+  <east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="createBeanExByClassName" id="_withdraw">       
+    <east:para name="className" value="colWithdraw" type="String" />
+  </east:service>
+  
+  <east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="getDefaultPattern"  id="_cwithdrawNo">
+    <east:para name="patternStr" value="{seq('WTHD%09d')}" type="String" />
+  </east:service>
+  
+  <east:service beanName="eastUtilService" methodName="getDateTime"  id="_nowDateTime">
+  </east:service>
+  
+  <MACRO>
+    Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_withdraw}","cwithdrawNo","${_cwithdrawNo}");
+    Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_withdraw}","ccustomerNo","${requestEx.ccustomerNo}");
+    Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_withdraw}","camount","${requestEx.camount}");
+    Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_withdraw}","cstatus","0");
+    Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_withdraw}","capplyTime","${_nowDateTime}");
+    Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_withdraw}","ccardNo","${_bankCard.ext.ccardNo}");
+    Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_withdraw}","cbankName","${_bankCard.ext.cbankName}");
+    Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_withdraw}","cbranchName","${_bankCard.ext.cbranchName}");
+    Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_withdraw}","ccardName","${_bankCard.ext.ccardName}");
+    Jsp.call("/bspms_jsp/bspms_funs_html/ajax_save_bean_fun.jsp" ,"${_withdraw}");
+  </MACRO>
+</s:if>
+
+<s:if test="${hasError eq '0'}">
+  {"state":"success"}
+</s:if>
+<s:else>
+  {"state":"failed","msg":"${msg}"}
+</s:else>

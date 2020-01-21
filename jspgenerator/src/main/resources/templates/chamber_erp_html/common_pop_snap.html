@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>顾客-快照</title>
+    <meta name="description" content="">
+    <meta name="author" content="templatemo">
+    <link href="../chamber_erp_css/font-awesome.css?ver=1.0" rel="stylesheet" type="text/css" />
+    <link href="../chamber_erp_css/bootstrap.min.css?ver=1.0" rel="stylesheet">
+    <link href="../chamber_erp_css/templatemo_style.css?ver=1.0" rel="stylesheet">
+    <link href="../chamber_erp_css/slidernav.css?ver=1.0" rel="stylesheet">
+    <link href="../chamber_erp_css/ob_style.css?ver=1.0" rel="stylesheet">
+    
+    <link href="../chamber_css/bs_div.css?ver=1.0" rel="stylesheet">  
+    <link href="../chamber_css/bs_a.css?ver=1.0" rel="stylesheet">
+    <link href="../chamber_css/menu_style.css?ver=1.0" rel="stylesheet">
+    <link href="../chamber_css/chat.css?ver=1.0" rel="stylesheet">
+  
+    <link href="../js/alertify/alertify.core.css" rel="stylesheet" type="text/css"/>
+    <link href="../js/alertify/alertify.bootstrap.css" rel="stylesheet" type="text/css"/>
+    
+    <script src="../js/jquery-1.8.3.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/moment.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/alertify/alertify.js" type="text/javascript" charset="utf-8"></script>
+    
+    <script src="../js/ajax_janus.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/column_janus_mobile.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../widgets/lhgdialog/lhgdialog.js?skin=iblue" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/janus_dialog.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../My97DatePicker/WdatePicker.js" type="text/javascript" charset="utf-8"></script>
+  
+    <!--#
+    <MACRO>
+      Jsp.includejsp("/chamber_jsp/chamber_const_html/erp_const_define.jsp");
+      Jsp.includejsp("/chamber_jsp/chamber_module_html/erp_login_staff_info.jsp");
+      Jsp.result("_loginStaff","_roleFuncMap");
+    </MACRO>
+    #-->
+    <script>
+    /*# 
+      <c:if test="${_loginStaff eq null || _loginStaff.ext.cstaffNo eq null || _loginStaff.ext.cstaffNo eq ''}">
+        setTimeout(function(){
+            parent.parent.parent.window.location.href = "<%=basePath%>bs_ajaxIndex!chamber!chamber_erp_html!login.do";
+          },200);
+      </c:if>
+    #*/
+    </script> 
+  </head>
+  
+<!--#
+<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="createBeanExByClassName" id="_bean">      
+  <east:para name="className" value="${requestEx.tableName}" type="String" />
+</east:service>
+<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="getOneByIdAlwaysWithClass"  id="_current">
+  <east:para name="tnewsid" value="${requestEx.id}" type="String" />
+  <east:para name="className" value="${requestEx.tableName}" type="String" />
+</east:service>
+#-->
+
+<!--#
+<east:service beanName="eastUtilService" methodName="setValue"  id="searchFrom">
+ <east:para name="_val" value="${requestEx.searchFrom}" type="Object" />
+ <east:para name="_default_val" value="0" type="Object" />
+</east:service>  
+<east:service beanName="eastUtilService" methodName="setValue"  id="pageSize">
+  <east:para name="_val" value="${requestEx.pageSize}" type="Object" />
+  <east:para name="_default_val" value="2" type="Object" />
+</east:service>   
+#-->
+
+<!--#
+<MACRO>
+  Jsp.call("/chamber_jsp/chamber_module_html/snap.jsp","${searchFrom}","${pageSize}","${requestEx.id}","${requestEx.tableName}");
+  Jsp.result("rsSnap","rsPagination");
+</MACRO>
+
+<east:service beanName="eastUtilService" methodName="setValue"  id="totalRecords">
+  <east:para name="_value" value="0" type="Object" />
+</east:service>
+<c:forEach items="${rsPagination}" var="_one" varStatus="_status">
+  <east:service beanName="eastUtilService" methodName="setValue"  id="totalRecords">
+    <east:para name="_value" value="${_one.totalRecords}" type="Object" />
+  </east:service> 
+</c:forEach>
+
+<east:service beanName="eastUtilService" methodName="setValue"  id="snap1Op">
+  <east:para name="_value" value="" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue"  id="snap1Time">
+  <east:para name="_value" value="" type="Object" />
+</east:service>
+<s:if test="${rsSnap != null && fn:length(rsSnap) > 0}">
+  <east:service beanName="eastUtilService" methodName="listGet" id="_snap1">
+    <east:para name="_list" value="${rsSnap}" type="Object" />
+    <east:para name="_index" value="0" type="Integer" />
+  </east:service>
+  <MACRO>
+    Jsp.call("/bspms_jsp/bspms_modules_html/bsnews_json_to_map.jsp","${_snap1.coptContent}");
+    Jsp.result("_snap1Map");
+  </MACRO>
+  
+  <east:service beanName="eastUtilService" methodName="setValue"  id="_snapBean1">
+    <east:para name="_value" value="${_snap1Map.data}" type="Object" />
+  </east:service>
+  <east:service beanName="eastUtilService" methodName="setValue"  id="snap1Op">
+    <east:para name="_value" value="${_snap1.crealName}(${_snap1.cphone})" type="Object" />
+  </east:service>
+  <east:service beanName="eastUtilService" methodName="setValue"  id="snap1Time">
+    <east:para name="_value" value="${_snap1.cupdateTime}" type="Object" />
+  </east:service>
+</s:if>
+
+
+<east:service beanName="eastUtilService" methodName="setValue"  id="snap2Op">
+  <east:para name="_value" value="" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue"  id="snap2Time">
+  <east:para name="_value" value="" type="Object" />
+</east:service>
+<s:if test="${rsSnap != null && fn:length(rsSnap) > 1}">
+  <east:service beanName="eastUtilService" methodName="listGet" id="_snap2">
+    <east:para name="_list" value="${rsSnap}" type="Object" />
+    <east:para name="_index" value="1" type="Integer" />
+  </east:service>
+  <MACRO>
+    Jsp.call("/bspms_jsp/bspms_modules_html/bsnews_json_to_map.jsp","${_snap2.coptContent}");
+    Jsp.result("_snap2Map");
+  </MACRO>
+  <east:service beanName="eastUtilService" methodName="setValue"  id="_snapBean2">
+    <east:para name="_value" value="${_snap2Map.data}" type="Object" />
+  </east:service>
+  <east:service beanName="eastUtilService" methodName="setValue"  id="snap2Op">
+    <east:para name="_value" value="${_snap2.crealName}(${_snap2.cphone})" type="Object" />
+  </east:service>
+  <east:service beanName="eastUtilService" methodName="setValue"  id="snap2Time">
+    <east:para name="_value" value="${_snap2.cupdateTime}" type="Object" />
+  </east:service>
+</s:if>
+#-->
+
+
+  <body>
+    <div class="templatemo-flex-row">
+      <!-- Main content -->
+      <div class="templatemo-content col-1 light-gray-bg"> 
+        <div class="templatemo-content-container">
+          <!--内容部分开始-->
+          <div class="div_tableList">
+            <div style="padding: 20px;width: 70%;float: left;">
+              <a id="btnPrev" class="bs_a_bar_btn bs_color_wihte bs_bk_belu_7E">前一个</a>
+              <a id="btnNext" class="bs_a_bar_btn bs_color_wihte bs_bk_belu_7E">后一个</a>
+            </div>
+            <div style="padding:20px;float: right;">
+              <a id="btnClose" class="bs_a_bar_btn bs_color_wihte bs_bk_green_1B" href="">关闭</a>
+            </div>
+            <div style="padding: 20px;width: 100%;float: left;">
+              <form id="searchForm" action="../chamber_erp_html/common_pop_snap.html" method="post" enctype="multipart/form-data">
+                
+                <input type="hidden" name="searchFrom" id="searchFrom" value="${searchFrom}" />
+                <input type="hidden" name="pageSize" id="pageSize" value="${pageSize}" />
+                <input name="totalRecords" type="hidden"  id="totalRecords" value="${totalRecords}" />
+                <input type="hidden" name="id" value="${requestEx.id}" />
+                <input type="hidden" name="tableName" value="${requestEx.tableName}" />
+              </form>
+            </div>
+            
+            <table cellpadding="6" cellspacing="0">
+              <thead>
+                <tr>
+                  <th>字段名</th>
+                  <th>当前数据</th> 
+                  <th colspan="2">快照数据</th> 
+                </tr>
+              </thead>
+              <tbody>
+                <!--#
+                <tr>
+                  <td>操作人</td>
+                  <td></td>
+                  <td>${snap1Op}</td>
+                  <td>${snap2Op}</td>
+                </tr>
+                <tr>
+                  <td>操作时间</td>
+                  <td></td>
+                  <td>${snap1Time}</td>
+                  <td>${snap2Time}</td>
+                </tr>
+                <east:service beanName="eastUtilService" methodName="mapKeys"  id="listKeys">
+                  <east:para name="_map" value="${_current.ext}" type="Object" /> 
+                </east:service>
+                <c:forEach items="${listKeys}" var="_idKey" varStatus="status">
+                  <s:if test="${_idKey ne null && _idKey ne '' && !fn:startsWith(_idKey, 'cx')}">
+                    
+                    <east:service beanName="eastUtilService" methodName="mapGet"  id="_extTitle">
+                      <east:para name="_map" value="${_bean.extKeepJson}" type="Object" />
+                      <east:para name="_key" value="${_idKey}" type="String" /> 
+                    </east:service>
+                    <east:service beanName="eastUtilService" methodName="mapGet"  id="_currentVal">
+                      <east:para name="_map" value="${_current.ext}" type="Object" />
+                      <east:para name="_key" value="${_idKey}" type="String" /> 
+                    </east:service>
+                    <east:service beanName="eastUtilService" methodName="setValue"  id="_snap1Changed">
+                      <east:para name="_value" value="0" type="Object" />
+                    </east:service>
+                    <east:service beanName="eastUtilService" methodName="setValue"  id="_snap1Val">
+                      <east:para name="_value" value="" type="Object" />
+                    </east:service>
+                    <s:if test="${rsSnap != null && fn:length(rsSnap) > 0}">
+                      <east:service beanName="eastUtilService" methodName="mapGet"  id="_snap1Val">
+                        <east:para name="_map" value="${_snapBean1.ext}" type="Object" />
+                        <east:para name="_key" value="${_idKey}" type="String" /> 
+                      </east:service>
+                      <s:if test="${_snap1Val ne _currentVal}">
+                        <east:service beanName="eastUtilService" methodName="setValue"  id="_snap1Changed">
+                          <east:para name="_value" value="1" type="Object" />
+                        </east:service>
+                      </s:if>
+                    </s:if>
+                           
+                    <east:service beanName="eastUtilService" methodName="setValue"  id="_snap2Changed">
+                      <east:para name="_value" value="0" type="Object" />
+                    </east:service>
+                    <east:service beanName="eastUtilService" methodName="setValue"  id="_snap2Val">
+                      <east:para name="_value" value="" type="Object" />
+                    </east:service>           
+                    <s:if test="${rsSnap != null && fn:length(rsSnap) > 1}">
+                      <east:service beanName="eastUtilService" methodName="mapGet"  id="_snap2Val">
+                        <east:para name="_map" value="${_snapBean2.ext}" type="Object" />
+                        <east:para name="_key" value="${_idKey}" type="String" /> 
+                      </east:service>
+                      <s:if test="${_snap2Val ne _snap1Val}">
+                        <east:service beanName="eastUtilService" methodName="setValue"  id="_snap2Changed">
+                          <east:para name="_value" value="1" type="Object" />
+                        </east:service>
+                      </s:if>
+                    </s:if>
+                           
+                    <east:service beanName="eastUtilService" methodName="htmlRemove"  id="_currentValSub">
+                      <east:para name="_html" value="${_currentVal}" type="String" />
+                      <east:para name="_nMaxLen" value="20" type="Integer" />
+                    </east:service>
+                    <east:service beanName="eastUtilService" methodName="htmlRemove"  id="_snap1ValSub">
+                      <east:para name="_html" value="${_snap1Val}" type="String" />
+                      <east:para name="_nMaxLen" value="20" type="Integer" />
+                    </east:service>
+                    <east:service beanName="eastUtilService" methodName="htmlRemove"  id="_snap2ValSub">
+                      <east:para name="_html" value="${_snap2Val}" type="String" />
+                      <east:para name="_nMaxLen" value="20" type="Integer" />
+                    </east:service>
+                    <tr>
+                      <td>${_extTitle.caption}</td>
+                      <td title="${_currentVal}"
+                        <s:if test="${_snap1Changed eq '1'}">style="color:red;"</s:if>
+                        >${_currentValSub}</td>
+                      <td title="${_snap1Val}"
+                        <s:if test="${_snap1Changed eq '1' || _snap2Changed eq '1'}">style="color:red;"</s:if>
+                        >${_snap1ValSub}</td>
+                      <td title="${_snap2Val}"
+                        <s:if test="${_snap2Changed eq '1'}">style="color:red;"</s:if>
+                        >${_snap2ValSub}</td>
+                    </tr>
+                  </s:if>
+                </c:forEach>
+                #-->                         
+                
+                <!--#<JREMOVE>#-->
+                <tr>
+                  <td>1</td>
+                </tr>
+                <!--#</JREMOVE>#-->
+              </tbody>
+            </table>
+          </div>
+          <!--内容部分结束-->
+        </div>
+      </div>
+    </div>
+    
+    <script>
+      var searchForm = $('#searchForm');
+      function search() {
+        searchForm.submit();
+      }
+      $(function() {
+        $('#btnPrev').on('click', function(){
+          var searchFrom = $('#searchFrom').val();
+          var pageSize = $('#pageSize').val();
+          var totalRecords = $('#totalRecords').val();
+          if ((parseInt(searchFrom) + parseInt(pageSize)) < parseInt(totalRecords)) {
+            $('#searchFrom').val(parseInt(searchFrom) + 1);
+          } else {
+            alertify.alert("没有更早的快照历史了。");
+            return false;
+          }
+          search();
+          return false;
+        });
+        $('#btnNext').on('click', function(){
+          var searchFrom = $('#searchFrom').val();
+          if (searchFrom == '0') {
+            alertify.alert("已经是最新的快照历史了。");
+            return false;
+          } else {
+            $('#searchFrom').val(parseInt(searchFrom) - 1);
+          }
+          search();
+          return false;
+        });
+      });
+    </script>
+    <script>
+    	$(function(){
+    	  $('#btnClose').on('click', function(){
+          __JDialogCallbackAndClose();
+    	  })
+    	})
+    </script>
+      
+  </body>
+</html>

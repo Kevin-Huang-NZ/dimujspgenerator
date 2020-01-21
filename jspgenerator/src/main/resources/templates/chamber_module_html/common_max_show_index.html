@@ -1,0 +1,47 @@
+<!--#<JREMOVE>#-->  
+  FUN:Confused
+	获取最大cshowIndex值，并加1返回
+	参数：
+		tableName：虚拟表名
+		
+<!--#</JREMOVE>#-->
+
+<MACRO>
+  Jsp.pops("__tableName");
+</MACRO>
+
+<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="createBeanExByClassName" id="__bean">       
+	<east:para name="className" value="${__tableName}" type="String" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue"  id="__tn">
+	<east:para name="_tableName" value="${__bean.externTable}" type="Object" />
+	<east:para name="_default" value="t_news" type="Object" />
+</east:service>
+
+<east:service beanName="pmsService" methodName="nativeQuerySqlMap" id="__rsResult">
+	<east:para name="nativeSql" value="SELECT 
+				MAX(CAST(t1.${__bean.extKeepName.cshowIndex} AS UNSIGNED)) AS maxShowIndex,'1' AS P
+			FROM  ${__tn} t1
+			WHERE t1.${__bean.keepName.newsClass} = '${__tableName}'
+				AND t1.column_id=1603
+			"
+			type="String" />
+	<east:para name="_out_nodes_name" value="maxShowIndex,p" type="String" />
+	<east:para name="token" value="123qweasd" type="String" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="listGet" id="__oneResult">
+	<east:para name="_list" value="${__rsResult}" type="Object" />
+	<east:para name="_index" value="0" type="Integer" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue"  id="__maxShowIndex">
+	<east:para name="_value" value="${__oneResult.maxShowIndex}" type="Object" />
+	<east:para name="_valueDefault" value="0" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="addIntString"  id="__cshowIndex">
+	<east:para name="_val1" value="${__maxShowIndex}" type="String" />
+	<east:para name="_val2" value="1" type="String" />
+</east:service>
+
+<MACRO>
+  Jsp.pushs("${__cshowIndex}");
+</MACRO>

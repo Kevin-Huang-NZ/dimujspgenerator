@@ -1,0 +1,42 @@
+<!--#<JREMOVE>
+  用id删除系统权限，同时删除相关权限功能关联关系。
+  参数：
+  id:colSysRoles表的id
+</JREMOVE>#-->
+<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="getOneByIdAlwaysWithClass"  id="_role">
+  <east:para name="tnewsid" value="${requestEx.id}" type="String" />
+  <east:para name="className" value="colSysRoles" type="String" />
+</east:service>
+
+<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="createBeanExByClassName" id="colSysRoleVsFun">       
+  <east:para name="className" value="colSysRoleVsFun" type="String" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue"  id="tnSysRoleVsFun">
+  <east:para name="_tableName" value="${colSysRoleVsFun.externTable}" type="Object" />
+  <east:para name="_default" value="t_news" type="Object" />
+</east:service>  
+<east:service beanName="pmsService" methodName="nativeSqlExc" id="_result">      
+  <east:para name="nativeSql" value="DELETE FROM ${tnSysRoleVsFun} 
+      WHERE ${colSysRoleVsFun.keepName.newsClass} = 'colSysRoleVsFun'
+        AND column_id=1603 
+        AND ${colSysRoleVsFun.extKeepName.croleNo} = '${_role.ext.croleNo}'
+    " type="String" />
+  <east:para name="token" value="123qweasd" type="String" />
+</east:service>    
+
+
+
+<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="createBeanExByClassName" id="_bean">       
+  <east:para name="className" value="colSysRoles" type="String" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue"  id="_tableName">
+  <east:para name="_tableName" value="${_bean.externTable}" type="Object" />
+  <east:para name="_default" value="t_news" type="Object" />
+</east:service>   
+
+<east:service beanName="pmsService" methodName="nativeSqlExc" id="_result">
+  <east:para name="nativeSql" value="DELETE FROM ${_tableName} WHERE id = ${requestEx.id}" type="String" />
+  <east:para name="token" value="123qweasd" type="String" />
+</east:service>
+
+{"state":"success"}

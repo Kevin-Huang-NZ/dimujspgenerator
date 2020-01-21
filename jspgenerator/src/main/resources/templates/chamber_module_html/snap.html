@@ -1,0 +1,66 @@
+<!--#<JREMOVE>#--> 
+FUN:Confused
+  检索快照
+<!--#</JREMOVE>#-->
+<MACRO>
+  Jsp.pops("__searchFrom","__pageSize","__beanId","__tableName");
+</MACRO>
+
+
+<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="createBeanExByClassName" id="colSnap">      
+  <east:para name="className" value="colSnap" type="String" />
+</east:service>
+<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="createBeanExByClassName" id="colStaff">      
+  <east:para name="className" value="colStaff" type="String" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue"  id="tnSnap">
+  <east:para name="_tableName" value="${colSnap.externTable}" type="Object" />
+  <east:para name="_default" value="t_news" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue"  id="tnStaff">
+  <east:para name="_tableName" value="${colStaff.externTable}" type="Object" />
+  <east:para name="_default" value="t_news" type="Object" />
+</east:service>
+      
+<east:service beanName="pmsService" methodName="nativeQuerySqlMap" id="__rsResult">
+  <east:para name="nativeSql" value="SELECT t1.id AS id
+         ,t1.${colSnap.extKeepName.cupdateTime} AS cupdateTime
+         ,t1.${colSnap.extKeepName.coperator} AS coperator
+         ,t1.${colSnap.extKeepName.coptContent} AS coptContent
+         ,t1.${colSnap.extKeepName.cversion} AS cversion
+         ,t2.${colStaff.extKeepName.crealName} AS crealName
+         ,t2.${colStaff.extKeepName.cphone} AS cphone
+      FROM  ${tnSnap} t1
+        LEFT JOIN ${tnStaff} t2 ON
+          t2.${colStaff.keepName.newsClass} = 'colStaff'
+          AND t2.column_id=1603
+          AND t2.${colStaff.extKeepName.cstaffNo} = t1.${colSnap.extKeepName.coperator}
+      WHERE t1.${colSnap.keepName.newsClass} = 'colSnap'
+        AND t1.column_id=1603
+        AND t1.${colSnap.extKeepName.ctableName} = '${__tableName}'
+        AND t1.${colSnap.extKeepName.csourceId} = '${__beanId}'
+      ORDER BY t1.id DESC
+      LIMIT ${__searchFrom},${__pageSize}
+      "
+      type="String" />
+  <east:para name="_out_nodes_name" value="id,cupdateTime,coperator,coptContent,cversion,crealName,cphone" type="String" />
+  <east:para name="token" value="123qweasd" type="String" />
+</east:service>
+
+<east:service beanName="pmsService" methodName="nativeQuerySqlMap" id="__rsPagination">
+  <east:para name="nativeSql" value="SELECT count('1') AS totalRecords
+        , CEIL(count('1')/${__pageSize}) AS totalPages
+      FROM  ${tnSnap} t1
+      WHERE t1.${colSnap.keepName.newsClass} = 'colSnap'
+        AND t1.column_id=1603
+        AND t1.${colSnap.extKeepName.ctableName} = '${__tableName}'
+        AND t1.${colSnap.extKeepName.csourceId} = '${__beanId}'
+       "
+      type="String" />
+  <east:para name="_out_nodes_name" value="totalRecords,totalPages" type="String" />
+  <east:para name="token" value="123qweasd" type="String" />
+</east:service>
+
+<MACRO>
+  Jsp.pushs("${__rsResult}","${__rsPagination}");
+</MACRO>

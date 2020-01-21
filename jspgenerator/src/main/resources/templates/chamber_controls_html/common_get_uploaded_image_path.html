@@ -1,0 +1,14 @@
+<!--#<JREMOVE>
+	获取上传图片的路径并返回。。
+	参数：fileId：文件ID。
+</JREMOVE>#-->
+	
+<east:service beanName="eastUtilService" methodName="getFile" id="__objFile"> 
+	<east:para name="_fileId"  value="${requestEx.fileId}" type="Integer"/>  
+</east:service>
+<s:if test="${__objFile ne null}">
+  {"state":"success","path":"${__objFile.path}","fileName":"${__objFile.fileName}"}
+</s:if>
+<s:else>
+  {"state":"failed"}
+</s:else>

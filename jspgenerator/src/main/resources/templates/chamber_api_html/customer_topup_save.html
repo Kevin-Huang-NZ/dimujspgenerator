@@ -1,0 +1,40 @@
+<!--#<JREMOVE>
+  创建用户充值订单。
+  参数：
+  ccustomerNo
+  camount
+  cpayway
+  cmemo(支付方式为银行卡时，必须填写备注，备注中应包括银行卡转账的详情)
+</JREMOVE>#-->
+
+<MACRO>
+	Jsp.includejsp("/chamber_jsp/chamber_const_html/global_const_define.jsp");
+</MACRO>
+
+<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="createBeanExByClassName" id="_order">       
+  <east:para name="className" value="colTopupOrder" type="String" />
+</east:service> 
+  
+<east:service beanName="eastUtilService" methodName="getDateTime"  id="_nowDateTime">
+</east:service>
+  
+ 
+<east:service beanName="eastUtilService" methodName="getShortDateTimeRand"  id="_corderNo">
+	<east:para name="nMaxLen" value="4" type="Integer" />
+</east:service> 
+<east:service beanName="eastUtilService" methodName="setValue"  id="_corderNo">
+	<east:para name="_value" value="${_corderNo}_${TOPUP_ORDER_CUSTOMER_TPP}" type="Object" />
+</east:service>
+
+<MACRO>
+	Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_order}","corderNo","${_corderNo}");
+	Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_order}","ccustomerNo","${requestEx.ccustomerNo}");
+	Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_order}","camount","${requestEx.camount}");
+	Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_order}","cpayway","${requestEx.cpayway}");
+	Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_order}","cstatus","0");
+	Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_order}","corderTime","${_nowDateTime}");
+	Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_order}","cmemo","${requestEx.cmemo}");
+	Jsp.call("/bspms_jsp/bspms_funs_html/ajax_save_bean_fun.jsp" ,"${_order}");
+</MACRO>
+
+{"state":"success","corderNo":"${_corderNo}"}

@@ -1,0 +1,129 @@
+<!--#<JREMOVE>
+  将id对应的对象的排序顺序上调或者下调。
+  参数
+	tableName:虚拟表名
+	id
+	upOrDown:0-down;1-up
+	ascOrDesc: asc/desc，默认倒序desc
+</JREMOVE>#-->
+<east:service beanName="eastUtilService" methodName="setValue"  id="hasError">
+  <east:para name="_value" value="0" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue"  id="msg">
+  <east:para name="_value" value="" type="Object" />
+</east:service>
+	
+	
+<east:service beanName="eastUtilService" methodName="setValue"  id="_ascOrDesc">
+  <east:para name="_value" value="${requestEx.ascOrDesc}" type="Object" />
+  <east:para name="_valueDefault" value="desc" type="Object" />
+</east:service>
+
+<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="getOneByIdAlwaysWithClass"  id="_selectedBean">
+  <east:para name="tnewsid" value="${requestEx.id}" type="String" />
+  <east:para name="className" value="${requestEx.tableName}" type="String" />
+</east:service>
+	
+<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="createBeanExByClassName" id="_bean">       
+	<east:para name="className" value="${requestEx.tableName}" type="String" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue"  id="_tn">
+	<east:para name="_tableName" value="${_bean.externTable}" type="Object" />
+	<east:para name="_default" value="t_news" type="Object" />
+</east:service>
+
+<s:if test="${requestEx.upOrDown eq '0'}">
+	<s:if test="${_ascOrDesc eq 'desc'}">
+		<east:service beanName="eastUtilService" methodName="setValue"  id="_compareOperator">
+			<east:para name="_value" value="<" type="Object" />
+		</east:service>
+		<east:service beanName="eastUtilService" methodName="setValue"  id="_ascOrDesc">
+			<east:para name="_value" value="desc" type="Object" />
+		</east:service>
+	</s:if>
+	<s:else>
+		<east:service beanName="eastUtilService" methodName="setValue"  id="_compareOperator">
+			<east:para name="_value" value=">" type="Object" />
+		</east:service>
+		<east:service beanName="eastUtilService" methodName="setValue"  id="_ascOrDesc">
+			<east:para name="_value" value="asc" type="Object" />
+		</east:service>
+	</s:else>
+</s:if>
+<s:else>
+	<s:if test="${_ascOrDesc eq 'desc'}">
+		<east:service beanName="eastUtilService" methodName="setValue"  id="_compareOperator">
+			<east:para name="_value" value=">" type="Object" />
+		</east:service>
+		<east:service beanName="eastUtilService" methodName="setValue"  id="_ascOrDesc">
+			<east:para name="_value" value="asc" type="Object" />
+		</east:service>
+	</s:if>
+	<s:else>
+		<east:service beanName="eastUtilService" methodName="setValue"  id="_compareOperator">
+			<east:para name="_value" value="<" type="Object" />
+		</east:service>
+		<east:service beanName="eastUtilService" methodName="setValue"  id="_ascOrDesc">
+			<east:para name="_value" value="desc" type="Object" />
+		</east:service>
+	</s:else>
+</s:else>
+
+<east:service beanName="pmsService" methodName="nativeQuerySqlMap" id="_rsSwopTarget">
+	<east:para name="nativeSql" value="SELECT 
+				t1.id
+				,t1.${_bean.extKeepName.cshowIndex} AS cshowIndex
+			FROM  ${_tn} t1
+			WHERE t1.${_bean.keepName.newsClass} = '${requestEx.tableName}'
+				AND t1.column_id=1603
+				AND CAST(t1.${_bean.extKeepName.cshowIndex} AS DECIMAL(12,5)) ${_compareOperator} CAST('${_selectedBean.ext.cshowIndex}' AS DECIMAL(12,5))
+			ORDER BY CAST(cshowIndex AS DECIMAL(12,5)) ${_ascOrDesc}
+			LIMIT 1
+			"
+			type="String" />
+	<east:para name="_out_nodes_name" value="id,cshowIndex" type="String" />
+	<east:para name="token" value="123qweasd" type="String" />
+</east:service>
+
+<s:if test="${_rsSwopTarget ne null && fn:length(_rsSwopTarget) gt 0}">
+	<east:service beanName="eastUtilService" methodName="listGet" id="_target">
+		<east:para name="_list"	value="${_rsSwopTarget}" type="Object" />
+		<east:para name="_index" value="0" type="Integer" />
+	</east:service>
+	<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="getOneByIdAlwaysWithClass"  id="_targetBean">
+		<east:para name="tnewsid" value="${_target.id}" type="String" />
+		<east:para name="className" value="${requestEx.tableName}" type="String" />
+	</east:service>
+		
+		
+	<east:service beanName="eastUtilService" methodName="setValue"  id="_showIndexTarget">
+		<east:para name="_val" value="${_targetBean.ext.cshowIndex}" type="Object" />
+	</east:service>
+
+	<MACRO>
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_targetBean}","cshowIndex","${_selectedBean.ext.cshowIndex}");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_save_bean_fun.jsp" ,"${_targetBean}");
+	</MACRO>
+	<MACRO>
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${_selectedBean}","cshowIndex","${_showIndexTarget}");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_save_bean_fun.jsp" ,"${_selectedBean}");
+	</MACRO>
+</s:if>
+<s:else>
+	<east:service beanName="eastUtilService" methodName="setValue"  id="hasError">
+		<east:para name="_value" value="1" type="Object" />
+	</east:service>
+	<east:service beanName="eastUtilService" methodName="setValue"  id="msg">
+		<east:para name="_value" value="" type="Object" />
+	</east:service>
+</s:else>
+
+
+
+
+<s:if test="${hasError eq '0'}">
+  {"state":"success"}
+</s:if>
+<s:else>
+  {"state":"failure", "msg":"${msg}"}
+</s:else>

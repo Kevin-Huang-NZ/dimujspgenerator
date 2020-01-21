@@ -1,0 +1,32 @@
+<!--#<JREMOVE>
+FUN:Confused
+返回解析后的list内部存储，key(中文名称)，val(值)
+</JREMOVE>#-->
+
+<MACRO>
+ Jsp.pops("__idBeanNode","__coperatorName","__event");
+</MACRO>   
+ 
+<east:service beanName="eastUtilService" methodName="getNowDateTime"  id="__coperatDatetime">
+</east:service>
+ 
+<east:service beanName="eastUtilService" methodName="encodeObjectToJson"  id="__coperatMemo">
+	<east:para name="_val" value="${__idBeanNode.ext}" type="Object" />
+</east:service> 
+	
+<east:service beanName="eastUtilService" methodName="setValue"  id="__cbeanTableName">
+	<east:para name="_val" value="${__idBeanNode.newsClass}" type="Object" />
+</east:service>    
+
+<MACRO>
+	Jsp.call("/bspms_jsp/bspms_funs_html/ajax_create_bean_fun.jsp","colOperateLog");
+	Jsp.result("__OperateLogBean");
+	Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field2_fun.jsp","${__OperateLogBean}","coperatorName","${__coperatorName}","coperatMemo","${__coperatMemo}");
+	Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field2_fun.jsp","${__OperateLogBean}","coperatDatetime","${__coperatDatetime}","cbeanTableName","${__cbeanTableName}");
+	Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field_fun.jsp","${__OperateLogBean}","cevent","${__event}");
+	Jsp.call("/bspms_jsp/bspms_funs_html/ajax_save_bean_fun.jsp","${__OperateLogBean}");
+</MACRO>
+	  
+<MACRO>
+  Jsp.pushs("${__OperateLogBean}");
+</MACRO>

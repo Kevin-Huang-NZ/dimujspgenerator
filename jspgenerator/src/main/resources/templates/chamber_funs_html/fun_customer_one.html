@@ -1,0 +1,55 @@
+<!--#<JREMOVE>
+FUN:Confused
+顾客详情。
+参数：2选1
+	id
+	ccustomerNo:顾客编号
+</JREMOVE>#-->
+<MACRO>
+	Jsp.pops("__id","__ccustomerNo");
+</MACRO>
+<east:service beanName="eastUtilService" methodName="setValue" id="__hasError">
+	<east:para name="_value" value="0" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue" id="__msg">
+	<east:para name="_value" value="" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue" id="__hasData">
+	<east:para name="_value" value="0" type="Object" />
+</east:service>
+	
+<s:if test="${(__id eq null || __id eq '')
+		&& (__ccustomerNo eq null || __ccustomerNo eq '')}">
+	<east:service beanName="eastUtilService" methodName="setValue" id="__hasError">
+		<east:para name="_value" value="1" type="Object" />
+	</east:service>
+	<east:service beanName="eastUtilService" methodName="setValue" id="__msg">
+		<east:para name="_value" value="参数不正确." type="Object" />
+	</east:service>
+</s:if>
+
+<s:if test="${__hasError eq '0'}">
+	<s:if test="${__id ne null && __id ne ''}">
+		<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="getOneByIdAlwaysWithClass" id="__customer">
+			<east:para name="tnewsid" value="${__id}" type="String" />
+			<east:para name="className" value="colCustomer" type="String" />
+		</east:service>
+	</s:if>
+	<s:else>
+		<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="getBeanOneByClassNameExtColumn" id="__customer">
+			<east:para name="className" value="colCustomer" type="String" />
+			<east:para name="fieldName" value="ccustomerNo" type="String" />
+			<east:para name="fieldValue" value="${__ccustomerNo}" type="String" />
+		</east:service>
+	</s:else>
+</s:if>
+
+<s:if test="${__customer ne null && __customer.id ne null && __customer.id ne ''}">
+	<east:service beanName="eastUtilService" methodName="setValue" id="__hasData">
+		<east:para name="_value" value="1" type="Object" />
+	</east:service>
+</s:if>
+	
+<MACRO>
+	Jsp.pushs("${__hasError}","${__msg}","${__hasData}","${__customer}");
+</MACRO>

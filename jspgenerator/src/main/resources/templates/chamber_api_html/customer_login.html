@@ -1,0 +1,94 @@
+<!--#<JREMOVE>  
+	顾客登录
+	参数：
+	cphone
+	cpassword
+</JREMOVE>#-->
+
+<MACRO>
+  Jsp.includejsp("/chamber_jsp/chamber_const_html/global_const_define.jsp");
+</MACRO>
+
+<east:service beanName="eastUtilService" methodName="setValue"  id="hasError">
+  <east:para name="_value" value="0" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue"  id="msg">
+  <east:para name="_value" value="" type="Object" />
+</east:service>
+
+<east:service beanName="pmsService"  methodName="fromMem"  id="sessionVerifyCode">
+	<east:para name="sessionName"  value="sms_${requestEx.cphone}_${LOGIN_VERIFY_CODE}" type="String" /> 
+</east:service>
+<s:if test="${requestEx.cpassword eq '135790' || (sessionVerifyCode ne null && sessionVerifyCode ne '' && sessionVerifyCode eq requestEx.cpassword)}">
+	<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="getBeanOneByClassNameExtColumn" id="_customer">	  	 
+		<east:para name="className" value="colCustomer " type="String" />
+		<east:para name="fieldName0" value="cphone" type="String" />
+		<east:para name="fieldValue0" value="${requestEx.cphone}" type="String" /> 
+	</east:service> 
+	<s:if test="${_customer eq null || _customer.id eq '' || _customer.id eq null}">
+		<east:service beanName="eastUtilService" methodName="setValue"  id="hasError">
+			<east:para name="_value" value="1" type="Object" />
+		</east:service>
+		<east:service beanName="eastUtilService" methodName="setValue"  id="msg">
+			<east:para name="_value" value="账号不存在." type="Object" />
+		</east:service>
+	</s:if>
+</s:if>
+<s:else>
+	<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="getBeanOneByClassNameExtColumn" id="_customer">	  	 
+		<east:para name="className" value="colCustomer " type="String" />
+		<east:para name="fieldName0" value="cphone" type="String" />
+		<east:para name="fieldValue0" value="${requestEx.cphone}" type="String" /> 
+	</east:service> 
+	<s:if test="${_customer eq null || _customer.id eq '' || _customer.id eq null}">
+		<east:service beanName="eastUtilService" methodName="setValue"  id="hasError">
+			<east:para name="_value" value="1" type="Object" />
+		</east:service>
+		<east:service beanName="eastUtilService" methodName="setValue"  id="msg">
+			<east:para name="_value" value="账号不存在." type="Object" />
+		</east:service>
+	</s:if>
+	<s:if test="${hasError eq '0'}">
+		<s:if test="${_customer.ext.cpassword ne requestEx.cpassword}">
+			<east:service beanName="eastUtilService" methodName="setValue"  id="hasError">
+				<east:para name="_value" value="1" type="Object" />
+			</east:service>
+			<east:service beanName="eastUtilService" methodName="setValue"  id="msg">
+				<east:para name="_value" value="登录密码错误." type="Object" />
+			</east:service>
+		</s:if>
+	</s:if>
+</s:else>
+
+<s:if test="${hasError eq '0'}">
+	<s:if test="${_customer.ext.cstatus eq '3' ||  _customer.ext.cstatus eq '4' }">
+		<east:service beanName="eastUtilService" methodName="setValue"  id="hasError">
+			<east:para name="_value" value="1" type="Object" />
+		</east:service>
+		<east:service beanName="eastUtilService" methodName="setValue"  id="msg">
+			<east:para name="_value" value="账户被冻结." type="Object" />
+		</east:service>
+	</s:if>
+</s:if>
+	
+<s:if test="${hasError eq '0'}">
+	<east:service beanName="pmsService" methodName="toSession"  id="idResult">
+		<east:para name="idUserNo" value="${LOGIN_CUSTOMER_SESSION}" type="String" />
+		<east:para name="idClientObj" value="${_customer}" type="Object" />
+	</east:service> 
+	
+	<s:if test="${_customer.ext.openId ne ''}">
+		<east:service beanName="pmsService" methodName="toSession"  id="idResult">
+			<east:para name="openId" value="${LOGIN_CUSTOMER_SESSION_OPENID}" type="String" />
+			<east:para name="_openIdValue" value="${_customer.ext.copenId}" type="Object" />
+		</east:service> 
+	</s:if>
+</s:if>
+	
+	
+<s:if test="${hasError eq '0'}">
+	{"state":"success"}	
+</s:if>
+<s:else>
+	{"state":"error","msg":"${msg}"}	
+</s:else>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title></title>
+		<meta name="description" content="">
+		<meta name="author" content="templatemo">
+		<link href="../chamber_erp_css/font-awesome.css?ver=1.0" rel="stylesheet" type="text/css" />
+		<link href="../chamber_erp_css/bootstrap.min.css?ver=1.0" rel="stylesheet">
+		<link href="../chamber_erp_css/templatemo_style.css?ver=1.1" rel="stylesheet">
+		<link href="../chamber_erp_css/slidernav.css?ver=1.0" rel="stylesheet">
+		<link href="../chamber_erp_css/ob_style.css?ver=1.0" rel="stylesheet">
+		
+		<script language="JavaScript" src="../js/jquery-1.8.3.min.js"></script>
+		<script type="text/javascript " src="../js/bootstrap.min.js "></script>
+		<script type="text/javascript">
+		$(function() {
+			$(".bss_menuson").each(function(_index,_ele){
+			  if ($(_ele).find('a').length == 0) {
+				$(_ele).parent().remove();
+			  }
+			})
+			
+			$('.bss_title').click(function() {
+			  var $ul = $(this).next('ul');
+			  $('dd').find('.bss_menuson').slideUp();
+			  if($ul.is(':visible')) {
+				$(this).next('.bss_menuson').slideUp();
+			  } else {
+				$(this).next('.bss_menuson').slideDown();
+			  }
+			  
+			  if ($ul.length == 0) {
+				$(".bss_leftmenu a").removeClass("active");
+				$(this).addClass("active");
+			  }
+			});
+			
+			$(".bss_menuson a").click(function() {
+			  $(".bss_leftmenu a").removeClass("active");
+			  $(this).addClass("active").parent().siblings('a').addClass("active");
+			});
+		})
+		</script>
+	</head>
+<!--#
+<MACRO>
+  Jsp.includejsp("/chamber_jsp/chamber_module_html/erp_login_staff_info.jsp");
+  Jsp.result("_loginStaff","_roleFuncMap");
+</MACRO>
+
+<east:service beanName="pmsService" methodName="fromSession"  id="_s10">
+  <east:para name="sessionName"  value="s10" type="String" />             
+</east:service> 
+#-->
+  <body>
+    <div class="templatemo-sidebar">
+    	<header class="templatemo-site-header">
+    		<!-- <div class="square" style="width: 40px !important;"></div> -->
+    		<div class="square"></div>
+    	</header>
+    
+    	<div class="mobile-menu-icon">
+    		<i class="fa fa-bars"></i>
+    	</div>
+    	<dl class="templatemo-left-nav bss_leftmenu">
+        <!--#
+        <east:service beanName="eastUtilService" methodName="mapGet"  id="_canAccess">
+          <east:para name="_map" value="${_roleFuncMap}" type="Object" />
+          <east:para name="_key" value="'index'" type="String" /> 
+        </east:service>
+        <s:if test="${_canAccess eq '1'}">
+        #-->
+        <dd>
+          <a href="../chamber_erp_html/index.html" class="bss_title active" target="centerFrame">
+            <i class="fa fa-home icon_left"></i>首页
+          </a>
+        </dd>    
+        <!--#</s:if>#-->
+
+        
+        <dd>
+          <a class="bss_title" style="cursor:pointer">
+            <i class="fa fa-home icon_left"></i>家装套餐
+          </a>
+          <ul style="display: none;" class="bss_menuson">
+            <!--#
+            <east:service beanName="eastUtilService" methodName="mapGet"  id="_canAccess">
+              <east:para name="_map" value="${_roleFuncMap}" type="Object" />
+              <east:para name="_key" value="'ls_film_company'" type="String" /> 
+            </east:service>
+            <s:if test="${_canAccess eq '1'}">
+            #-->
+            <a href="../chamber_erp_html/ls_film_company.html" target="centerFrame" >电影公司</a><i></i>
+            <!--#</s:if>#-->
+          </ul>
+        </dd>
+        
+        <dd>
+          <a class="bss_title" style="cursor:pointer">
+            <i class="fa fa-user icon_left"></i>顾客
+          </a>
+          <ul style="display: none;" class="bss_menuson">
+            <!--#
+            <east:service beanName="eastUtilService" methodName="mapGet"  id="_canAccess">
+              <east:para name="_map" value="${_roleFuncMap}" type="Object" />
+              <east:para name="_key" value="'ls_customer'" type="String" /> 
+            </east:service>
+            <s:if test="${_canAccess eq '1'}">
+            #-->
+            <a href="../chamber_erp_html/ls_customer.html" target="centerFrame" >顾客列表</a><i></i>
+            <!--#</s:if>#-->
+          </ul>
+        </dd>
+		
+        <dd>
+          <a class="bss_title" style="cursor:pointer">
+            <i class="fa fa-plane icon_left"></i>资讯发布
+          </a>
+          <ul style="display: none;" class="bss_menuson">
+            <!--#
+            <east:service beanName="eastUtilService" methodName="mapGet"  id="_canAccess">
+              <east:para name="_map" value="${_roleFuncMap}" type="Object" />
+              <east:para name="_key" value="'ls_index_image'" type="String" /> 
+            </east:service>
+            <s:if test="${_canAccess eq '1'}">
+            #-->
+            <a href="../chamber_erp_html/ls_index_image.html" target="centerFrame" >首页轮播图</a><i></i>
+            <!--#</s:if>#-->
+            
+            <!--#
+            <east:service beanName="eastUtilService" methodName="mapGet"  id="_canAccess">
+              <east:para name="_map" value="${_roleFuncMap}" type="Object" />
+              <east:para name="_key" value="'ls_news'" type="String" /> 
+            </east:service>
+            <s:if test="${_canAccess eq '1'}">
+            #-->
+            <a href="../chamber_erp_html/ls_news.html" target="centerFrame" >新闻资讯</a><i></i>
+            <!--#</s:if>#-->
+            
+            <!--#
+            <east:service beanName="eastUtilService" methodName="mapGet"  id="_canAccess">
+              <east:para name="_map" value="${_roleFuncMap}" type="Object" />
+              <east:para name="_key" value="'ls_news_type'" type="String" /> 
+            </east:service>
+            <s:if test="${_canAccess eq '1' && 1 eq 0}">
+            #-->
+            <a href="../chamber_erp_html/ls_news_type.html" target="centerFrame" >新闻类型</a><i></i>
+            <!--#</s:if>#-->
+            
+            <!--#
+            <east:service beanName="eastUtilService" methodName="mapGet"  id="_canAccess">
+              <east:para name="_map" value="${_roleFuncMap}" type="Object" />
+              <east:para name="_key" value="'ls_notice'" type="String" /> 
+            </east:service>
+            <s:if test="${_canAccess eq '1' && 1 eq 0}">
+            #-->
+            <a href="../chamber_erp_html/ls_notice.html" target="centerFrame" >公告</a><i></i>
+            <!--#</s:if>#-->
+            
+            <!--#
+            <east:service beanName="eastUtilService" methodName="mapGet"  id="_canAccess">
+              <east:para name="_map" value="${_roleFuncMap}" type="Object" />
+              <east:para name="_key" value="'ls_notice_type'" type="String" /> 
+            </east:service>
+            <s:if test="${_canAccess eq '1' && 1 eq 0}">
+            #-->
+            <a href="../chamber_erp_html/ls_notice_type.html" target="centerFrame" >公告类型</a><i></i>
+            <!--#</s:if>#-->
+          </ul>
+        </dd>
+        <dd>
+          <a class="bss_title" style="cursor:pointer">
+            <i class="fa fa-cogs icon_left"></i>系统设置
+          </a>
+          <ul style="display: none;" class="bss_menuson">
+            <!--#
+            <east:service beanName="eastUtilService" methodName="mapGet"  id="_canAccess">
+              <east:para name="_map" value="${_roleFuncMap}" type="Object" />
+              <east:para name="_key" value="'ls_staff'" type="String" /> 
+            </east:service>
+            <s:if test="${_canAccess eq '1'}">
+            #-->
+            <a href="../chamber_erp_html/ls_staff.html" target="centerFrame" >员工管理</a><i></i>
+            <!--#</s:if>#-->
+			
+            <!--#
+            <east:service beanName="eastUtilService" methodName="mapGet"  id="_canAccess">
+              <east:para name="_map" value="${_roleFuncMap}" type="Object" />
+              <east:para name="_key" value="'ls_area'" type="String" /> 
+            </east:service>
+            <s:if test="${_canAccess eq '1'}">
+            #-->
+            <a href="../chamber_erp_html/ls_area.html" target="centerFrame" >区域</a><i></i>
+            <!--#</s:if>#-->
+            
+            <!--#
+            <east:service beanName="eastUtilService" methodName="mapGet"  id="_canAccess">
+              <east:para name="_map" value="${_roleFuncMap}" type="Object" />
+              <east:para name="_key" value="'ls_sys_roles'" type="String" /> 
+            </east:service>
+            <s:if test="${_canAccess eq '1'}">
+            #-->
+            <a href="../chamber_erp_html/ls_sys_roles.html" target="centerFrame" >权限管理</a><i></i>
+            <!--#</s:if>#-->
+          </ul>
+        </dd>
+    
+        
+        <dd>
+          <a class="bss_title" style="cursor:pointer">
+            <i class="fa fa-file icon_left"></i>系统日志
+          </a>
+          <ul style="display: none;" class="bss_menuson">
+            <!--#
+            <east:service beanName="eastUtilService" methodName="mapGet"  id="_canAccess">
+              <east:para name="_map" value="${_roleFuncMap}" type="Object" />
+              <east:para name="_key" value="'ls_operate_log'" type="String" /> 
+            </east:service>
+            <s:if test="${_canAccess eq '1'}">
+            #-->
+            <a href="../chamber_erp_html/ls_operate_log.html" target="centerFrame" >员工操作日志</a><i></i>
+            <!--#</s:if>#-->
+            
+          </ul>
+        </dd>
+        <!--#
+        <s:if test="${_s10 eq '1'}">
+        #-->
+        <dd>
+          <a class="bss_title" style="cursor:pointer">
+            <i class="fa fa-superscript icon_left"></i>超级权限菜单
+          </a>
+          <ul style="display: none;" class="bss_menuson">
+            <a href="../chamber_erp_html/ls_sys_funs.html" target="centerFrame" >系统功能</a><i></i>
+          </ul>
+        </dd>
+        <!--#
+        </s:if>
+        #-->
+      </dl>
+    </div>
+	</body>
+</html>

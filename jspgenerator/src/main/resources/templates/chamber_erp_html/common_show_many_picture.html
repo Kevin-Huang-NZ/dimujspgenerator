@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>查看照片</title>
+	<meta name="description" content="">
+	<meta name="author" content="templatemo">
+	
+	<link rel="stylesheet" type="text/css" href="../chamber_erp_css/font-awesome.css?ver=1.0"/>
+	<link rel="stylesheet" type="text/css" href="../chamber_erp_css/bootstrap.min.css?ver=1.0">
+  <link rel="stylesheet" type="text/css" href="../js/alertify/alertify.core.css"/>
+  <link rel="stylesheet" type="text/css" href="../js/alertify/alertify.bootstrap.css"/>
+  <link rel="stylesheet" type="text/css" href="../chamber_erp_css/jquery.superslides.css"/>
+	
+  <script src="../js/jquery-1.8.3.min.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../js/moment.js" type="text/javascript" charset="utf-8"></script>
+  
+  <script src="../js/ajax_janus.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../js/column_janus_mobile.js" type="text/javascript" charset="utf-8"></script>
+  <script src="../js/alertify/alertify.js" type="text/javascript" charset="utf-8"></script>
+  
+  <script src="../widgets/lhgdialog/lhgdialog.js?skin=iblue" type="text/javascript" charset="utf-8"></script>
+  <script src="../js/janus_dialog.js" type="text/javascript" charset="utf-8"></script>
+	
+	<script src="../chamber_erp_js/jquery.superslides.js" type="text/javascript" charset="utf-8"></script>
+	
+	<script type="text/javascript " src="../My97DatePicker/WdatePicker.js"></script>
+
+
+</head>
+<!--#
+<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="getOneByIdAlwaysWithClass"  id="_bean">
+  <east:para name="tnewsid" value="${requestEx.id}" type="String" />
+  <east:para name="className" value="${requestEx.tableName}" type="String" />
+</east:service>
+
+<east:service beanName="eastUtilService" methodName="mapGet"  id="_images">
+  <east:para name="_map" value="${_bean.ext}" type="Object" />
+  <east:para name="_key" value="${requestEx.columnName}" type="String" /> 
+</east:service>
+
+<east:service beanName="eastUtilService" methodName="splitString" id="lsImage">
+  <east:para name="_sStr" value="${_images}" type="String" />
+  <east:para name="_linkLetter" value=";" type="String" />
+</east:service>
+#-->
+<body>
+	<div class="center-block" style="width: 540px;">
+    <div style="width:500px;margin: 0 auto;">
+      <div id="slides">
+        <div class="slides-container">
+          <!--#
+          <c:forEach items="${lsImage}" var="_one" varStatus="_status">
+            <img src="./${_one}" alt="">
+          </c:forEach>
+          #-->
+          <!--#<JREMOVE>#-->
+          <img src="http://flickholdr.com/1000/800" alt="">
+          <img src="http://flickholdr.com/1000/800" alt="">
+          <!--#</JREMOVE>#-->
+        </div>
+      </div>
+    </div>
+	</div>
+	<script type="text/javascript">
+		$(function(){
+		  $('#slides').superslides();
+		})
+	</script>
+</body>
+
+</html>

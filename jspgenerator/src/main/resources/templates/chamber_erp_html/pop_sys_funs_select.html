@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>选择系统功能</title>
+    <meta name="description" content="">
+    <meta name="author" content="templatemo">
+    <link href="../chamber_erp_css/font-awesome.css?ver=1.0" rel="stylesheet" type="text/css" />
+    <link href="../chamber_erp_css/bootstrap.min.css?ver=1.0" rel="stylesheet">
+    <link href="../chamber_erp_css/templatemo_style.css?ver=1.0" rel="stylesheet">
+    <link href="../chamber_erp_css/slidernav.css?ver=1.0" rel="stylesheet">
+    <link href="../chamber_erp_css/ob_style.css?ver=1.0" rel="stylesheet">
+    <link href="../chamber_erp_css/orderBy.css?ver=1.0" rel="stylesheet">
+    
+    <link href="../chamber_css/bs_div.css?ver=1.0" rel="stylesheet">  
+    <link href="../chamber_css/bs_a.css?ver=1.0" rel="stylesheet">
+    <link href="../chamber_css/menu_style.css?ver=1.0" rel="stylesheet">
+	<link href="../chamber_css/chat.css?ver=1.0" rel="stylesheet">
+  
+    <link href="../js/alertify/alertify.core.css" rel="stylesheet" type="text/css"/>
+    <link href="../js/alertify/alertify.bootstrap.css" rel="stylesheet" type="text/css"/>
+    
+    <script src="../js/jquery-1.8.3.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/moment.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/alertify/alertify.js" type="text/javascript" charset="utf-8"></script>
+    
+    <script src="../js/ajax_janus.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/column_janus_mobile.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../widgets/lhgdialog/lhgdialog.js?skin=iblue" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/janus_dialog.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../My97DatePicker/WdatePicker.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../chamber_erp_js/orderby.js" type="text/javascript" charset="utf-8"></script>
+  
+    <!--#
+    <MACRO>
+      Jsp.includejsp("/chamber_jsp/chamber_const_html/erp_const_define.jsp");
+      Jsp.includejsp("/chamber_jsp/chamber_module_html/erp_login_staff_info.jsp");
+      Jsp.result("_loginStaff","_roleFuncMap");
+    </MACRO>
+    #-->
+    <script>
+    /*# 
+      <c:if test="${_loginStaff eq null || _loginStaff.ext.cstaffNo eq null || _loginStaff.ext.cstaffNo eq ''}">
+        setTimeout(function(){
+            parent.parent.parent.window.location.href = "<%=basePath%>bs_ajaxIndex!chamber!chamber_erp_html!login.do";
+          },200);
+      </c:if>
+    #*/
+    </script> 
+  </head>
+  
+<!--#
+<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="getOneByIdAlwaysWithClass"  id="_role">
+  <east:para name="tnewsid" value="${requestEx.id}" type="String" />
+  <east:para name="className" value="colSysRoles" type="String" />
+</east:service>
+#-->
+
+<!--#
+<east:service beanName="eastUtilService" methodName="setValue"  id="pageNo">
+ <east:para name="_val" value="${requestEx.pageNo}" type="Object" />
+ <east:para name="_default_val" value="1" type="Object" />
+</east:service>  
+<east:service beanName="eastUtilService" methodName="setValue"  id="pageSize">
+  <east:para name="_val" value="${requestEx.pageSize}" type="Object" />
+  <east:para name="_default_val" value="10" type="Object" />
+</east:service>   
+<east:service beanName="eastUtilService" methodName="setValue"  id="_orderBy">
+  <east:para name="_val" value="${requestEx.orderBy}" type="Object" />
+  <east:para name="_default_val" value="cfunNo" type="Object" />
+</east:service>   
+<east:service beanName="eastUtilService" methodName="setValue"  id="_orderIsNumber">
+  <east:para name="_val" value="${requestEx.orderIsNumber}" type="Object" />
+  <east:para name="_default_val" value="0" type="Object" />
+</east:service>   
+<east:service beanName="eastUtilService" methodName="setValue"  id="_ascDesc">
+  <east:para name="_val" value="${requestEx.ascDesc}" type="Object" />
+  <east:para name="_default_val" value="asc" type="Object" />
+</east:service>   
+#-->
+
+<!--#
+<MACRO>
+  Jsp.call("/chamber_jsp/chamber_module_html/sys_funs.jsp","${pageNo}","${pageSize}","${_orderBy}","${_orderIsNumber}","${_ascDesc}","${requestEx.keyWord}");
+  Jsp.result("rsSysFuns","rsPagination");
+</MACRO>
+
+<MACRO>
+  Jsp.call("/chamber_jsp/chamber_module_html/calculate_pagination_for_original_sql.jsp","${rsPagination}","${pageNo}");
+  Jsp.result("totalRecords","totalPages","pagePrev","pageNext","pageOne","pageTwo","pageThree","pageFour","pageFive","pageSix","pageSeven");
+</MACRO>
+
+<MACRO>
+  Jsp.call("/chamber_jsp/chamber_module_html/sys_role_vs_fun.jsp","1","9999","","${_role.ext.croleNo}");
+  Jsp.result("rsSysRoleVsFun","rsPagination1");
+</MACRO>
+
+<east:service beanName="eastUtilService" methodName="listCreate"  id="lsSelected">
+</east:service>
+<c:forEach items="${rsSysRoleVsFun}" var="_one" varStatus="_status">
+  <east:service beanName="eastUtilService" methodName="listAdd" id="idResult">
+    <east:para name="_list" value="${lsSelected}" type="List" />
+    <east:para name="_object" value="${_one.cfunNo}" type="Object" />
+  </east:service>
+</c:forEach>
+       
+<east:service beanName="eastUtilService" methodName="getListString" id="_selectedFuns">
+  <east:para name="_list"  value="${lsSelected}" type="List" />
+  <east:para name="_paddingStr" value="," type="String" />
+  <east:para name="_quot" value="'" type="String" />
+</east:service>
+#-->
+
+
+  <body>
+    <div class="templatemo-flex-row">
+      <!-- Main content -->
+      <div class="templatemo-content col-1 light-gray-bg"> 
+        <div class="templatemo-content-container">
+          <!--内容部分开始-->
+          <div class="div_tableList">
+            <div style="padding: 20px;width: 70%;float: left;">
+              <span style="color: red;">*勾选系统功能，将功能加入到权限中；取消勾选将系统功能从权限中移除。</span>
+            </div>
+            <div style="padding:20px;float: right;">
+              <a id="btnClose" class="bs_a_bar_btn bs_color_wihte bs_bk_green_1B" href="">关闭</a>
+            </div>
+            <div style="padding: 20px;width: 100%;float: left;">
+              <table class="table detail_table" id="detailInfo">
+                <tr>
+                  <th>权限编号</th>
+                  <td>${_role.ext.croleNo}</td>
+                  <th>权限名称</th>
+                  <td>${_role.ext.cname}</td>
+                </tr>
+              </table>
+            </div>
+            <div style="padding: 20px;width: 100%;float: left;">
+              <form id="searchForm" action="../chamber_erp_html/pop_sys_funs_select.html" method="post" enctype="multipart/form-data">
+                <input type="text" name="keyWord" value="${requestEx.keyWord}" style="width: 200px;float: left;margin-right: 15px;height: 38px;" class="form-control" placeholder="关键字搜索" />
+                
+                <span style="float: left;margin-left: 20px;" class="input-group-btn">
+                  <a href="#" id="btnSearch" class="btn btn-success" style="padding: 8px 12px;">查找</a>
+                </span>
+                
+                <input type="hidden" name="pageNo" id="pageNo" value="${pageNo}" />
+                <input type="hidden" name="pageSize" id="pageSize" value="${pageSize}" />
+                <input name="totalPage" type="hidden"  id="totalPage" value="${totalPages}" />
+                <input name="orderBy" type="hidden"  id="orderBy" value="${_orderBy}" />
+                <input name="orderIsNumber" type="hidden"  id="orderIsNumber" value="${_orderIsNumber}" />
+                <input name="ascDesc" type="hidden"  id="ascDesc" value="${_ascDesc}" />
+                <input type="hidden" name="id" value="${requestEx.id}" />
+              </form>
+            </div>
+            
+            <table cellpadding="6" cellspacing="0">
+              <thead>
+                <tr>
+                  <th style="min-width:20px"></th>
+                  <th>序号</th>
+                  <th class="can_order" data-order-by="cfunNo" data-asc-desc="" data-order-is-number="0">功能号</th> 
+                  <th class="can_order" data-order-by="cname" data-asc-desc="" data-order-is-number="0">功能名称</th> 
+                  <th>备注</th> 
+                </tr>
+              </thead>
+              <tbody>
+                <!--#
+                <s:if test="${rsSysFuns != null && fn:length(rsSysFuns) > 0}">    
+                  <c:forEach items="${rsSysFuns}" var="_one" varStatus="_status">
+                    <east:service beanName="eastUtilService" methodName="htmlRemove"  id="_subMemo">
+                      <east:para name="_html" value="${_one.cmemo}" type="String" />
+                      <east:para name="_nMaxLen" value="60" type="Integer" />
+                    </east:service>
+                    <east:service beanName="eastUtilService" methodName="setValue"  id="quotedFunNo">
+                      <east:para name="_value" value="'${_one.cfunNo}'" type="Object" />
+                    </east:service>
+                    
+                    <tr id="idTR${_one.id}" data-id="${_one.id}">
+                      <td><input name="checkboxData" type="checkbox" value="${_one.id}" onclick="pickOut('${_one.cfunNo}',this);" 
+                        <s:if test="${fn:contains(_selectedFuns,quotedFunNo)}">
+                          checked
+                        </s:if>
+                        /></td>
+                      <td>${(pageNo - 1) * pageSize + _status.index + 1}</td>
+                      <td>${_one.cfunNo}</td>
+                      <td>${_one.cname}</td>
+                      <td title="${_one.cmemo}">${_subMemo}</td>
+                    </tr>                       
+                  </c:forEach>
+                </s:if>
+                #-->                              
+                
+                <!--#<JREMOVE>#-->
+                <tr>
+                  <td><input name="checkboxData" type="checkbox" value="1" onclick="pickOut('1',this);" /></td>
+                  <td>1</td>
+                </tr>
+                <!--#</JREMOVE>#-->
+              </tbody>
+            </table>
+            <div class="div_bottom">
+              <!--#
+              <MACRO>
+                Jsp.call("/chamber_jsp/chamber_module_html/erp_display_pagination.jsp","${pageNo}","1","${pagePrev}","${pageOne}","${pageTwo}","${pageThree}","${pageFour}","${pageFive}","${pageSix}","${pageNext}","${totalPages}","${totalRecords}");
+              </MACRO>
+              #-->
+              <!--#<JREMOVE>#-->
+              <p>第1页,共20页</p>
+              <div>
+                <a href="#">第一页</a>
+                <a href="#">上一页</a>
+                <a href="#" class="a_active">1</a>
+                <a href="#">2</a>
+                <a href="#">3</a>
+                <a href="#">4</a>
+                <a href="#">5</a>
+                <span>...</span>
+                <a href="#">下一页</a>
+                <a href="#">最后一页</a>
+              </div>
+              <!--#</JREMOVE>#-->
+            </div>
+          </div>
+          <!--内容部分结束-->
+        </div>
+      </div>
+    </div>
+    
+    <script>
+      var searchForm = $('#searchForm');
+      function search() {
+        searchForm.submit();
+      }
+      $(function() {
+        $('#btnSearch').on('click', function(){
+          $('#pageNo').val('1');
+          search();
+        });
+      });
+      function searchByPage(_page_no){
+        var intPageNo = parseInt(_page_no),
+          intTotalPage = parseInt($('#totalPage').val());
+        if (intPageNo > intTotalPage) {
+          intPageNo = intTotalPage;
+        }
+        if (intPageNo < 1) {
+          intPageNo = '1';
+        }
+        $('#pageNo').val(intPageNo);
+        search();
+        return false;
+      }
+    </script>
+    <script>
+    	$(function(){
+    	  $('#btnClose').on('click', function(){
+          __JDialogCallbackAndClose();
+    	  })
+    	})
+    </script>
+    <script>
+      function pickOut(cfunNo, _this){
+        var pick = '0';
+        if ($(_this).prop('checked')) {
+          pick = '1';
+        }
+        
+        var _url_para = {
+            "croleNo":"${_role.ext.croleNo}",
+            "cfunNo":cfunNo,
+            "pick":pick
+          },
+          _url = "<%=basePath%>bs_ajaxIndex!chamber!chamber_controls_html!erp_sys_funs_select.do";
+        $AjaxPostASyn(_url, _url_para,
+          function(_resp) {
+            var jsonResp = JSON.parse(_resp);
+            if(jsonResp.state == 'success') {
+            } else {
+            }
+          },
+          function(_resp) {});
+      }
+    </script>
+      
+  </body>
+</html>

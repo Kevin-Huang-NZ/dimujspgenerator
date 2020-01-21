@@ -1,0 +1,97 @@
+<!--#<JREMOVE>
+FUN:Confused
+	保存收货地址。
+</JREMOVE>#-->
+<MACRO>
+	Jsp.pops("__id","__ccustomerNo","__cname","__cphone","__cprovince","__ccity","__carea","__caddress","__chouseType");
+</MACRO>
+
+<east:service beanName="eastUtilService" methodName="setValue" id="__hasError">
+	<east:para name="_value" value="0" type="Object" />
+</east:service>
+<east:service beanName="eastUtilService" methodName="setValue" id="__msg">
+	<east:para name="_value" value="" type="Object" />
+</east:service>
+
+<!--#<JREMOVE>
+<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="getAllByNativeField" id="__rsCheckDuplicate">
+	<east:para name="newsClass" value="colDeliveryAddress" type="String" />
+	<east:para name="page" value="1" type="Integer" />
+	<east:para name="pageSize" value="1" type="Integer" />
+	<east:para name="searchTVL" value="{\"tag\":\"cfilmNo\",\"val\":\"${__cfilmNo}\",\"link\":\"!{EQ}\",\"type\":\"1\"}
+		,{\"tag\":\"id\",\"val\":\"${__id}\",\"link\":\"!{NE}\",\"type\":\"1\"}" type="String" />
+	<east:para name="orderName" value="cdate" type="String" />
+	<east:para name="descOrAsc" value="true" type="Boolean" />
+</east:service>
+
+<s:if test="${__rsCheckDuplicate.list ne null && fn:length(__rsCheckDuplicate.list) gt 0}">
+	<east:service beanName="eastUtilService" methodName="setValue" id="__hasError">
+		<east:para name="_value" value="1" type="Object" />
+	</east:service>
+	<east:service beanName="eastUtilService" methodName="setValue" id="__msg">
+		<east:para name="_value" value="该电影已经发行通证,保存失败。" type="Object" />
+	</east:service>
+</s:if>
+</JREMOVE>#-->
+
+<s:if test="${__hasError eq '0'}">
+	<s:if test="${__id eq '0'}">
+		<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="getAllByNativeField" id="__rsCheckDefault">
+			<east:para name="newsClass" value="colDeliveryAddress" type="String" />
+			<east:para name="page" value="1" type="Integer" />
+			<east:para name="pageSize" value="1" type="Integer" />
+			<east:para name="searchTVL" value="{\"tag\":\"ccustomerNo\",\"val\":\"${__ccustomerNo}\",\"link\":\"!{EQ}\",\"type\":\"1\"}
+				,{\"tag\":\"cisDefault\",\"val\":\"1\",\"link\":\"!{EQ}\",\"type\":\"1\"}" type="String" />
+			<east:para name="orderName" value="cdate" type="String" />
+			<east:para name="descOrAsc" value="true" type="Boolean" />
+		</east:service>
+
+		<s:if test="${__rsCheckDefault.list ne null && fn:length(__rsCheckDefault.list) gt 0}">
+			<east:service beanName="eastUtilService" methodName="setValue" id="__cisDefault">
+				<east:para name="_value" value="0" type="Object" />
+			</east:service>
+		</s:if>
+		<s:else>
+			<east:service beanName="eastUtilService" methodName="setValue" id="__cisDefault">
+				<east:para name="_value" value="1" type="Object" />
+			</east:service>
+		</s:else>
+		<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="createBeanExByClassName" id="__deliveryAddress">
+			<east:para name="className" value="colDeliveryAddress" type="String" />
+		</east:service>
+		<MACRO>
+			Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${__deliveryAddress}","ccustomerNo","${__ccustomerNo}");
+			Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${__deliveryAddress}","cisDefault","${__cisDefault}");
+		</MACRO>
+		<!--#<JREMOVE>
+		<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="getDefaultPattern" id="__generatedNo">
+			<east:para name="patternStr" value="{seq('TN%09d')}" type="String" />
+		</east:service>
+		<east:service beanName="eastUtilService" methodName="getNowDate" id="__nowDate">
+		</east:service>
+		<east:service beanName="eastUtilService" methodName="getDateTime" id="__nowDateTime">
+		</east:service>
+		</JREMOVE>#-->
+	</s:if>
+	<s:else>
+		<east:service beanName="pmsService.pmsDaoImpl.daoBsNewsInfo" methodName="getOneByIdAlwaysWithClass" id="__deliveryAddress">
+			<east:para name="tnewsid" value="${requestEx.id}" type="String" />
+			<east:para name="className" value="colDeliveryAddress" type="String" />
+		</east:service>
+	</s:else>
+	<MACRO>
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${__deliveryAddress}","cname","${__cname}");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${__deliveryAddress}","cphone","${__cphone}");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${__deliveryAddress}","cprovince","${__cprovince}");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${__deliveryAddress}","ccity","${__ccity}");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${__deliveryAddress}","carea","${__carea}");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${__deliveryAddress}","caddress","${__caddress}");
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_set_field1_fun.jsp","${__deliveryAddress}","chouseType","${__chouseType}");
+		
+		Jsp.call("/bspms_jsp/bspms_funs_html/ajax_save_bean_fun.jsp" ,"${__deliveryAddress}");
+	</MACRO>
+</s:if>
+	
+<MACRO>
+	Jsp.pushs("${__hasError}","${__msg}","${__deliveryAddress}");
+</MACRO>
